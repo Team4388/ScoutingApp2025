@@ -61,8 +61,8 @@ public class TBAFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        TBAViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(TBAViewModel.class);
+//        TBAViewModel dashboardViewModel =
+//                new ViewModelProvider(this).get(TBAViewModel.class);
 
         binding = FragmentTbaBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

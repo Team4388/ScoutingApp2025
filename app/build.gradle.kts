@@ -2,6 +2,12 @@ plugins {
     alias(libs.plugins.androidApplication)
 }
 
+//allprojects {
+//    repositories {
+//        maven ( url = "https://jitpack.io" )
+//    }
+//}
+
 android {
     namespace = "com.astatin3.scoutingapp2025"
     compileSdk = 34
@@ -40,7 +46,11 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+//    implementation(libs.support.annotations)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation("com.github.yuriy-budiyev:code-scanner:2.3.0")
+    implementation("com.github.kenglxn.QRGen:android:3.0.1")
 }
