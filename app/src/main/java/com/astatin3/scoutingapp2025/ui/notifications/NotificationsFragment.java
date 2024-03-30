@@ -16,7 +16,13 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ScanMode;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.Result;
+
+import java.util.EnumMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 public class NotificationsFragment extends Fragment {
     private CodeScanner mCodeScanner;
@@ -38,21 +44,16 @@ public class NotificationsFragment extends Fragment {
         final Activity activity = getActivity();
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
 
-        CodeScannerView scannerView = root.findViewById(R.id.scanner_view);
-        mCodeScanner = new CodeScanner(activity, scannerView);
-        mCodeScanner.setScanMode(ScanMode.CONTINUOUS);
-        mCodeScanner.setDecodeCallback(new DecodeCallback() {
-            @Override
-            public void onDecoded(@NonNull final Result result) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        alert("QR", result.getText());
-                    }
-                });
-            }
-        });
-        mCodeScanner.startPreview();
+        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(FragmentQRScan.this);
+
+        integrator.setOrientationLocked(false);
+        integrator.setPrompt("Scan QR code");
+        integrator.setBeepEnabled(false);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+
+
+        integrator.initiateScan();
+
         return root;
     }
 }

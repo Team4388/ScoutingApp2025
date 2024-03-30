@@ -7,14 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.astatin3.scoutingapp2025.RequestTask;
 import com.astatin3.scoutingapp2025.databinding.FragmentTbaBinding;
@@ -24,11 +21,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.function.Function;
 
-import kotlin.io.LineReader;
 
 public class TBAFragment extends Fragment {
 
