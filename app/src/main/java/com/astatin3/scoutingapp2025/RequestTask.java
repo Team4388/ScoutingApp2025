@@ -1,6 +1,13 @@
 package com.astatin3.scoutingapp2025;
 
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PointF;
 import android.os.AsyncTask;
+import android.util.AttributeSet;
+import android.view.View;
 
 import java.io.BufferedReader;
 import java.io.IOException;

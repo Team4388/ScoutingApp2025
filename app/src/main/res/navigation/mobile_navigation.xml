@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.astatin3.scoutingapp2025.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:name="com.astatin3.scoutingapp2025.ui.transfer.TransferFragment"
+        android:label="@string/title_transfer"
+        tools:layout="@layout/fragment_transfer" />
 </navigation>

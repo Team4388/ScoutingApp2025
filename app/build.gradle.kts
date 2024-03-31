@@ -53,5 +53,6 @@ dependencies {
 
 //    implementation("com.github.yuriy-budiyev:code-scanner:2.3.0")
 //    implementation("com.github.kenglxn.QRGen:android:3.0.1")
-    implementation("com.journeyapps:zxing-android-embedded:2.3.0")
+//    implementation("com.journeyapps:zxing-android-embedded:2.3.0")
+    implementation("com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.3")
 }
