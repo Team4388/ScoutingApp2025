@@ -33,7 +33,6 @@ public class TransferFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
 
-
         binding = FragmentTransferBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 

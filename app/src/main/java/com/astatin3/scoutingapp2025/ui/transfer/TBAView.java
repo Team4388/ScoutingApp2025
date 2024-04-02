@@ -3,17 +3,22 @@ package com.astatin3.scoutingapp2025.ui.transfer;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ScrollView;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.RequestTask;
@@ -24,8 +29,13 @@ import com.astatin3.scoutingapp2025.ui.JSONUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.function.Function;
 
 public class TBAView extends ScrollView {
@@ -79,6 +89,8 @@ public class TBAView extends ScrollView {
     }
 
     public void eventTable(String dataString){
+        Date currentTime = Calendar.getInstance().getTime();
+
         try {
             JSONArray data = new JSONArray(dataString);
 
@@ -87,25 +99,63 @@ public class TBAView extends ScrollView {
 
             boolean toggle = false;
 
-            TableRow tr = new TableRow(getContext());
-            addTableText(tr, "Key");
-            addTableText(tr, "Title");
-            addTableText(tr, "Type");
-
-            Table.addView(tr);
+//            TableRow tr = new TableRow(getContext());
+//            addTableText(tr, "Key");
+//            addTableText(tr, "Title");
+//            addTableText(tr, "Type");
+//
+//            Table.addView(tr);
 
             for(int i=0;i<data.length();i++){
-                tr = new TableRow(getContext());
+                TableRow tr = new TableRow(getContext());
+                TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT
+                );
+                rowParams.setMargins(20,20,20,20);
+                tr.setLayoutParams(rowParams);
+                tr.setPadding(20,20,20,20);
+                tr.setBackgroundColor(0x30000000);
 
-                if (toggle) {
-                    tr.setBackgroundColor(0x30000000);
-                }
 
                 JSONObject j = data.getJSONObject(i);
 
-                Button button = new Button(getContext());
                 String matchKey = j.getString("key");
-                button.setOnClickListener( new View.OnClickListener() {
+                String name = j.getString("short_name");
+
+                // Sometimes, a short name is not present on TBA Events
+                if(name.isEmpty()){
+                    name = j.getString("name");
+                }
+
+                TextView tv = new TextView(getContext());
+                tv.setGravity(Gravity.CENTER_VERTICAL);
+                tv.setTextSize(12);
+                tv.setText(j.getString("key"));
+                tr.addView(tv);
+
+                tv = new TextView(getContext());
+                tv.setTextSize(18);
+                tv.setText(name);
+                tr.addView(tv);
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date startDate = format.parse(j.getString("start_date"));
+                    Date endDate = format.parse(j.getString("end_date"));
+                    if(currentTime.after(endDate)){
+                        tr.setBackgroundColor(0x30FF0000);
+                    }else if(currentTime.before(startDate)){
+                        tr.setBackgroundColor(0x3000FF00);
+                    }else if(currentTime.after(startDate) && currentTime.before(endDate)){
+                        tr.setBackgroundColor(0x30FFFF00);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+                tr.setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         final RequestTask rq = new RequestTask();
@@ -119,21 +169,9 @@ public class TBAView extends ScrollView {
                         rq.execute((TBAAddress + "event/" + matchKey + "/matches"), TBAHeader);
                     }
                 });
-                button.setText(matchKey);
-                tr.addView(button);
 
-                String name = j.getString("short_name");
-
-                // Sometimes, a short name is not present on TBA Events
-                if(name.isEmpty()){
-                    name = j.getString("name");
-                }
-
-                addTableText(tr, name);
-                addTableText(tr, j.getString("event_type_string"));
-
-//                tr.addView(text);
-                Table.addView(tr);
+//                tr.addView(cl);
+                Table.addView(tr, rowParams);
 
                 toggle = !toggle;
             }
@@ -176,8 +214,19 @@ public class TBAView extends ScrollView {
                 return;
             }
 
-
             TableRow tr = new TableRow(getContext());
+            Button btn = new Button(getContext());
+            btn.setText("Save");
+            btn.setTextSize(18);
+            btn.setLayoutParams(new LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+//            addTableText(tr, "test");
+            tr.addView(btn);
+            Table.addView(tr);
+
+            tr = new TableRow(getContext());
             addTableText(tr, "#");
             addTableText(tr, "Red-1");
             addTableText(tr, "Red-2");
