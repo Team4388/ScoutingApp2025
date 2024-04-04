@@ -1,10 +1,12 @@
 package com.astatin3.scoutingapp2025.ui.transfer;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
+import com.astatin3.scoutingapp2025.fileEditor;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -20,7 +23,11 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -51,6 +58,7 @@ public class generatorView extends ConstraintLayout {
     private int qrCount = 0;
 
     private ArrayList<Bitmap> qrBitmaps;
+
     public generatorView(Context context) {
         super(context);
     }
@@ -90,17 +98,44 @@ public class generatorView extends ConstraintLayout {
         return bitmap;
     }
 
-    public void start(FragmentTransferBinding binding, String data){
+    public void start(FragmentTransferBinding binding, String inputData){
         qrImage = binding.qrImage;
         qrSpeedSlider = binding.qrSpeedSlider;
         qrSizeSlider = binding.qrSizeSlider;
         qrIndexN = binding.qrIndexN;
         qrIndexD = binding.qrIndexD;
 
-        sendData(data);
+        String compiledData = null;
+        try {
+            byte[] tempData = fileEditor.compress(inputData.getBytes("UTF-8"));
+            compiledData = new String(tempData, "UTF-8");
+            alert(""+tempData.length, fileEditor.binaryVisualize(tempData));
+            Log.i("Info", fileEditor.binaryVisualize(tempData));
+
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+
+        if(compiledData == null || inputData.length() < compiledData.length()){
+            sendData(inputData);
+        }else{
+            sendData(compiledData);
+        }
+
+    }
+
+    private void alert(String title, String content) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setMessage(content);
+        alert.setTitle(title);
+        alert.setPositiveButton("OK", null);
+        alert.setCancelable(true);
+        alert.create().show();
     }
 
     private void sendData(String data){
+
         minQrSize = Math.round(data.length()/maxQrCount);
 
         qrSizeSlider.setMax(maxQrSize-minQrSize);
@@ -139,15 +174,19 @@ public class generatorView extends ConstraintLayout {
         qrSpeedSlider.setProgress(defaultQrDelay+5);
 
         qrBitmaps = new ArrayList<Bitmap>();
-        for(int i=0;i<=(data.length()/qrSize);i++){
+        for(int i=0;i<=((data.length()+1)/qrSize);i++){
             final int start = i*qrSize;
             int end = (i+1)*qrSize;
-            if(end > data.length()){
-                end = data.length()-1;
+            if(end >= data.length()){
+                end = data.length();
             }
             try {
+//                alert("test", ""+Math.ceil((double)data.length()/(double)qrSize));
                 qrBitmaps.add(generateQrCode(
-                        data.substring(start, end)
+                        String.valueOf(fileEditor.toChar(fileEditor.internalDataVersion)) +
+                                String.valueOf(fileEditor.toChar(i)) +
+                                String.valueOf(fileEditor.toChar(qrCount-1)) +
+                                data.substring(start, end)
                 ));
             }catch (WriterException e){
                 e.printStackTrace();
@@ -173,6 +212,7 @@ public class generatorView extends ConstraintLayout {
                 this.qrIndex = this.qrCount-1;
             }
         }
+
         qrIndexN.setText(String.valueOf(qrIndex+1));
     }
 

@@ -2,12 +2,8 @@ package com.astatin3.scoutingapp2025.ui.transfer;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,31 +12,26 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-
-import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.RequestTask;
-import com.astatin3.scoutingapp2025.databinding.FragmentTbaBinding;
+import com.astatin3.scoutingapp2025.Utils.frcMatch;
+import com.astatin3.scoutingapp2025.Utils.frcTeam;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
+import com.astatin3.scoutingapp2025.fileEditor;
 import com.astatin3.scoutingapp2025.ui.JSONUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.function.Function;
 
 public class TBAView extends ScrollView {
-
-    //    private final String
     private final String TBAAddress = "https://www.thebluealliance.com/api/v3/";
     private final String TBAHeader = "X-TBA-Auth-Key: tjEKSZojAU2pgbs2mBt06SKyOakVhLutj3NwuxLTxPKQPLih11aCIwRIVFXKzY4e";
 
@@ -68,6 +59,12 @@ public class TBAView extends ScrollView {
 
         Table = binding.matchTable;
 
+        Table.setStretchAllColumns(true);
+
+        TableRow tr = new TableRow(getContext());
+        addTableText(tr, "Loading Events...");
+        Table.addView(tr);
+
         final RequestTask rq = new RequestTask();
         rq.onResult(new Function<String, String>() {
             @Override
@@ -89,6 +86,10 @@ public class TBAView extends ScrollView {
     }
 
     public void eventTable(String dataString){
+        Table.removeAllViews();
+        Table.setStretchAllColumns(true);
+        Table.bringToFront();
+
         Date currentTime = Calendar.getInstance().getTime();
 
         try {
@@ -158,15 +159,35 @@ public class TBAView extends ScrollView {
                 tr.setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Table.removeAllViews();
+                        Table.setStretchAllColumns(true);
+                        Table.bringToFront();
+
+                        TableRow tr = new TableRow(getContext());
+                        addTableText(tr, "Downloading Teams...");
+                        Table.addView(tr);
+
                         final RequestTask rq = new RequestTask();
                         rq.onResult(new Function<String, String>() {
                             @Override
-                            public String apply(String s) {
-                                matchTable(s);
+                            public String apply(String teamsStr) {
+                                TableRow tr = new TableRow(getContext());
+                                addTableText(tr, "Downloading Matches...");
+                                Table.addView(tr);
+
+                                final RequestTask rq = new RequestTask();
+                                rq.onResult(new Function<String, String>() {
+                                    @Override
+                                    public String apply(String matchesStr) {
+                                        matchTable(matchesStr, teamsStr, j);
+                                        return null;
+                                    }
+                                });
+                                rq.execute((TBAAddress + "event/" + matchKey + "/matches"), TBAHeader);
                                 return null;
                             }
                         });
-                        rq.execute((TBAAddress + "event/" + matchKey + "/matches"), TBAHeader);
+                        rq.execute((TBAAddress + "event/" + matchKey + "/teams"), TBAHeader);
                     }
                 });
 
@@ -194,17 +215,46 @@ public class TBAView extends ScrollView {
     }
 
 
-    public void matchTable(String dataString){
+
+    public void matchTable(String matchesString, String teamsString, JSONObject eventData){
+        Table.removeAllViews();
+        Table.setStretchAllColumns(true);
+        Table.bringToFront();
+
         try {
-            JSONArray data = new JSONArray(dataString);
+            final JSONArray matchData = new JSONArray(matchesString);
+            final JSONArray teamData = new JSONArray(teamsString);
 
-            Table.removeAllViews();
-            Table.setStretchAllColumns(true);
-            Table.bringToFront();
+            String matchKey = eventData.getString("key");
+            String matchName = eventData.getString("short_name");
 
+            // Sometimes, a short name is not present on TBA Events
+            if(matchName.isEmpty()){
+                matchName = eventData.getString("name");
+            }
 
+            // Event code at top
+            TextView tv = new TextView(getContext());
+            tv.setLayoutParams(new LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tv.setText(matchKey);
+            tv.setTextSize(18);
+            Table.addView(tv);
 
-            if(data.length() == 0){
+            // Event Name
+            tv = new TextView(getContext());
+            tv.setLayoutParams(new LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tv.setText(matchName);
+            tv.setTextSize(28);
+            Table.addView(tv);
+
+            if(matchData.length() == 0){
                 TableRow tr = new TableRow(getContext());
                 addTableText(tr, "This event has no matches released yet...");
                 Table.addView(tr);
@@ -214,7 +264,7 @@ public class TBAView extends ScrollView {
                 return;
             }
 
-            TableRow tr = new TableRow(getContext());
+            // Save button
             Button btn = new Button(getContext());
             btn.setText("Save");
             btn.setTextSize(18);
@@ -222,11 +272,10 @@ public class TBAView extends ScrollView {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
-//            addTableText(tr, "test");
-            tr.addView(btn);
-            Table.addView(tr);
+            Table.addView(btn);
 
-            tr = new TableRow(getContext());
+
+            TableRow tr = new TableRow(getContext());
             addTableText(tr, "#");
             addTableText(tr, "Red-1");
             addTableText(tr, "Red-2");
@@ -237,7 +286,7 @@ public class TBAView extends ScrollView {
             Table.addView(tr);
 
 
-            data = JSONUtil.sort(data, new Comparator(){
+            final JSONArray sortedMatchData = JSONUtil.sort(matchData, new Comparator(){
                 public int compare(Object a, Object b){
                     JSONObject    ja = (JSONObject)a;
                     JSONObject    jb = (JSONObject)b;
@@ -250,11 +299,12 @@ public class TBAView extends ScrollView {
             });
 
 
+            final ArrayList<frcMatch> matchesOBJ = new ArrayList<frcMatch>();
             boolean toggle = false;
             int matchCount = 1;
 
-            for(int a=0;a<data.length();a++){
-                final JSONObject match = data.getJSONObject(a);
+            for(int a=0;a<sortedMatchData.length();a++){
+                final JSONObject match = sortedMatchData.getJSONObject(a);
 
                 if(!match.getString("comp_level").equals("qm")){
                     continue;
@@ -273,6 +323,9 @@ public class TBAView extends ScrollView {
                 addTableText(tr, String.valueOf(matchCount));
 //                addTableText(tr, match.getString("key"));
 
+                int[] blueKeys = new int[3];
+                int[] redKeys = new int[3];
+
                 for(int b=0;b<6;b++){
                     TextView text = new TextView(getContext());
                     text.setTextSize(18);
@@ -280,24 +333,80 @@ public class TBAView extends ScrollView {
                     tr.addView(text);
 
                     if(b < 3){
-                        text.setText(redAlliance.getString(b).substring(3));
+                        String str = redAlliance.getString(b).substring(3);
+                        redKeys[b] = (int)Integer.parseInt(str);
+                        text.setText(str);
                         text.setBackgroundColor(0x50ff0000);
                     }else{
-                        text.setText(blueAlliance.getString(b-3).substring(3));
+                        String str = blueAlliance.getString(b-3).substring(3);
+                        blueKeys[b-3] = (int)Integer.parseInt(str);
+                        text.setText(str);
                         text.setBackgroundColor(0x500000ff);
                     }
                 }
 
                 Table.addView(tr);
 
+                frcMatch matchOBJ = new frcMatch();
+                matchOBJ.matchIndex = matchCount;
+                matchOBJ.blueAlliance = blueKeys;
+                matchOBJ.redAlliance = redKeys;
+                matchesOBJ.add(matchOBJ);
+
                 matchCount += 1;
                 toggle = !toggle;
             }
 
-
+            btn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(saveData(matchesOBJ, teamData, eventData)){
+                        alert("Info", "Saved!");
+                    }else{
+                        alert("Error", "Error saving files.");
+                    }
+                }
+            });
 
         }catch (JSONException j){
+            j.printStackTrace();
             alert("Error", "Invalid JSON");
+        }
+    }
+
+    private boolean saveData(ArrayList<frcMatch> matchData, JSONArray teamData, JSONObject eventData){
+        try {
+            final String matchKey = eventData.getString("key");
+            String matchName = eventData.getString("short_name");
+
+            // Sometimes, a short name is not present on TBA Events
+            if(matchName.isEmpty()){
+                matchName = eventData.getString("name");
+            }
+
+
+            ArrayList<frcTeam> teams = new ArrayList<frcTeam>();
+            for(int i=0;i<teamData.length();i++){
+                frcTeam teamObj = new frcTeam();
+                JSONObject team = teamData.getJSONObject(i);
+
+                teamObj.teamNumber = team.getInt("team_number");
+                teamObj.teamName = team.getString("nickname");
+                teamObj.city = team.getString("city");
+                teamObj.stateOrProv = team.getString("state_prov");
+                teamObj.school = team.getString("school_name");
+                teamObj.country = team.getString("country");
+                teamObj.startingYear = team.getInt("rookie_year");
+
+                teams.add(teamObj);
+            }
+
+            return fileEditor.setMatches(getContext(), matchKey, matchName, matchData) &&
+                    fileEditor.setTeams(getContext(), matchKey, teams);
+        }catch (JSONException j){
+            j.printStackTrace();
+            alert("Error", "Invalid JSON");
+            return false;
         }
     }
 }
