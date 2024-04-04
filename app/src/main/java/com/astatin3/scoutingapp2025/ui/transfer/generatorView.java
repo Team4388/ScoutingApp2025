@@ -106,16 +106,17 @@ public class generatorView extends ConstraintLayout {
         qrIndexD = binding.qrIndexD;
 
         String compiledData = null;
-        try {
-            byte[] tempData = fileEditor.compress(inputData.getBytes("UTF-8"));
-            compiledData = new String(tempData, "UTF-8");
-            alert(""+tempData.length, fileEditor.binaryVisualize(tempData));
-            Log.i("Info", fileEditor.binaryVisualize(tempData));
+//        try {
+        byte[] tempData = fileEditor.compress(inputData.getBytes(StandardCharsets.ISO_8859_1));
+        compiledData = new String(tempData, StandardCharsets.ISO_8859_1);
+//            alert(""+tempData.length, fileEditor.binaryVisualize(tempData));
+//            Log.i("Info", fileEditor.binaryVisualize(tempData));
 
-        }catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-        }
+//        }catch (UnsupportedEncodingException e){
+//            e.printStackTrace();
+//        }
 
+        alert(""+compiledData.length(), compiledData);
 
         if(compiledData == null || inputData.length() < compiledData.length()){
             sendData(inputData);

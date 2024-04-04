@@ -128,9 +128,9 @@ public class scannerView extends ConstraintLayout {
 
             try {
                 byte[] compiledBytes = compiledData.getBytes(StandardCharsets.ISO_8859_1);
-//                alert("completed", ""+fileEditor.decompress(compiledBytes));
-                alert(""+compiledBytes.length, fileEditor.binaryVisualize(compiledBytes));
-                Log.i("Info", fileEditor.binaryVisualize(compiledBytes));
+                alert("completed", new String(fileEditor.decompress(compiledBytes), StandardCharsets.ISO_8859_1));
+//                alert(""+compiledBytes.length, fileEditor.binaryVisualize(compiledBytes));
+//                Log.i("Info", fileEditor.binaryVisualize(compiledBytes));
             }catch (Exception e){
 //                alert("completed", compiledData);
                 e.printStackTrace();
