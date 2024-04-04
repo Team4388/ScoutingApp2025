@@ -1,19 +1,18 @@
 package com.astatin3.scoutingapp2025;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.astatin3.scoutingapp2025.Utils.frcMatch;
 import com.astatin3.scoutingapp2025.Utils.frcTeam;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.BufferOverflowException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -21,6 +20,9 @@ import java.util.zip.Inflater;
 public final class fileEditor {
 //    private final static String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final byte internalDataVersion = 0x01;
+    public static final int maxCompressedBlockSize = 4096;
+
+
 
     public static String binaryVisualize(byte[] bytes){
         String returnStr = "";
@@ -33,7 +35,9 @@ public final class fileEditor {
         return returnStr;
     }
 
-    public static char toChar(int num){
+
+
+    public static char byteToChar(int num){
         if(num < 0 || num > 255){
             throw new BufferOverflowException();
         }
@@ -42,9 +46,46 @@ public final class fileEditor {
         return new String(bytes, Charset.defaultCharset()).charAt(0);
     }
 
-    public static int fromChar(char c){
+
+
+    public static byte[] toBytes(int num, int byteCount){
+        if(num < 0 || num > (Math.pow(2,byteCount*8)-1)){
+            throw new BufferOverflowException();
+        }
+        byte[] bytes = new byte[byteCount];
+        for(int i=0;i<byteCount;i++){
+            bytes[i] = (byte)(num >> (i*8));
+        }
+        return bytes;
+    }
+
+
+
+    public static int fromBytes(byte[] bytes, int byteCount){
+        int returnInt = 0;
+        for(int i=0;i<byteCount;i++){
+            returnInt |= (bytes[i] & 0xFF) << (i*8);
+        }
+        return returnInt;
+    }
+
+
+
+    public static int byteFromChar(char c){
         byte[] bytes = (String.valueOf(c)).getBytes(Charset.defaultCharset());
         return Byte.toUnsignedInt(bytes[0]);
+    }
+
+
+    public static byte[] getByteBlock(byte[] bytes, int start, int end){
+        byte[] dataBlock = new byte[end-start]  ;
+
+        for(int a=start;a<end;a++){
+            Log.i("test", start+", "+a+", "+end);
+            dataBlock[a-start] = bytes[a];
+        }
+
+        return dataBlock;
     }
 
     public static byte[] compress(byte[] input) {
@@ -53,7 +94,7 @@ public final class fileEditor {
         deflater.finish();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[maxCompressedBlockSize];
 
         while (!deflater.finished()) {
             int compressedSize = deflater.deflate(buffer);
@@ -69,7 +110,9 @@ public final class fileEditor {
         inflater.setInput(input);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[maxCompressedBlockSize];
+
+
 
         while (!inflater.finished()) {
             int decompressedSize = inflater.inflate(buffer);

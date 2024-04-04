@@ -134,13 +134,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        tools:visibility="gone">
-
-        <com.astatin3.scoutingapp2025.qrPointsOverlayView
-            android:id="@+id/qrPointsOverlayView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.astatin3.scoutingapp2025.ui.transfer.scannerView>
+        tools:visibility="gone" />
 
     <com.astatin3.scoutingapp2025.ui.transfer.TBAView
         android:id="@+id/TBAView"
@@ -153,7 +147,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"

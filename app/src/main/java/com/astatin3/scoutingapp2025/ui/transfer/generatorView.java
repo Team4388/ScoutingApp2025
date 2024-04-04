@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
 import com.google.zxing.BarcodeFormat;
@@ -23,13 +22,11 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Random;
 
 public class generatorView extends ConstraintLayout {
     private FragmentTransferBinding binding;
@@ -45,7 +42,7 @@ public class generatorView extends ConstraintLayout {
     private final int minQrSpeed = 300 + maxQrSpeed - 1;
 
     private int minQrSize = 0;
-    private final int maxQrSize = 600;
+    private final int maxQrSize = 500;
     private int qrSize = 200;
 
 
@@ -73,11 +70,11 @@ public class generatorView extends ConstraintLayout {
 
         Map<EncodeHintType, Object> hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L); // H = 30% damage
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H); // H = 30% damage
 //        hints.put(EncodeHintType.QR_COMPACT, true);
         hints.put(EncodeHintType.MARGIN, 0); /* default = 4 */
 
-        int size = 200;
+        int size = 512;
 
         BitMatrix bitMatrix = qrCodeWriter.encode(myCodeText, BarcodeFormat.QR_CODE, size, size, hints);
 
@@ -99,31 +96,48 @@ public class generatorView extends ConstraintLayout {
     }
 
     public void start(FragmentTransferBinding binding, String inputData){
+        start(binding, inputData.getBytes(StandardCharsets.ISO_8859_1));
+    }
+    public void start(FragmentTransferBinding binding, byte[] inputData){
         qrImage = binding.qrImage;
         qrSpeedSlider = binding.qrSpeedSlider;
         qrSizeSlider = binding.qrSizeSlider;
         qrIndexN = binding.qrIndexN;
         qrIndexD = binding.qrIndexD;
 
-        String compiledData = null;
-//        try {
-        byte[] tempData = fileEditor.compress(inputData.getBytes(StandardCharsets.ISO_8859_1));
-        compiledData = new String(tempData, StandardCharsets.ISO_8859_1);
-//            alert(""+tempData.length, fileEditor.binaryVisualize(tempData));
-//            Log.i("Info", fileEditor.binaryVisualize(tempData));
+//        byte[] randomData = new byte[4596];
+//        new Random().nextBytes(randomData);
+//        inputData = randomData;
 
-//        }catch (UnsupportedEncodingException e){
-//            e.printStackTrace();
-//        }
 
-        alert(""+compiledData.length(), compiledData);
+        String compiledData = "";
 
-        if(compiledData == null || inputData.length() < compiledData.length()){
-            sendData(inputData);
-        }else{
-            sendData(compiledData);
+        for(int i=0;i<Math.ceil((double) inputData.length / fileEditor.maxCompressedBlockSize);i++){
+            final int start = i*fileEditor.maxCompressedBlockSize;
+            int end = ((i+1)*fileEditor.maxCompressedBlockSize);
+            if(end > inputData.length) {
+                end = inputData.length;
+            }
+
+            byte[] dataBlock = fileEditor.getByteBlock(inputData, start, end);
+
+            final String compressedBlock =
+                new String(
+                    fileEditor.compress(dataBlock),
+                        StandardCharsets.ISO_8859_1);
+
+            compiledData +=
+                new String(
+                    fileEditor.toBytes(compressedBlock.length(), 2),
+                        StandardCharsets.ISO_8859_1) +
+
+                    compressedBlock;
         }
 
+//        byte[] tempData = fileEditor.compress(inputData);
+//        String compiledData = new String(tempData, StandardCharsets.ISO_8859_1);
+
+        sendData(compiledData);
     }
 
     private void alert(String title, String content) {
@@ -137,7 +151,8 @@ public class generatorView extends ConstraintLayout {
 
     private void sendData(String data){
 
-        minQrSize = Math.round(data.length()/maxQrCount);
+//        minQrSize = 0;
+        minQrSize = Math.round(data.length()/maxQrCount)+1;
 
         qrSizeSlider.setMax(maxQrSize-minQrSize);
         qrSpeedSlider.setMax((minQrSpeed-maxQrSpeed)*2);
@@ -165,8 +180,9 @@ public class generatorView extends ConstraintLayout {
             public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                qrSize = seekBar.getProgress() + minQrSpeed;
-                qrCount = (data.length()/qrSize)+1;
+                qrSize = seekBar.getProgress() + minQrSize;
+//                qrCount = (int)Math.ceil((double) (data.length()+1)/qrSize);
+                qrCount = (int)((data.length()+1)/qrSize)+1;
                 qrIndexD.setText(String.valueOf(qrCount));
                 sendData(data);
             }
@@ -175,6 +191,9 @@ public class generatorView extends ConstraintLayout {
         qrSpeedSlider.setProgress(defaultQrDelay+5);
 
         qrBitmaps = new ArrayList<Bitmap>();
+
+        int randID = new Random().nextInt(255);
+
         for(int i=0;i<=((data.length()+1)/qrSize);i++){
             final int start = i*qrSize;
             int end = (i+1)*qrSize;
@@ -184,9 +203,10 @@ public class generatorView extends ConstraintLayout {
             try {
 //                alert("test", ""+Math.ceil((double)data.length()/(double)qrSize));
                 qrBitmaps.add(generateQrCode(
-                        String.valueOf(fileEditor.toChar(fileEditor.internalDataVersion)) +
-                                String.valueOf(fileEditor.toChar(i)) +
-                                String.valueOf(fileEditor.toChar(qrCount-1)) +
+                        String.valueOf(fileEditor.byteToChar(fileEditor.internalDataVersion)) +
+                                String.valueOf(fileEditor.byteToChar(randID)) +
+                                String.valueOf(fileEditor.byteToChar(i)) +
+                                String.valueOf(fileEditor.byteToChar(qrCount-1)) +
                                 data.substring(start, end)
                 ));
             }catch (WriterException e){
@@ -202,6 +222,7 @@ public class generatorView extends ConstraintLayout {
 
     private void updateQr(){
         qrImage.setImageBitmap(qrBitmaps.get(qrIndex));
+        Log.i("test", qrIndex+", "+qrCount);
         if(qrDelay > 0) {
             this.qrIndex += 1;
             if (this.qrIndex >= this.qrCount) {
