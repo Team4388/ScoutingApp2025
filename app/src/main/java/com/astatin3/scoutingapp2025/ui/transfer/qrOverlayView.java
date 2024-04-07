@@ -17,7 +17,6 @@ public class qrOverlayView extends View {
         int[] barColors;
         private Paint paint;
         private final int barHeight = 50;
-        private final int barMargin = 5;
 
         public qrOverlayView(Context context) {
             super(context);
@@ -63,12 +62,14 @@ public class qrOverlayView extends View {
 
                 final int top = 0;
                 final int bottom = barHeight;
+                final int margin = 5*(int)((double)width/getWidth());
 
                 for(int i=0;i<barColors.length;i++){
 
                     final int num = barColors[i];
 
                     int c = Color.RED;
+
                     if(num == 2){
                         c = Color.GREEN;
                     }else if(num == 1){
@@ -79,8 +80,8 @@ public class qrOverlayView extends View {
                     p.setColor(c);
 
                     canvas.drawRect(new Rect(
-                            (i*width)+barMargin, top+barMargin,
-                            ((i+1)*width)-barMargin, bottom-barMargin
+                            (i*width), top,
+                            ((i+1)*width), bottom
                     ), p);
                 }
             }

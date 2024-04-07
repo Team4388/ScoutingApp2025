@@ -27,6 +27,7 @@ public class TransferFragment extends Fragment {
         alert.setCancelable(true);
         alert.create().show();
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -53,7 +54,7 @@ public class TransferFragment extends Fragment {
             public void onClick(View v) {
                 binding.selectLayout.setVisibility(View.GONE);
                 binding.scannerLayout.setVisibility(View.VISIBLE);
-                binding.scannerLayout.start(binding);
+                binding.scannerLayout.start(binding, getViewLifecycleOwner());
             }
         });
         binding.TBAButton.setOnClickListener(new View.OnClickListener() {

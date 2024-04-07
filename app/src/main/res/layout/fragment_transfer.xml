@@ -129,21 +129,58 @@
 
     </com.astatin3.scoutingapp2025.ui.transfer.generatorView>
 
+
     <com.astatin3.scoutingapp2025.ui.transfer.scannerView
         android:id="@+id/scannerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="parent"
+        tools:layout_editor_absoluteX="-62dp"
+        tools:visibility="visible">
+
+
+        <SeekBar
+            android:id="@+id/scannerThreshold"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/scannerImage"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:scaleX="1"
+            android:scaleY="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".TransferFragment" />
+
+        <!--        <Switch-->
+        <!--            android:id="@+id/switch1"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Switch"-->
+        <!--            tools:ignore="UseSwitchCompatOrMaterialXml" />-->
+
+
+    </com.astatin3.scoutingapp2025.ui.transfer.scannerView>
 
     <com.astatin3.scoutingapp2025.ui.transfer.TBAView
         android:id="@+id/TBAView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="57dp"
         android:fillViewport="true"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

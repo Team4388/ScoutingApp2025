@@ -15,8 +15,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
@@ -38,7 +40,7 @@ public class generatorView extends ConstraintLayout {
 
     private final int maxQrCount = 256; //The max number that can be stored in a byte
 
-    private final int maxQrSpeed = 20;
+    private final int maxQrSpeed = 5;
     private final int minQrSpeed = 300 + maxQrSpeed - 1;
 
     private int minQrSize = 0;
@@ -64,32 +66,42 @@ public class generatorView extends ConstraintLayout {
         super(context, attributeSet);
     }
 
-    public static Bitmap generateQrCode(String myCodeText) throws WriterException {
+    private Bitmap generateQrCode(String contents) throws WriterException {
 
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        final int size = 512;
+
+        if (contents == null) {
+            return null;
+        }
 
         Map<EncodeHintType, Object> hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+
+        // The Charset must be UTF-8, Or data will not be transferred properly. IDK why.
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H); // H = 30% damage
-//        hints.put(EncodeHintType.QR_COMPACT, true);
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
         hints.put(EncodeHintType.MARGIN, 0); /* default = 4 */
+        MultiFormatWriter writer = new MultiFormatWriter();
 
-        int size = 512;
+        BitMatrix result;
+        try {
+            result = writer.encode(contents, BarcodeFormat.QR_CODE, size, size, hints);
+        } catch (IllegalArgumentException iae) {
+            // Unsupported format
+            return null;
+        }
 
-        BitMatrix bitMatrix = qrCodeWriter.encode(myCodeText, BarcodeFormat.QR_CODE, size, size, hints);
-
-        int width = bitMatrix.getWidth();
-        int height = bitMatrix.getHeight();
-
+        int width = result.getWidth();
+        int height = result.getHeight();
         int[] pixels = new int[width * height];
         for (int y = 0; y < height; y++) {
             int offset = y * width;
             for (int x = 0; x < width; x++) {
-                pixels[offset + x] = bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE;
+                pixels[offset + x] = result.get(x, y) ? Color.BLACK : Color.WHITE;
             }
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(width, height,
+                Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 
         return bitmap;
@@ -132,6 +144,8 @@ public class generatorView extends ConstraintLayout {
                         StandardCharsets.ISO_8859_1) +
 
                     compressedBlock;
+
+
         }
 
 //        byte[] tempData = fileEditor.compress(inputData);
@@ -209,6 +223,7 @@ public class generatorView extends ConstraintLayout {
                                 String.valueOf(fileEditor.byteToChar(qrCount-1)) +
                                 data.substring(start, end)
                 ));
+//                alert("title", ""+(qrCount-1));
             }catch (WriterException e){
                 e.printStackTrace();
             }
@@ -222,7 +237,6 @@ public class generatorView extends ConstraintLayout {
 
     private void updateQr(){
         qrImage.setImageBitmap(qrBitmaps.get(qrIndex));
-        Log.i("test", qrIndex+", "+qrCount);
         if(qrDelay > 0) {
             this.qrIndex += 1;
             if (this.qrIndex >= this.qrCount) {

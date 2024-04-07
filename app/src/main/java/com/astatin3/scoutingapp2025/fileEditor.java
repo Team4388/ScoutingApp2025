@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.astatin3.scoutingapp2025.Utils.frcMatch;
 import com.astatin3.scoutingapp2025.Utils.frcTeam;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -78,10 +77,10 @@ public final class fileEditor {
 
 
     public static byte[] getByteBlock(byte[] bytes, int start, int end){
-        byte[] dataBlock = new byte[end-start]  ;
+        byte[] dataBlock = new byte[end-start];
 
         for(int a=start;a<end;a++){
-            Log.i("test", start+", "+a+", "+end);
+//            Log.i("test", start+", "+a+", "+end);
             dataBlock[a-start] = bytes[a];
         }
 
@@ -113,9 +112,11 @@ public final class fileEditor {
         byte[] buffer = new byte[maxCompressedBlockSize];
 
 
-
-        while (!inflater.finished()) {
+        while (inflater.getRemaining() > 0) {
             int decompressedSize = inflater.inflate(buffer);
+            if (decompressedSize == 0) {
+                break;
+            }
             outputStream.write(buffer, 0, decompressedSize);
         }
 
