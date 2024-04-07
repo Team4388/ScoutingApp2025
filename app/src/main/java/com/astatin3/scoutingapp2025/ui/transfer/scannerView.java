@@ -1,35 +1,17 @@
 package com.astatin3.scoutingapp2025.ui.transfer;
 
-import static android.view.Surface.ROTATION_0;
 import static androidx.core.math.MathUtils.clamp;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.ImageFormat;
-import android.graphics.Paint;
-import android.graphics.PointF;
-import android.graphics.YuvImage;
 import android.media.Image;
 import android.os.Handler;
-import android.os.SystemClock;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Size;
 import android.view.Surface;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.OptIn;
@@ -40,30 +22,25 @@ import androidx.camera.core.ExperimentalGetImage;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
-import androidx.camera.core.impl.CameraFilters;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.astatin3.scoutingapp2025.YuvConvertor;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
 
+import com.astatin3.scoutingapp2025.qrScanTask;
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 import com.google.common.util.concurrent.ListenableFuture;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 import java.util.zip.DataFormatException;
 
 //public class scannerView extends androidx.appcompat.widget.AppCompatImageView {
@@ -78,7 +55,6 @@ public class scannerView extends ConstraintLayout {
     private qrOverlayView qrOverlayView;
     private Handler uiHandler;
     private ScriptIntrinsicYuvToRGB script;
-    private YuvConvertor yuvConvertor;
 
 //    private class codeReadListener implements QRCodeReaderView.OnQRCodeReadListener {
 //        @Override
@@ -115,114 +91,153 @@ public class scannerView extends ConstraintLayout {
     }
 
     private float scale = 0;
-    private double threshhold = 0.5;
     private FragmentTransferBinding binding;
     private LifecycleOwner lifecycle;
 
     private void setImage(Bitmap bmp){
         if(scale == 0) {
-            scale = ((float) ((View) getParent()).getWidth() / bmp.getWidth()) * ((float) 16 / 9);
-            setScaleX(scale);
-            setScaleY(scale);
+            scale = ((float) getWidth() / bmp.getWidth()) * ((float) 16 / 9);
+            binding.scannerImage.setTranslationX(0);
+            binding.scannerImage.setTranslationY(0);
+//            binding.scannerImage.setScaleX(scale);
+//            binding.scannerImage.setScaleY(scale);
         }
+        scanQRCode(bmp);
         binding.scannerImage.setImageBitmap(bmp);
         binding.scannerThreshold.bringToFront();
+//        alert("test", getChildCount()+"");
     }
 
-    private Bitmap toGreyscale(Bitmap originalBitmap){
-        int width = originalBitmap.getWidth();
-        int height = originalBitmap.getHeight();
+//    private Bitmap img
 
-        Bitmap oneBitBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(oneBitBitmap);
-        Paint paint = new Paint();
-        paint.setColorFilter(new ColorMatrixColorFilter(new ColorMatrix(new float[] {
-                0.299f, 0.587f, 0.114f, 0, 0,
-                0.299f, 0.587f, 0.114f, 0, 0,
-                0.299f, 0.587f, 0.114f, 0, 0,
-                0,      0,      0,      1, 0
-        })));
-
-        canvas.drawBitmap(originalBitmap, 0, 0, paint);
+    int[] levelMap = new int[256];
+    private void recalcMap(){
+        for (int i = 0; i < 256; i++) {
+            levelMap[i] = clamp(
+                (clamp(
+                    i-thresholdOffset, 0, 255) / (256 / numColors)) * (256 / numColors
+                )+brightness, 0, 255
+            );
+        }
+    }
+    private Bitmap toGreyscale(Image image){
+        // Turns out the "Y" In YUV is the Luminance of the pixel.
+        // Makes converting to greyscale 1000x easier
+        ByteBuffer yBuffer = image.getPlanes()[0].getBuffer();
+        final int width = image.getWidth();
+        final int height = image.getHeight();
 
         int[] pixels = new int[width * height];
-        oneBitBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-
-        int[] oneBitPixels = new int[width * height];
-        int threshold = 128; // Adjust this value to change the threshold
-
-        for (int i = 0; i < pixels.length; i++) {
-            int pixel = pixels[i];
-            int red = Color.red(pixel);
-            int green = Color.green(pixel);
-            int blue = Color.blue(pixel);
-            int average = (red + green + blue) / 3;
-            oneBitPixels[i] = (average > threshold) ? Color.WHITE : Color.BLACK;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+//                int L = levelMap[clamp((yBuffer.get() & 0xff) - thresholdOffset, 0, 255)];
+//                int L = clamp(levelMap[yBuffer.get() & 0xff]-thresholdOffset, 0, 255);
+                int L = levelMap[yBuffer.get() & 0xff];
+                pixels[y * width + x] = 0xff000000 | (L << 16) | (L << 8) | L;
+//                if(L > threshold) {
+//                    pixels[y * width + x] = 0xffffffff;
+//                }else{
+//                    pixels[y * width + x] = 0xff000000;
+//                }
+//                pixels[y * width + x] = levelMap[L];
+            }
         }
 
-        oneBitBitmap.setPixels(oneBitPixels, 0, width, 0, 0, width, height);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 
-        return oneBitBitmap;
+        return bitmap;
     }
+    public void scanQRCode(Bitmap bitmap) {
 
+        qrScanTask async = new qrScanTask();
+        async.setImage(bitmap);
+        async.onResult(new Function<String, String>() {
+            @Override
+            public String apply(String data) {
+                if(data != null){
+//                    alert("test", ""+fileEditor.byteFromChar(data.charAt(0)));
+                    compileData(
+                        fileEditor.byteFromChar(data.charAt(0)),
+                        fileEditor.byteFromChar(data.charAt(1)),
+                        fileEditor.byteFromChar(data.charAt(2)),
+                        (fileEditor.byteFromChar(data.charAt(3))+1),
+                        data.substring(4)
+                    );
+                }
+                return null;
+            }
+        });
+        async.execute();
+
+
+
+//        return contents;
+    }
+    private int numColors = 3;
+    private int thresholdOffset = 128;
+    private int brightness = 128;
     public void start(FragmentTransferBinding binding, LifecycleOwner lifecycle){
         this.binding = binding;
         this.lifecycle = lifecycle;
-        yuvConvertor = new YuvConvertor(getContext(), 1280, 720);
+
+
 
         uiHandler = new Handler();
 
-//        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(TransferFragment);
-//        integrator.setPrompt("Scan a QR code");
-//        integrator.setBeepEnabled(true);
-//        integrator.setOrientationLocked(true);
-//        integrator.setCaptureActivity(CaptureActivity.class);
-//        integrator.initiateScan();
+
+        binding.scannerThreshold.setProgress(thresholdOffset);
+        binding.scannerThreshold.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                thresholdOffset = 127-progress;
+                recalcMap();
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        binding.scannerThreshold.setMax(255);
+
+        binding.scannerColors.setProgress(numColors);
+        binding.scannerColors.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                numColors = 18-(progress-2);
+                recalcMap();
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        binding.scannerColors.setMax(18);
+        binding.scannerBrightness.setProgress(brightness);
+        binding.scannerBrightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                brightness = progress-128;
+                recalcMap();
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        binding.scannerBrightness.setMax(256);
 
 
-//        ScanOptions options = new ScanOptions();
-//        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
-//        options.setPrompt("Scan a barcode");
-//        options.setCameraId(0);  // Use a specific camera of the device
-//        options.setBeepEnabled(false);
-//        options.setBarcodeImageEnabled(true);
-//        barcodeLauncher.launch(options);
+        recalcMap();
 
-//        qrCodeReaderView = new QRCodeReaderView(getContext());
-//        this.addView(qrCodeReaderView);
-//        ConstraintLayout.LayoutParams qrCodeReaderViewParams = (ConstraintLayout.LayoutParams) qrCodeReaderView.getLayoutParams();
-//        qrCodeReaderViewParams.width = ActionBar.LayoutParams.MATCH_PARENT;
-//        qrCodeReaderViewParams.height = ActionBar.LayoutParams.MATCH_PARENT;
-//        qrCodeReaderView.setLayoutParams(qrCodeReaderViewParams);
-//
-//        qrOverlayView = new qrOverlayView(getContext());
-//        qrOverlayView.bringToFront();
-//        this.addView(qrOverlayView);
-//        ConstraintLayout.LayoutParams pointsOverlayViewParams = (ConstraintLayout.LayoutParams) qrCodeReaderView.getLayoutParams();
-//        pointsOverlayViewParams.width = ActionBar.LayoutParams.MATCH_PARENT;
-//        pointsOverlayViewParams.height = ActionBar.LayoutParams.MATCH_PARENT;
-//        qrOverlayView.setLayoutParams(pointsOverlayViewParams);
-//
-//        Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
-//        hints.put(DecodeHintType.POSSIBLE_FORMATS, BarcodeFormat.QR_CODE);
-//        hints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
-////        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-//
-//        qrCodeReaderView.setDecodeHints(hints);
-//
-////        qrCodeReaderView = (QRCodeReaderView) binding.qrdecoderview;
-//        qrCodeReaderView.setOnQRCodeReadListener(new codeReadListener());
-////        qrCodeReaderView.setQRDecodingEnabled(true);
-//        qrCodeReaderView.setAutofocusInterval(2000L);
-////        qrCodeReaderView.setFrontCamera();
-//        qrCodeReaderView.setBackCamera();
-//        qrCodeReaderView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                qrCodeReaderView.forceAutoFocus();
-//            }
-//        });
-//        qrCodeReaderView.startCamera();
+        qrOverlayView = new qrOverlayView(getContext());
+        qrOverlayView.bringToFront();
+        ConstraintLayout.LayoutParams pointsOverlayViewParams = new ConstraintLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT
+        );
+
+        qrOverlayView.setLayoutParams(pointsOverlayViewParams);
+        this.addView(qrOverlayView);
 
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture
                 = ProcessCameraProvider.getInstance(this.getContext());
@@ -267,14 +282,18 @@ public class scannerView extends ConstraintLayout {
             @OptIn(markerClass = ExperimentalGetImage.class) @Override
             public void analyze(@NonNull ImageProxy image) {
                 Image img = Objects.requireNonNull(image.getImage());
-                Log.i("test", img.getWidth() + ", " + img.getHeight());
-                final Bitmap bmp = yuvConvertor.toBitmap(img);
-                uiHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setImage(toGreyscale(bmp));
-                    }
-                });
+//                Log.i("test", img.getWidth() + ", " + img.getHeight());
+//                final Bitmap bmp = yuvConvertor.toBitmap(img);
+                if(img != null) {
+                    uiHandler.post(new Runnable() {
+                        Bitmap bmp = toGreyscale(img);
+                        @Override
+                        public void run() {
+//                        setImage(toGreyscale(bmp));
+                            setImage(bmp);
+                        }
+                    });
+                }
                 image.close();
             }
         });
@@ -295,7 +314,7 @@ public class scannerView extends ConstraintLayout {
     private int prevQrIndex;
     private void compileData(int dataVersion, int randID, int qrIndex, int qrCount, String qrData){
         if(dataVersion != fileEditor.internalDataVersion){
-            alert("Error", "Incorrect data version");
+            alert("Error", "Incorrect data version ("+dataVersion+" != "+fileEditor.internalDataVersion+")");
             return;
         }
 
@@ -324,14 +343,13 @@ public class scannerView extends ConstraintLayout {
 
         if(updated && qrScannedCount >= qrCount){
 
-            // I guess String.join does not like non-ascii text
-            String compiledData = "";
+            String compiledString = "";
             for(int i=0;i<qrCount;i++){
-                compiledData += qrDataArr[i];
+                compiledString += qrDataArr[i];
             }
 
             try {
-                byte[] compiledBytes = compiledData.getBytes(StandardCharsets.ISO_8859_1);
+                byte[] compiledBytes = compiledString.getBytes(StandardCharsets.ISO_8859_1);
 //                alert(count+", "+compiledData.length()+", "+compiledBytes.length, ""+fileEditor.fromBytes(fileEditor.getByteBlock(compiledBytes, 0,2),2));
 //                alert("completed", new String(fileEditor.decompress(compiledBytes), StandardCharsets.ISO_8859_1));
                 alert("completed", blockUncompress(compiledBytes));

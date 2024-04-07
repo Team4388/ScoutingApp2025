@@ -78,7 +78,7 @@ public class generatorView extends ConstraintLayout {
 
         // The Charset must be UTF-8, Or data will not be transferred properly. IDK why.
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         hints.put(EncodeHintType.MARGIN, 0); /* default = 4 */
         MultiFormatWriter writer = new MultiFormatWriter();
 

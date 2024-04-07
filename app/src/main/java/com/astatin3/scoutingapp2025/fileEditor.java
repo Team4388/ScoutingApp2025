@@ -37,12 +37,7 @@ public final class fileEditor {
 
 
     public static char byteToChar(int num){
-        if(num < 0 || num > 255){
-            throw new BufferOverflowException();
-        }
-        byte[] bytes = new byte[1];
-        bytes[0] = (byte) num;
-        return new String(bytes, Charset.defaultCharset()).charAt(0);
+        return new String(toBytes(num, 1), StandardCharsets.UTF_8).charAt(0);
     }
 
 

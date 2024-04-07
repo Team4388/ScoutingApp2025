@@ -141,36 +141,77 @@
 
 
         <SeekBar
-            android:id="@+id/scannerThreshold"
+            android:id="@+id/scannerColors"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginBottom="60dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
+        <SeekBar
+            android:id="@+id/scannerThreshold"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@id/scannerColors"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <SeekBar
+            android:id="@+id/scannerBrightness"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@id/scannerThreshold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/scannerColorsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="-12dp"
+            android:text="Posterize"
+            app:layout_constraintBottom_toTopOf="@+id/scannerColors"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/scannerThresholdLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="-12dp"
+            android:text="Exposure"
+            app:layout_constraintBottom_toTopOf="@+id/scannerThreshold"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/scannerBrightnessLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="-12dp"
+            android:text="Brightness"
+            app:layout_constraintBottom_toTopOf="@+id/scannerBrightness"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
         <ImageView
             android:id="@+id/scannerImage"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:adjustViewBounds="true"
             android:rotation="90"
             android:scaleType="fitCenter"
             android:scaleX="1"
             android:scaleY="1"
+            android:translationY="-40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:context=".TransferFragment" />
-
-        <!--        <Switch-->
-        <!--            android:id="@+id/switch1"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="Switch"-->
-        <!--            tools:ignore="UseSwitchCompatOrMaterialXml" />-->
 
 
     </com.astatin3.scoutingapp2025.ui.transfer.scannerView>
