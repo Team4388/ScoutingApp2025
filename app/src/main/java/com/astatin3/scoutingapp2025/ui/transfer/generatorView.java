@@ -1,12 +1,10 @@
 package com.astatin3.scoutingapp2025.ui.transfer;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -15,13 +13,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.nio.charset.StandardCharsets;
@@ -47,8 +43,6 @@ public class generatorView extends ConstraintLayout {
     private final int maxQrSize = 500;
     private int qrSize = 200;
 
-
-    private int curCodeIndex = 0;
     private final int defaultQrDelay = 419;
     private int qrDelay = 0;
     private int qrIndex = 0;
@@ -74,7 +68,7 @@ public class generatorView extends ConstraintLayout {
             return null;
         }
 
-        Map<EncodeHintType, Object> hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+        Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
 
         // The Charset must be UTF-8, Or data will not be transferred properly. IDK why.
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
@@ -117,10 +111,6 @@ public class generatorView extends ConstraintLayout {
         qrIndexN = binding.qrIndexN;
         qrIndexD = binding.qrIndexD;
 
-//        byte[] randomData = new byte[4596];
-//        new Random().nextBytes(randomData);
-//        inputData = randomData;
-
 
         String compiledData = "";
 
@@ -148,19 +138,7 @@ public class generatorView extends ConstraintLayout {
 
         }
 
-//        byte[] tempData = fileEditor.compress(inputData);
-//        String compiledData = new String(tempData, StandardCharsets.ISO_8859_1);
-
         sendData(compiledData);
-    }
-
-    private void alert(String title, String content) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setMessage(content);
-        alert.setTitle(title);
-        alert.setPositiveButton("OK", null);
-        alert.setCancelable(true);
-        alert.create().show();
     }
 
     private void sendData(String data){
@@ -196,7 +174,7 @@ public class generatorView extends ConstraintLayout {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 qrSize = seekBar.getProgress() + minQrSize;
 //                qrCount = (int)Math.ceil((double) (data.length()+1)/qrSize);
-                qrCount = (int)((data.length()+1)/qrSize)+1;
+                qrCount = ((data.length()+1)/qrSize) +1;
                 qrIndexD.setText(String.valueOf(qrCount));
                 sendData(data);
             }
@@ -204,7 +182,7 @@ public class generatorView extends ConstraintLayout {
 
         qrSpeedSlider.setProgress(defaultQrDelay+5);
 
-        qrBitmaps = new ArrayList<Bitmap>();
+        qrBitmaps = new ArrayList<>();
 
         int randID = new Random().nextInt(255);
 
@@ -217,10 +195,10 @@ public class generatorView extends ConstraintLayout {
             try {
 //                alert("test", ""+Math.ceil((double)data.length()/(double)qrSize));
                 qrBitmaps.add(generateQrCode(
-                        String.valueOf(fileEditor.byteToChar(fileEditor.internalDataVersion)) +
+                        fileEditor.byteToChar(fileEditor.internalDataVersion) +
                                 String.valueOf(fileEditor.byteToChar(randID)) +
-                                String.valueOf(fileEditor.byteToChar(i)) +
-                                String.valueOf(fileEditor.byteToChar(qrCount-1)) +
+                                fileEditor.byteToChar(i) +
+                                fileEditor.byteToChar(qrCount - 1) +
                                 data.substring(start, end)
                 ));
 //                alert("title", ""+(qrCount-1));

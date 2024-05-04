@@ -1,37 +1,19 @@
-package com.astatin3.scoutingapp2025.ui.TBA;
+package com.astatin3.scoutingapp2025.ui.Settings;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.astatin3.scoutingapp2025.RequestTask;
-import com.astatin3.scoutingapp2025.databinding.FragmentTbaBinding;
-import com.astatin3.scoutingapp2025.ui.JSONUtil;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Comparator;
-import java.util.function.Function;
+import com.astatin3.scoutingapp2025.databinding.FragmentSettingsBinding;
 
 
-public class TBAFragment extends Fragment {
-
-//    private final String
-    private final String TBAAddress = "https://www.thebluealliance.com/api/v3/";
-    private final String TBAHeader = "X-TBA-Auth-Key: tjEKSZojAU2pgbs2mBt06SKyOakVhLutj3NwuxLTxPKQPLih11aCIwRIVFXKzY4e";
-
-    private FragmentTbaBinding binding;
+public class Settings extends Fragment {
+    private FragmentSettingsBinding binding;
     private android.widget.ScrollView ScrollArea;
     private android.widget.TableLayout Table;
 
@@ -48,7 +30,7 @@ public class TBAFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentTbaBinding.inflate(inflater, container, false);
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         return root;

@@ -1,11 +1,17 @@
 package com.astatin3.scoutingapp2025;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.astatin3.scoutingapp2025.Utils.frcMatch;
-import com.astatin3.scoutingapp2025.Utils.frcTeam;
+import com.astatin3.scoutingapp2025.types.frcEvent;
+import com.astatin3.scoutingapp2025.types.frcMatch;
+import com.astatin3.scoutingapp2025.types.frcTeam;
+
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.BufferOverflowException;
@@ -17,7 +23,7 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 public final class fileEditor {
-//    private final static String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+    private final static String baseDir = "/data/data/com.astatin3.scoutingapp2025/files/";
     public static final byte internalDataVersion = 0x01;
     public static final int maxCompressedBlockSize = 4096;
 
@@ -25,11 +31,11 @@ public final class fileEditor {
 
     public static String binaryVisualize(byte[] bytes){
         String returnStr = "";
-        for(int a=0;a<bytes.length;a++){
-            for(int b=0;b<8;b++){
-                returnStr += String.valueOf((bytes[a] >> b) & 1);
+        for (byte aByte : bytes) {
+            for (int b = 7; b >= 0; b--) {
+                returnStr += String.valueOf((aByte >> b) & 1);
             }
-            returnStr += " (" + (int)bytes[a] + ")\n";
+            returnStr += " (" + (int) aByte + ")\n";
         }
         return returnStr;
     }
@@ -43,7 +49,7 @@ public final class fileEditor {
 
 
     public static byte[] toBytes(int num, int byteCount){
-        if(num < 0 || num > (Math.pow(2,byteCount*8)-1)){
+        if(num > (Math.pow(2,byteCount*8)-1)){
             throw new BufferOverflowException();
         }
         byte[] bytes = new byte[byteCount];
@@ -118,16 +124,34 @@ public final class fileEditor {
         return outputStream.toByteArray();
     }
 
-    private static boolean writeToFile(Context context, String filepath, String data) {
+    private static boolean writeToFile(String filepath, byte[] data) {
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filepath, Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
+            FileOutputStream output = new FileOutputStream(filepath);
+            output.write(data);
+            output.close();
             return true;
         }
         catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public static byte[] readFile(String path){
+        File file = new File(path);
+        int size = (int) file.length();
+        byte[] bytes = new byte[size];
+        try {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+            return bytes;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -142,23 +166,31 @@ public final class fileEditor {
         return returnStr;
     }
 
-    public static boolean setMatches(Context context, String key, String matchName, ArrayList<frcMatch> matches){
-        final String filename = (key + "-matches.csv");
 
-        String csvData = "";
 
-        csvData += key + "\n";
-        csvData += matchName + "\n";
 
-        for(int i=0;i<matches.size();i++){
-            final frcMatch match = matches.get(i);
-            csvData += String.valueOf(match.matchIndex)
-                       + "," + intSplit(match.redAlliance, ",")
-                       + "," + intSplit(match.blueAlliance, ",") + "\n";
-        }
 
-        return writeToFile(context, filename, csvData);
+
+
+    public static boolean setEvent(frcEvent event){
+        final String filename = (baseDir + event.eventCode + ".eventdata");
+
+        return writeToFile(filename, event.encode());
     }
+
+    public static ArrayList<String> getEventList(){
+        File f = new File(baseDir);
+        File[] files = f.listFiles();
+        ArrayList<String> outFiles = new ArrayList<>();
+        if(files == null){return outFiles;}
+        for (File file : files) {
+            if(!file.isDirectory() && file.getName().endsWith(".eventdata")) {
+                outFiles.add(file.getName());
+            }
+        }
+        return outFiles;
+    }
+
 
     public static boolean setTeams(Context context, String key, ArrayList<frcTeam> teams){
         return true;

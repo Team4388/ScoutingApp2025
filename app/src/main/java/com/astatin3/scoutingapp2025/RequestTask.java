@@ -1,13 +1,6 @@
 package com.astatin3.scoutingapp2025;
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PointF;
 import android.os.AsyncTask;
-import android.util.AttributeSet;
-import android.view.View;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,8 +36,6 @@ public class RequestTask extends AsyncTask<String, String, String> {
             else {
                 return null; // See documentation for more info on response handling
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,10 +43,10 @@ public class RequestTask extends AsyncTask<String, String, String> {
     }
     private static String readStream(InputStream in) {
         BufferedReader reader = null;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
         try {
             reader = new BufferedReader(new InputStreamReader(in));
-            String line = "";
+            String line;
             while ((line = reader.readLine()) != null) {
                 response.append(line);
             }

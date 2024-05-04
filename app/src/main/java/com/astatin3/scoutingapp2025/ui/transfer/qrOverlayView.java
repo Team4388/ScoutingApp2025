@@ -11,6 +11,8 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 public class qrOverlayView extends View {
 
         PointF[] points;
@@ -50,7 +52,7 @@ public class qrOverlayView extends View {
         }
 
         @Override
-        public void draw(Canvas canvas) {
+        public void draw(@NonNull Canvas canvas) {
             super.draw(canvas);
             if (points != null) {
                 for (PointF pointF : points) {
@@ -58,11 +60,10 @@ public class qrOverlayView extends View {
                 }
             }
             if(barColors != null){
-                final int width = (int)(getWidth()/barColors.length);
+                final int width = getWidth()/barColors.length;
 
                 final int top = 0;
                 final int bottom = barHeight;
-                final int margin = 5*(int)((double)width/getWidth());
 
                 for(int i=0;i<barColors.length;i++){
 

@@ -11,4 +11,10 @@
     tools:context=".MainActivity">
 
 
+    <Spinner
+        android:id="@+id/eventDropdown"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="32dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

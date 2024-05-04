@@ -13,8 +13,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.astatin3.scoutingapp2025.RequestTask;
-import com.astatin3.scoutingapp2025.Utils.frcMatch;
-import com.astatin3.scoutingapp2025.Utils.frcTeam;
+import com.astatin3.scoutingapp2025.types.frcEvent;
+import com.astatin3.scoutingapp2025.types.frcMatch;
+import com.astatin3.scoutingapp2025.types.frcTeam;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
 import com.astatin3.scoutingapp2025.ui.JSONUtil;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.function.Function;
+import java.util.Objects;
 
 public class TBAView extends ScrollView {
     private final String TBAAddress = "https://www.thebluealliance.com/api/v3/";
@@ -66,12 +67,9 @@ public class TBAView extends ScrollView {
         Table.addView(tr);
 
         final RequestTask rq = new RequestTask();
-        rq.onResult(new Function<String, String>() {
-            @Override
-            public String apply(String s) {
-                eventTable(s);
-                return null;
-            }
+        rq.onResult(s -> {
+            eventTable(s);
+            return null;
         });
         rq.execute(TBAAddress + "events/"+yearStr, TBAHeader);
 
@@ -99,13 +97,6 @@ public class TBAView extends ScrollView {
             Table.bringToFront();
 
             boolean toggle = false;
-
-//            TableRow tr = new TableRow(getContext());
-//            addTableText(tr, "Key");
-//            addTableText(tr, "Title");
-//            addTableText(tr, "Type");
-//
-//            Table.addView(tr);
 
             for(int i=0;i<data.length();i++){
                 TableRow tr = new TableRow(getContext());
@@ -156,39 +147,30 @@ public class TBAView extends ScrollView {
                 }
 
 
-                tr.setOnClickListener( new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Table.removeAllViews();
-                        Table.setStretchAllColumns(true);
-                        Table.bringToFront();
+                tr.setOnClickListener(v -> {
+                    Table.removeAllViews();
+                    Table.setStretchAllColumns(true);
+                    Table.bringToFront();
 
-                        TableRow tr = new TableRow(getContext());
-                        addTableText(tr, "Downloading Teams...");
-                        Table.addView(tr);
+                    TableRow tr1 = new TableRow(getContext());
+                    addTableText(tr1, "Downloading Teams...");
+                    Table.addView(tr1);
 
-                        final RequestTask rq = new RequestTask();
-                        rq.onResult(new Function<String, String>() {
-                            @Override
-                            public String apply(String teamsStr) {
-                                TableRow tr = new TableRow(getContext());
-                                addTableText(tr, "Downloading Matches...");
-                                Table.addView(tr);
+                    final RequestTask rq = new RequestTask();
+                    rq.onResult(teamsStr -> {
+                        TableRow tr11 = new TableRow(getContext());
+                        addTableText(tr11, "Downloading Matches...");
+                        Table.addView(tr11);
 
-                                final RequestTask rq = new RequestTask();
-                                rq.onResult(new Function<String, String>() {
-                                    @Override
-                                    public String apply(String matchesStr) {
-                                        matchTable(matchesStr, teamsStr, j);
-                                        return null;
-                                    }
-                                });
-                                rq.execute((TBAAddress + "event/" + matchKey + "/matches"), TBAHeader);
-                                return null;
-                            }
+                        final RequestTask rq1 = new RequestTask();
+                        rq1.onResult(matchesStr -> {
+                            matchTable(matchesStr, teamsStr, j);
+                            return null;
                         });
-                        rq.execute((TBAAddress + "event/" + matchKey + "/teams"), TBAHeader);
-                    }
+                        rq1.execute((TBAAddress + "event/" + matchKey + "/matches"), TBAHeader);
+                        return null;
+                    });
+                    rq.execute((TBAAddress + "event/" + matchKey + "/teams"), TBAHeader);
                 });
 
 //                tr.addView(cl);
@@ -201,7 +183,7 @@ public class TBAView extends ScrollView {
         }
     }
 
-    class matchComparator implements Comparator<JSONObject>
+    static class matchComparator implements Comparator<JSONObject>
     {
 
         public int compare(JSONObject a, JSONObject b)
@@ -286,20 +268,18 @@ public class TBAView extends ScrollView {
             Table.addView(tr);
 
 
-            final JSONArray sortedMatchData = JSONUtil.sort(matchData, new Comparator(){
-                public int compare(Object a, Object b){
-                    JSONObject    ja = (JSONObject)a;
-                    JSONObject    jb = (JSONObject)b;
-                    try {
-                        return ja.getInt("match_number") - jb.getInt("match_number");
-                    }catch (JSONException j){
-                        return 0;
-                    }
+            final JSONArray sortedMatchData = JSONUtil.sort(matchData, (a, b) -> {
+                JSONObject    ja = (JSONObject)a;
+                JSONObject    jb = (JSONObject)b;
+                try {
+                    return ja.getInt("match_number") - jb.getInt("match_number");
+                }catch (JSONException j){
+                    return 0;
                 }
             });
 
 
-            final ArrayList<frcMatch> matchesOBJ = new ArrayList<frcMatch>();
+            final ArrayList<frcMatch> matchesOBJ = new ArrayList<>();
             boolean toggle = false;
             int matchCount = 1;
 
@@ -334,12 +314,12 @@ public class TBAView extends ScrollView {
 
                     if(b < 3){
                         String str = redAlliance.getString(b).substring(3);
-                        redKeys[b] = (int)Integer.parseInt(str);
+                        redKeys[b] = Integer.parseInt(str);
                         text.setText(str);
                         text.setBackgroundColor(0x50ff0000);
                     }else{
                         String str = blueAlliance.getString(b-3).substring(3);
-                        blueKeys[b-3] = (int)Integer.parseInt(str);
+                        blueKeys[b-3] = Integer.parseInt(str);
                         text.setText(str);
                         text.setBackgroundColor(0x500000ff);
                     }
@@ -357,14 +337,11 @@ public class TBAView extends ScrollView {
                 toggle = !toggle;
             }
 
-            btn.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(saveData(matchesOBJ, teamData, eventData)){
-                        alert("Info", "Saved!");
-                    }else{
-                        alert("Error", "Error saving files.");
-                    }
+            btn.setOnClickListener(v -> {
+                if(saveData(matchesOBJ, teamData, eventData)){
+                    alert("Info", "Saved!");
+                }else{
+                    alert("Error", "Error saving files.");
                 }
             });
 
@@ -385,7 +362,7 @@ public class TBAView extends ScrollView {
             }
 
 
-            ArrayList<frcTeam> teams = new ArrayList<frcTeam>();
+            ArrayList<frcTeam> teams = new ArrayList<>();
             for(int i=0;i<teamData.length();i++){
                 frcTeam teamObj = new frcTeam();
                 JSONObject team = teamData.getJSONObject(i);
@@ -401,8 +378,13 @@ public class TBAView extends ScrollView {
                 teams.add(teamObj);
             }
 
-            return fileEditor.setMatches(getContext(), matchKey, matchName, matchData) &&
-                    fileEditor.setTeams(getContext(), matchKey, teams);
+            frcEvent event = new frcEvent();
+            event.name = matchName;
+            event.eventCode = matchKey;
+            event.teams = teams;
+            event.matches = matchData;
+
+            return fileEditor.setEvent(event);
         }catch (JSONException j){
             j.printStackTrace();
             alert("Error", "Invalid JSON");

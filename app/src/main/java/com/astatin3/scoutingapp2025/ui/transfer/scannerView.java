@@ -7,7 +7,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Handler;
-import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Surface;
@@ -29,9 +28,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
-
 import com.astatin3.scoutingapp2025.qrScanTask;
-import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.nio.ByteBuffer;
@@ -40,38 +37,12 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Function;
 import java.util.zip.DataFormatException;
 
 //public class scannerView extends androidx.appcompat.widget.AppCompatImageView {
 public class scannerView extends ConstraintLayout {
-//    public static class fixedQRCodeReaderView extends QRCodeReaderView {
-//        public fixedQRCodeReaderView(Context context) {
-//            super(context, null);
-//        }
-//    }
-
-    private QRCodeReaderView qrCodeReaderView;
     private qrOverlayView qrOverlayView;
     private Handler uiHandler;
-    private ScriptIntrinsicYuvToRGB script;
-
-//    private class codeReadListener implements QRCodeReaderView.OnQRCodeReadListener {
-//        @Override
-//        public void onQRCodeRead(String text, PointF[] points) {
-//            qrOverlayView.setPoints(points);
-//
-////            alert("Info", ""+(fileEditor.byteFromChar(text.charAt(3))+1));
-//
-//            compileData(
-//                fileEditor.byteFromChar(text.charAt(0)),
-//                fileEditor.byteFromChar(text.charAt(1)),
-//                fileEditor.byteFromChar(text.charAt(2)),
-//                (fileEditor.byteFromChar(text.charAt(3))+1),
-//                text.substring(4)
-//            );
-//        }
-//    }
 
     private void alert(String title, String content) {
         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -99,8 +70,6 @@ public class scannerView extends ConstraintLayout {
             scale = ((float) getWidth() / bmp.getWidth()) * ((float) 16 / 9);
             binding.scannerImage.setTranslationX(0);
             binding.scannerImage.setTranslationY(0);
-//            binding.scannerImage.setScaleX(scale);
-//            binding.scannerImage.setScaleY(scale);
         }
         scanQRCode(bmp);
         binding.scannerImage.setImageBitmap(bmp);
@@ -130,16 +99,8 @@ public class scannerView extends ConstraintLayout {
         int[] pixels = new int[width * height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-//                int L = levelMap[clamp((yBuffer.get() & 0xff) - thresholdOffset, 0, 255)];
-//                int L = clamp(levelMap[yBuffer.get() & 0xff]-thresholdOffset, 0, 255);
                 int L = levelMap[yBuffer.get() & 0xff];
                 pixels[y * width + x] = 0xff000000 | (L << 16) | (L << 8) | L;
-//                if(L > threshold) {
-//                    pixels[y * width + x] = 0xffffffff;
-//                }else{
-//                    pixels[y * width + x] = 0xff000000;
-//                }
-//                pixels[y * width + x] = levelMap[L];
             }
         }
 
@@ -152,21 +113,18 @@ public class scannerView extends ConstraintLayout {
 
         qrScanTask async = new qrScanTask();
         async.setImage(bitmap);
-        async.onResult(new Function<String, String>() {
-            @Override
-            public String apply(String data) {
-                if(data != null){
+        async.onResult(data -> {
+            if(data != null){
 //                    alert("test", ""+fileEditor.byteFromChar(data.charAt(0)));
-                    compileData(
-                        fileEditor.byteFromChar(data.charAt(0)),
-                        fileEditor.byteFromChar(data.charAt(1)),
-                        fileEditor.byteFromChar(data.charAt(2)),
-                        (fileEditor.byteFromChar(data.charAt(3))+1),
-                        data.substring(4)
-                    );
-                }
-                return null;
+                compileData(
+                    fileEditor.byteFromChar(data.charAt(0)),
+                    fileEditor.byteFromChar(data.charAt(1)),
+                    fileEditor.byteFromChar(data.charAt(2)),
+                    (fileEditor.byteFromChar(data.charAt(3))+1),
+                    data.substring(4)
+                );
             }
+            return null;
         });
         async.execute();
 
@@ -242,16 +200,13 @@ public class scannerView extends ConstraintLayout {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture
                 = ProcessCameraProvider.getInstance(this.getContext());
 
-        cameraProviderFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                    bindPreview(cameraProvider);
-                } catch (ExecutionException | InterruptedException e) {
-                    // No errors need to be handled for this Future.
-                    // This should never be reached.
-                }
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                bindPreview(cameraProvider);
+            } catch (ExecutionException | InterruptedException e) {
+                // No errors need to be handled for this Future.
+                // This should never be reached.
             }
         }, ContextCompat.getMainExecutor(this.getContext()));
     }
@@ -282,25 +237,22 @@ public class scannerView extends ConstraintLayout {
             @OptIn(markerClass = ExperimentalGetImage.class) @Override
             public void analyze(@NonNull ImageProxy image) {
                 Image img = Objects.requireNonNull(image.getImage());
-//                Log.i("test", img.getWidth() + ", " + img.getHeight());
-//                final Bitmap bmp = yuvConvertor.toBitmap(img);
-                if(img != null) {
-                    uiHandler.post(new Runnable() {
-                        Bitmap bmp = toGreyscale(img);
-                        @Override
-                        public void run() {
+                uiHandler.post(new Runnable() {
+                    final Bitmap bmp = toGreyscale(img);
+
+                    @Override
+                    public void run() {
 //                        setImage(toGreyscale(bmp));
-                            setImage(bmp);
-                        }
-                    });
-                }
+                        setImage(bmp);
+                    }
+                });
                 image.close();
             }
         });
 
         cameraProvider.unbindAll();
 
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)lifecycle,
+        cameraProvider.bindToLifecycle(lifecycle,
                 cameraSelector, imageAnalysis, preview);
 
 //        preview.setSurfaceProvider(binding.previewView.getSurfaceProvider());
@@ -350,8 +302,6 @@ public class scannerView extends ConstraintLayout {
 
             try {
                 byte[] compiledBytes = compiledString.getBytes(StandardCharsets.ISO_8859_1);
-//                alert(count+", "+compiledData.length()+", "+compiledBytes.length, ""+fileEditor.fromBytes(fileEditor.getByteBlock(compiledBytes, 0,2),2));
-//                alert("completed", new String(fileEditor.decompress(compiledBytes), StandardCharsets.ISO_8859_1));
                 alert("completed", blockUncompress(compiledBytes));
             }catch (Exception e){
                 e.printStackTrace();

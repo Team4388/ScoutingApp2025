@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ScoutingApp2025</string>
-    <string name="title_home">Home</string>
+    <string name="title_scouting">Scouting</string>
+    <string name="title_data">Data</string>
     <string name="title_transfer">Transfer</string>
-    <string name="title_tba">TBA</string>
+    <string name="title_settings">Settings</string>
 </resources>

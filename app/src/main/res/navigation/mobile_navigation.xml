@@ -3,40 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_scouting">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.astatin3.scoutingapp2025.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_navigation_home_to_navigation_tba"
-            app:destination="@id/navigation_tba" />
-        <action
-            android:id="@+id/action_navigation_home_to_navigation_notifications"
-            app:destination="@id/navigation_notifications" />
-        <action
-            android:id="@+id/action_navigation_home_to_navigation_dashboard2"
-            app:destination="@id/navigation_tba" />
+        android:id="@+id/navigation_scouting"
+        android:name="com.astatin3.scoutingapp2025.ui.scouting.scoutingFragment"
+        android:label="@string/title_scouting"
+        tools:layout="@layout/fragment_scouting" >
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_tba"
-        android:name="com.astatin3.scoutingapp2025.ui.TBA.TBAFragment"
-        android:label="@string/title_tba"
-        tools:layout="@layout/fragment_tba" >
-        <action
-            android:id="@+id/action_navigation_dashboard_to_navigation_notifications"
-            app:destination="@id/navigation_notifications" />
-        <action
-            android:id="@+id/action_navigation_dashboard_to_navigation_home"
-            app:destination="@id/navigation_home" />
+        android:id="@+id/navigation_data"
+        android:name="com.astatin3.scoutingapp2025.ui.scouting.dataFragment"
+        android:label="@string/title_data"
+        tools:layout="@layout/fragment_data" >
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_settings"
+        android:name="com.astatin3.scoutingapp2025.ui.Settings.Settings"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_transfer"
         android:name="com.astatin3.scoutingapp2025.ui.transfer.TransferFragment"
         android:label="@string/title_transfer"
         tools:layout="@layout/fragment_transfer" />
+
 </navigation>

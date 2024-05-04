@@ -13,7 +13,7 @@ public class JSONUtil {
         for (int i=0; i<array.length(); i++){
             asList.add(array.opt(i));
         }
-        Collections.sort(asList, c);
+        asList.sort(c);
         JSONArray  res = new JSONArray();
         for (Object o : asList){
             res.put(o);
