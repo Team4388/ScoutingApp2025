@@ -58,6 +58,7 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.3.2")
     implementation("androidx.camera:camera-view:${camerax_version}")
 
-
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    implementation("com.github.skydoves:powerspinner:1.2.7")
 }

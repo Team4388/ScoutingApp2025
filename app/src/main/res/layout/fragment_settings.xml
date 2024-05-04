@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Settings.Settings">
+    tools:context=".ui.Settings.settingsFragment">
 
     <ScrollView
         android:id="@+id/ScrollArea"
@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="57dp"
         android:fillViewport="true"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,10 +23,88 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TableLayout
-                android:id="@+id/matchTable"
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="412dp"
+                    android:layout_height="79dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Wifi Mode"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventDropdown" />
+
+                <com.skydoves.powerspinner.PowerSpinnerView
+                    android:id="@+id/eventDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black_2"
+                    android:gravity="center"
+                    android:hint="Question 1"
+                    android:padding="10dp"
+                    android:textColor="@color/main_500"
+                    android:textColorHint="@color/teal_700"
+                    android:textSize="14.5sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView1"
+                    app:spinner_arrow_gravity="end"
+                    app:spinner_arrow_padding="8dp"
+                    app:spinner_divider_color="@color/teal_200"
+                    app:spinner_divider_show="true"
+                    app:spinner_divider_size="0.4dp"
+                    app:spinner_item_height="46dp"
+                    app:spinner_popup_background="@color/black_2"
+                    app:spinner_popup_elevation="14dp" />
+
+                <EditText
+                    android:id="@+id/editTextText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:text="Username"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="107dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="152dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="152dp"
+                    android:text="Event Code"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="66dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="172dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="173dp"
+                    android:text="Name"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>

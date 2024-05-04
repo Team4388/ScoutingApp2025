@@ -18,6 +18,7 @@ import java.nio.BufferOverflowException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -185,9 +186,10 @@ public final class fileEditor {
         if(files == null){return outFiles;}
         for (File file : files) {
             if(!file.isDirectory() && file.getName().endsWith(".eventdata")) {
-                outFiles.add(file.getName());
+                outFiles.add(file.getName().substring(0,file.getName().length()-10));
             }
         }
+        Collections.sort(outFiles);
         return outFiles;
     }
 

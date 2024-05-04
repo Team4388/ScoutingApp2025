@@ -30,6 +30,7 @@ public class dataFragment extends Fragment {
         binding = FragmentDataBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+
         return root;
     }
 }
