@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/black_2"
                     android:gravity="center"
-                    android:hint="Question 1"
+                    android:hint="Events"
                     android:padding="10dp"
                     android:textColor="@color/main_500"
                     android:textColorHint="@color/teal_700"

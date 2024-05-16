@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentSettingsBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
+import com.astatin3.scoutingapp2025.SettingsVersionStack.v0;
+
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
 import com.skydoves.powerspinner.PowerSpinnerView;
@@ -57,8 +59,16 @@ public class settingsFragment extends Fragment {
         IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(spinnerView);
         spinnerView.setSpinnerAdapter(iconSpinnerAdapter);
         spinnerView.setItems(iconSpinnerItems);
-        spinnerView.selectItemByIndex(0);
         spinnerView.setLifecycleOwner(this);
+
+        if(!iconSpinnerItems.isEmpty()){
+            spinnerView.selectItemByIndex(0);
+        }
+
+        alert("test", v0.writeLine(1, "oeseo"));
+
+
+        alert("test", v0.readLine(0));
 
         return root;
     }

@@ -3,7 +3,6 @@ package com.astatin3.scoutingapp2025;
 import android.content.Context;
 
 import com.astatin3.scoutingapp2025.types.frcEvent;
-import com.astatin3.scoutingapp2025.types.frcMatch;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 
 import java.io.BufferedInputStream;
@@ -13,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.BufferOverflowException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -44,7 +42,7 @@ public final class fileEditor {
 
 
     public static char byteToChar(int num){
-        return new String(toBytes(num, 1), StandardCharsets.UTF_8).charAt(0);
+        return new String(toBytes(num, 1), StandardCharsets.ISO_8859_1).charAt(0);
     }
 
 
@@ -125,7 +123,7 @@ public final class fileEditor {
         return outputStream.toByteArray();
     }
 
-    private static boolean writeToFile(String filepath, byte[] data) {
+    public static boolean writeFile(String filepath, byte[] data) {
         try {
             FileOutputStream output = new FileOutputStream(filepath);
             output.write(data);
@@ -138,8 +136,13 @@ public final class fileEditor {
         }
     }
 
+    public static boolean fileExist(String path){
+        File f = new File(baseDir + path);
+        return f.exists() && !f.isDirectory();
+    }
+
     public static byte[] readFile(String path){
-        File file = new File(path);
+        File file = new File(baseDir + path);
         int size = (int) file.length();
         byte[] bytes = new byte[size];
         try {
@@ -176,7 +179,7 @@ public final class fileEditor {
     public static boolean setEvent(frcEvent event){
         final String filename = (baseDir + event.eventCode + ".eventdata");
 
-        return writeToFile(filename, event.encode());
+        return writeFile(filename, event.encode());
     }
 
     public static ArrayList<String> getEventList(){

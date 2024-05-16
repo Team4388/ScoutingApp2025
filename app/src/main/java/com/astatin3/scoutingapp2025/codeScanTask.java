@@ -12,7 +12,11 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
+import com.google.zxing.aztec.AztecReader;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.datamatrix.DataMatrixReader;
+import com.google.zxing.maxicode.MaxiCodeReader;
+import com.google.zxing.pdf417.PDF417Reader;
 import com.google.zxing.qrcode.QRCodeReader;
 
 import java.util.EnumSet;
@@ -20,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class qrScanTask extends AsyncTask<String, String, String>{
+public class codeScanTask extends AsyncTask<String, String, String>{
     private Function<String, String> resultFunction = null;
     private Bitmap image;
 
@@ -39,9 +43,9 @@ public class qrScanTask extends AsyncTask<String, String, String>{
         Map<DecodeHintType, Object> hints = new HashMap<>();
         hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
 //        hints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.of(BarcodeFormat.QR_CODE));
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.of(BarcodeFormat.DATA_MATRIX));
 
-        Reader reader = new QRCodeReader();
+        Reader reader = new DataMatrixReader();
         try {
             Result result = reader.decode(binaryBitmap, hints);
             return result.getText();

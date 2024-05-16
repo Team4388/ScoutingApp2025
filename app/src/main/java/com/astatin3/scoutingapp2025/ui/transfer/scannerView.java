@@ -15,7 +15,6 @@ import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.OptIn;
 import androidx.camera.core.AspectRatio;
-import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ExperimentalGetImage;
 import androidx.camera.core.ImageAnalysis;
@@ -28,7 +27,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
-import com.astatin3.scoutingapp2025.qrScanTask;
+import com.astatin3.scoutingapp2025.codeScanTask;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.nio.ByteBuffer;
@@ -111,7 +110,7 @@ public class scannerView extends ConstraintLayout {
     }
     public void scanQRCode(Bitmap bitmap) {
 
-        qrScanTask async = new qrScanTask();
+        codeScanTask async = new codeScanTask();
         async.setImage(bitmap);
         async.onResult(data -> {
             if(data != null){

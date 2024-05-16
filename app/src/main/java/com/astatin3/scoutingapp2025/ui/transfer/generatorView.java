@@ -40,7 +40,7 @@ public class generatorView extends ConstraintLayout {
     private final int minQrSpeed = 300 + maxQrSpeed - 1;
 
     private int minQrSize = 0;
-    private final int maxQrSize = 500;
+    private final int maxQrSize = 800;
     private int qrSize = 200;
 
     private final int defaultQrDelay = 419;
@@ -71,16 +71,17 @@ public class generatorView extends ConstraintLayout {
         Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
 
         // The Charset must be UTF-8, Or data will not be transferred properly. IDK why.
-        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+        hints.put(EncodeHintType.CHARACTER_SET, "ISO-8859-1");
+//        hints.put(EncodeHintType.);
         hints.put(EncodeHintType.MARGIN, 0); /* default = 4 */
         MultiFormatWriter writer = new MultiFormatWriter();
 
         BitMatrix result;
         try {
-            result = writer.encode(contents, BarcodeFormat.QR_CODE, size, size, hints);
-        } catch (IllegalArgumentException iae) {
+            result = writer.encode(contents, BarcodeFormat.DATA_MATRIX, size, size, hints);
+        } catch (IllegalArgumentException e) {
             // Unsupported format
+            e.printStackTrace();
             return null;
         }
 
@@ -195,7 +196,7 @@ public class generatorView extends ConstraintLayout {
             try {
 //                alert("test", ""+Math.ceil((double)data.length()/(double)qrSize));
                 qrBitmaps.add(generateQrCode(
-                        fileEditor.byteToChar(fileEditor.internalDataVersion) +
+                    fileEditor.byteToChar(fileEditor.internalDataVersion) +
                                 String.valueOf(fileEditor.byteToChar(randID)) +
                                 fileEditor.byteToChar(i) +
                                 fileEditor.byteToChar(qrCount - 1) +
