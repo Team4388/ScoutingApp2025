@@ -125,10 +125,24 @@ public final class fileEditor {
 
     public static boolean writeFile(String filepath, byte[] data) {
         try {
-            FileOutputStream output = new FileOutputStream(filepath);
+            FileOutputStream output = new FileOutputStream(baseDir + filepath);
             output.write(data);
             output.close();
             return true;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean createFile(String filepath){
+        if(fileExist(filepath)){
+            return true;
+        }
+        try {
+            File file = new File(baseDir + filepath);
+            return file.createNewFile();
         }
         catch (IOException e) {
             e.printStackTrace();

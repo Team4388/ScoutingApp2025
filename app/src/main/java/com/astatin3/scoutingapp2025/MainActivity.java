@@ -12,6 +12,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.astatin3.scoutingapp2025.databinding.ActivityMainBinding;
 
+import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        latestSettings settings = new latestSettings();
     }
 
 }

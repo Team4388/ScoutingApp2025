@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.astatin3.scoutingapp2025.ui.Settings.settingsFragment"
+        android:name="com.astatin3.scoutingapp2025.ui.settings.settingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" >
     </fragment>

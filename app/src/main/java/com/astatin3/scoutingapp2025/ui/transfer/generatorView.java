@@ -1,5 +1,6 @@
 package com.astatin3.scoutingapp2025.ui.transfer;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -59,6 +60,16 @@ public class generatorView extends ConstraintLayout {
     public generatorView(Context context, AttributeSet attributeSet){
         super(context, attributeSet);
     }
+
+    private void alert(String title, String content) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setMessage(content);
+        alert.setTitle(title);
+        alert.setPositiveButton("OK", null);
+        alert.setCancelable(true);
+        alert.create().show();
+    }
+
 
     private Bitmap generateQrCode(String contents) throws WriterException {
 
@@ -139,16 +150,25 @@ public class generatorView extends ConstraintLayout {
 
         }
 
+        if(compiledData.isEmpty()){
+            alert("Error!", "Empty data!");
+            return;
+        }
+
+        minQrSize = Math.round(compiledData.length()/maxQrCount)+1;
+
+        qrSizeSlider.setMax(maxQrSize-minQrSize);
+        qrSpeedSlider.setMax((minQrSpeed-maxQrSpeed)*2);
+
+        qrSizeSlider.setProgress(minQrSize+qrSize);
+        qrSpeedSlider.setProgress(defaultQrDelay+5);
+
         sendData(compiledData);
     }
 
     private void sendData(String data){
 
-//        minQrSize = 0;
-        minQrSize = Math.round(data.length()/maxQrCount)+1;
 
-        qrSizeSlider.setMax(maxQrSize-minQrSize);
-        qrSpeedSlider.setMax((minQrSpeed-maxQrSpeed)*2);
 
         qrCount = (data.length()/qrSize)+1;
         qrIndexD.setText(String.valueOf(qrCount));
@@ -181,7 +201,7 @@ public class generatorView extends ConstraintLayout {
             }
         });
 
-        qrSpeedSlider.setProgress(defaultQrDelay+5);
+//        qrSizeSlider.setProgress(qr);
 
         qrBitmaps = new ArrayList<>();
 

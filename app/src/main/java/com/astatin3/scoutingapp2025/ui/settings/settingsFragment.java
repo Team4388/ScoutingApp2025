@@ -1,4 +1,4 @@
-package com.astatin3.scoutingapp2025.ui.Settings;
+package com.astatin3.scoutingapp2025.ui.settings;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentSettingsBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
-import com.astatin3.scoutingapp2025.SettingsVersionStack.v0;
+import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
@@ -65,10 +65,7 @@ public class settingsFragment extends Fragment {
             spinnerView.selectItemByIndex(0);
         }
 
-        alert("test", v0.writeLine(1, "oeseo"));
-
-
-        alert("test", v0.readLine(0));
+        alert("test", latestSettings.settings.readTag("test2"));
 
         return root;
     }

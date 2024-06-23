@@ -142,7 +142,7 @@ public class TBAView extends ScrollView {
                     }else if(currentTime.after(startDate) && currentTime.before(endDate)){
                         tr.setBackgroundColor(0x30FFFF00);
                     }
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 

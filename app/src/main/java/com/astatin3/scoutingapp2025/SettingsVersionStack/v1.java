@@ -1,11 +1,17 @@
 package com.astatin3.scoutingapp2025.SettingsVersionStack;
 
-public class v0 extends settingsVersion {
+public class v1 extends v0 {
+    @Override
     public int getVersion() {
-        return 0;
+        return 1;
     }
+    @Override
     public void update(){
+        if(get_file_version() < getVersion()){super.update();}
         set_file_version(getVersion());
+//        writeTag("test1", "value_v1_1");
+        writeTag("test2", "value_v1_2");
+        writeTag("test3", "value_v1_3");
     }
 
     @Override

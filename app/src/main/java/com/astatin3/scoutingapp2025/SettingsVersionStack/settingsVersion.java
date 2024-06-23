@@ -5,47 +5,100 @@ import com.astatin3.scoutingapp2025.fileEditor;
 import java.nio.charset.StandardCharsets;
 
 public abstract class settingsVersion {
-    private static String settingsFilename = "settings.txt";
+    private static final String settingsFilename = "settings.txt";
+    public abstract void defaultSettings();
     public abstract int getVersion();
     public abstract void update();
 
-    public static String readLine(int line){
-        if(!fileEditor.fileExist("settings.txt")){return null;}
-
-        String[] fileContent = new String(fileEditor.readFile("settings.txt"), StandardCharsets.UTF_8).split("\n");
-
-        if(fileContent.length <= line){return null;}
-
-        return fileContent[line];
+    public static String get_settings_file_content(){
+        byte[] data = fileEditor.readFile(settingsFilename);
+        if(data == null){return "";}
+        return new String(data, StandardCharsets.UTF_8);
     }
 
-    public static String w riteLine(int line, String data){
-        String[] fileContent;
+    public int get_file_version(){
+        String[] fileContent = get_settings_file_content().split("\n");
+        try{
+            return Integer.parseInt(fileContent[0]);
+        }catch(Exception e){
+            return -1;
+        }
+    }
+
+    public void set_file_version(int version){
+        String[] fileContent = get_settings_file_content().split("\n");
+        String output = String.valueOf(version);
+        for(int i = 0; i < fileContent.length; i++){
+            output += ("\n" + fileContent[i]);
+        }
+        fileEditor.writeFile(settingsFilename, output.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String readTag(String search_tag){
+        String[] fileContent = get_settings_file_content().split("\n");
+
+        try{
+            for(String line : fileContent){
+                if(line.isEmpty()){
+                    continue;
+                }
+                String[] split = line.split("=");
+                if(split[0].equals(search_tag)){
+                    return split[1];
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public void init_settings(){
         if(!fileEditor.fileExist(settingsFilename)){
-            fileContent = new String[]{};
+            fileEditor.createFile(settingsFilename);
+
+            defaultSettings();
+
+            set_file_version(getVersion());
+        }
+    }
+
+    public String forceWriteTag(String tag_name, String data){
+        String fileContent = get_settings_file_content();
+        String output = fileContent + "\n" + tag_name + "=" + data;
+        fileEditor.writeFile(settingsFilename, output.getBytes(StandardCharsets.UTF_8));
+        return output;
+    }
+
+    public String writeTag(String tag_name, String data){
+        final boolean already_exists = readTag(tag_name) != null;
+
+        if(!already_exists){
+            String fileContent = get_settings_file_content();
+            String output = fileContent + "\n" + tag_name + "=" + data;
+            fileEditor.writeFile(settingsFilename, output.getBytes(StandardCharsets.UTF_8));
+            return output;
         }else{
-            fileContent = new String(fileEditor.readFile(settingsFilename), StandardCharsets.UTF_8).split("\n");
+            String[] fileContent = get_settings_file_content().split("\n");
+            try{
+                for(int i = 0; i < fileContent.length; i++){
+                    if(fileContent[i].isEmpty()){
+                        continue;
+                    }
+                    String[] split = fileContent[i].split("=");
+                    if(split[0].equals(tag_name)){
+                        fileContent[i] = tag_name + "=" + data;
+                        String output = String.join("\n", fileContent);
+                        fileEditor.writeFile(settingsFilename, output.getBytes(StandardCharsets.UTF_8));
+                        return output;
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
-        String newFile = "";
-
-        for(int i = 0; i < Math.max(fileContent.length-1, line); i++){
-
-            if(i == line) {
-                newFile += data + "\n";
-
-            }else if(i > fileContent.length-1){
-                newFile += fileContent[i];
-
-            }
-
-            if(i < Math.max(fileContent.length - 1, line) - 1){
-                newFile += "\n";
-            }
-        }
-
-        return newFile;
-
-//        fileEditor.writeFile(settingsFilename, newFile.getBytes(StandardCharsets.UTF_8));
+        return "No idea how this happened";
     }
 }
