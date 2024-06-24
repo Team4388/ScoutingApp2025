@@ -61,6 +61,7 @@ public class scannerView extends ConstraintLayout {
     }
 
     private float scale = 0;
+    private final int downscale = 1;
     private FragmentTransferBinding binding;
     private LifecycleOwner lifecycle;
 

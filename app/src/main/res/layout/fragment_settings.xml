@@ -10,7 +10,7 @@
         android:id="@+id/ScrollArea"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="57dp"
+        android:layout_marginBottom="60dp"
         android:fillViewport="true"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,8 +28,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+<!--                <CheckBox-->
+<!--                    android:id="@+id/practice_mode"-->
+<!--                    android:layout_width="412dp"-->
+<!--                    android:layout_height="79dp"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:text="Practice Mode"-->
+<!--                    android:textSize="24sp"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintHorizontal_bias="0.0"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/eventDropdown" />-->
+
                 <CheckBox
-                    android:id="@+id/checkBox"
+                    android:id="@+id/wifi_mode"
                     android:layout_width="412dp"
                     android:layout_height="79dp"
                     android:layout_marginTop="20dp"
@@ -46,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/black_2"
                     android:gravity="center"
-                    android:hint="Events"
+                    android:hint="No events selected"
                     android:padding="10dp"
                     android:textColor="@color/main_500"
                     android:textColorHint="@color/teal_700"
@@ -63,7 +75,7 @@
                     app:spinner_popup_elevation="14dp" />
 
                 <EditText
-                    android:id="@+id/editTextText"
+                    android:id="@+id/username"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -87,7 +99,7 @@
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+                    app:layout_constraintTop_toBottomOf="@+id/username" />
 
                 <TextView
                     android:id="@+id/textView2"
@@ -103,6 +115,15 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/reset_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reset Settings"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

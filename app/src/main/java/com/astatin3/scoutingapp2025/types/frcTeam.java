@@ -1,9 +1,12 @@
 package com.astatin3.scoutingapp2025.types;
 
+import androidx.annotation.NonNull;
+
 import com.astatin3.scoutingapp2025.BuiltByteParser;
 import com.astatin3.scoutingapp2025.ByteBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class frcTeam {
     public static final int typecode = 252;
@@ -16,7 +19,7 @@ public class frcTeam {
     public int startingYear = 0;
 
     public String getDescription(){
-        return teamName + " Started in " + startingYear + ", and is from " + school + " in " + city + ", " + stateOrProv + ", " + country;
+        return teamName + " Started in " + startingYear + ", and are from " + school + " in " + city + ", " + stateOrProv + ", " + country;
     }
 
     public byte[] encode(){
@@ -55,5 +58,10 @@ public class frcTeam {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @NonNull
+    public String toString(){
+        return "frcTeam Num: " + teamNumber + ", " + getDescription();
     }
 }

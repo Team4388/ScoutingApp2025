@@ -5,6 +5,8 @@ import android.content.Context;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 
+import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -191,7 +193,11 @@ public final class fileEditor {
 
 
     public static boolean setEvent(frcEvent event){
-        final String filename = (baseDir + event.eventCode + ".eventdata");
+        final String filename = (event.eventCode + ".eventdata");
+
+        if(latestSettings.settings.get_evcode().equals("unset")){
+            latestSettings.settings.set_evcode(event.eventCode);
+        }
 
         return writeFile(filename, event.encode());
     }

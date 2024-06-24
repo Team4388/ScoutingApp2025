@@ -1,9 +1,12 @@
 package com.astatin3.scoutingapp2025.types;
 
+import androidx.annotation.NonNull;
+
 import com.astatin3.scoutingapp2025.BuiltByteParser;
 import com.astatin3.scoutingapp2025.ByteBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class frcMatch {
     public static final int typecode = 253;
@@ -51,5 +54,9 @@ public class frcMatch {
         }
     }
 
+    @NonNull
+    public String toString(){
+        return "frcMatch Num: " + matchIndex + ", Blue: " + Arrays.toString(blueAlliance) + ", Red: " + Arrays.toString(redAlliance);
+    }
 
 }

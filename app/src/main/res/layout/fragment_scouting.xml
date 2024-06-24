@@ -9,4 +9,16 @@
     android:focusable="false"
     android:focusableInTouchMode="false"
     tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/no_event_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No match has been specified\nPlease select one"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

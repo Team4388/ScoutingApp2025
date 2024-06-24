@@ -66,6 +66,6 @@ public class frcEvent {
     }
     @NonNull
     public String toString(){
-        return "Name: " + name + ", Code: " + eventCode + " numTeams: " + teams.size() + " numMatches: " + matches.size();
+        return "frcEvent Name: " + name + ", Code: " + eventCode + " numTeams: " + teams.size() + " numMatches: " + matches.size();
     }
 }

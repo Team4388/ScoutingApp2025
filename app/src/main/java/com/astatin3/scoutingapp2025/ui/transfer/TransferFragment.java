@@ -11,10 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
 
 import java.util.Objects;
+import java.util.Scanner;
 
 public class TransferFragment extends Fragment {
     private FragmentTransferBinding binding;
@@ -29,6 +31,7 @@ public class TransferFragment extends Fragment {
         binding = FragmentTransferBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+
         binding.uploadButton.setOnClickListener(v -> {
             binding.selectLayout.setVisibility(View.GONE);
             binding.generatorLayout.setVisibility(View.VISIBLE);
@@ -42,6 +45,10 @@ public class TransferFragment extends Fragment {
             binding.scannerLayout.setVisibility(View.VISIBLE);
             binding.scannerLayout.start(binding, getViewLifecycleOwner());
         });
+
+        if(!latestSettings.settings.get_wifi_mode())
+            binding.TBAButton.setVisibility(View.GONE);
+
         binding.TBAButton.setOnClickListener(v -> {
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
             alert.setTitle("Warning");

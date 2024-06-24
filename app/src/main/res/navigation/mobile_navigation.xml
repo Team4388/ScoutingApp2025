@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/navigation_data"
-        android:name="com.astatin3.scoutingapp2025.ui.scouting.dataFragment"
+        android:name="com.astatin3.scoutingapp2025.ui.data.dataFragment"
         android:label="@string/title_data"
         tools:layout="@layout/fragment_data" >
     </fragment>

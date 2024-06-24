@@ -44,7 +44,13 @@ public abstract class settingsVersion {
                 }
                 String[] split = line.split("=");
                 if(split[0].equals(search_tag)){
-                    return split[1];
+                    if(split[1].equals("<empty>")){
+                        return "";
+                    }else if(split[1].equals("<null>")){
+                        return null;
+                    }else {
+                        return split[1];
+                    }
                 }
             }
         }catch (Exception e){
@@ -58,21 +64,20 @@ public abstract class settingsVersion {
         if(!fileEditor.fileExist(settingsFilename)){
             fileEditor.createFile(settingsFilename);
 
+            set_file_version(getVersion());
             defaultSettings();
 
-            set_file_version(getVersion());
         }
-    }
-
-    public String forceWriteTag(String tag_name, String data){
-        String fileContent = get_settings_file_content();
-        String output = fileContent + "\n" + tag_name + "=" + data;
-        fileEditor.writeFile(settingsFilename, output.getBytes(StandardCharsets.UTF_8));
-        return output;
     }
 
     public String writeTag(String tag_name, String data){
         final boolean already_exists = readTag(tag_name) != null;
+
+        if(data == null){
+            data = "<null>";
+        }else if(data.equals("")){
+            data = "<empty>";
+        }
 
         if(!already_exists){
             String fileContent = get_settings_file_content();

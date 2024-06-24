@@ -1,6 +1,5 @@
 package com.astatin3.scoutingapp2025.ui.scouting;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 
@@ -13,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentScoutingBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
 
@@ -26,6 +26,9 @@ public class scoutingFragment extends Fragment {
         binding = FragmentScoutingBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        if(latestSettings.settings.get_evcode().equals("unset")){
+            binding.noEventError.setVisibility(View.VISIBLE);
+        }
 
         return root;
     }

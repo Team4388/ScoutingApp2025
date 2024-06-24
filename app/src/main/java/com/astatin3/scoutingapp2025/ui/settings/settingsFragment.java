@@ -2,21 +2,31 @@ package com.astatin3.scoutingapp2025.ui.settings;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentSettingsBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
+import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
 import java.util.ArrayList;
@@ -48,12 +58,33 @@ public class settingsFragment extends Fragment {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        EditText username = binding.username;
+        username.setText(latestSettings.settings.get_username());
+        username.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                latestSettings.settings.set_username(username.getText().toString());
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
+
+
+
+
         PowerSpinnerView spinnerView = binding.eventDropdown;
 
         List<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
 
-        for(String name : fileEditor.getEventList()){
-            iconSpinnerItems.add(new IconSpinnerItem(name));
+        String target_event_name = latestSettings.settings.get_evcode();
+        int target_index = -1;
+
+        ArrayList<String> evlist = fileEditor.getEventList();
+        for(int i = 0; i < evlist.size(); i++){
+            if(evlist.get(i).equals(target_event_name)){
+                target_index = i;
+            }
+            iconSpinnerItems.add(new IconSpinnerItem(evlist.get(i)));
         }
 
         IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(spinnerView);
@@ -61,11 +92,75 @@ public class settingsFragment extends Fragment {
         spinnerView.setItems(iconSpinnerItems);
         spinnerView.setLifecycleOwner(this);
 
-        if(!iconSpinnerItems.isEmpty()){
-            spinnerView.selectItemByIndex(0);
+        if(!iconSpinnerItems.isEmpty() && target_index != -1){
+            spinnerView.selectItemByIndex(target_index);
         }
 
-        alert("test", latestSettings.settings.readTag("test2"));
+        spinnerView.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<IconSpinnerItem>() {
+            @Override
+            public void onItemSelected(int oldIndex, @Nullable IconSpinnerItem oldItem, int newIndex,
+                                       IconSpinnerItem newItem) {
+                latestSettings.settings.set_evcode(newItem.getText().toString());
+            }
+        });
+
+
+
+
+
+//
+//        CheckBox practice_mode = binding.practiceMode;
+//        practice_mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+//                latestSettings.settings.set_practice_mode(isChecked);
+//            }
+//
+//        });
+//
+//        practice_mode.setChecked(latestSettings.settings.get_practice_mode());
+
+
+
+
+
+        CheckBox wifi_mode = binding.wifiMode;
+        wifi_mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                latestSettings.settings.set_wifi_mode(isChecked);
+            }
+
+        });
+
+        wifi_mode.setChecked(latestSettings.settings.get_wifi_mode());
+
+
+
+
+
+
+        Button reset_button = binding.resetButton;
+        reset_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle("Warning");
+                alert.setMessage("Do you really want to reset settings?");
+                alert.setCancelable(true);
+
+                alert.setPositiveButton("Ok", (dialog, which) -> {
+                    latestSettings.settings.defaultSettings();
+                    username.setText(latestSettings.settings.get_username());
+                    spinnerView.clearSelectedItem();
+//                    practice_mode.setChecked(latestSettings.settings.get_practice_mode());
+                    wifi_mode.setChecked(latestSettings.settings.get_wifi_mode());
+                });
+
+                alert.setNegativeButton("Cancel", null);
+                alert.create().show();
+            }
+        });
 
         return root;
     }
