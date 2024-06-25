@@ -9,7 +9,7 @@
         android:id="@+id/no_event_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No match has been specified\nPlease select one"
+        android:text="No event has been specified\nPlease select one"
         android:textAlignment="center"
         android:textSize="20sp"
         android:visibility="gone"
