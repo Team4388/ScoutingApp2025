@@ -24,7 +24,7 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 public final class fileEditor {
-    private final static String baseDir = "/data/data/com.astatin3.scoutingapp2025/files/";
+    private final static String baseDir = "/data/data/com.astatin3.scoutingapp2025/";
     public static final byte internalDataVersion = 0x01;
     public static final int maxCompressedBlockSize = 4096;
 
