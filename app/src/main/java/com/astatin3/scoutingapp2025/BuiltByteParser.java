@@ -8,16 +8,23 @@ import java.util.ArrayList;
 public class BuiltByteParser {
     public static final Integer intType = 0;
     public static final Integer stringType = 1;
+    public static final Integer intArrayType = 2;
+    public static final Integer stringArrayType = 3;
+
     public class byteParsingExeption extends Exception {
         public byteParsingExeption() {}
         public byteParsingExeption(String message) {
             super(message);
         }
     }
+
+
     public abstract class parsedObject {
         public abstract Integer getType();
         public abstract Object get();
     }
+
+
     public class intObject extends parsedObject{
         int num;
         public Integer getType(){return intType;}
@@ -28,6 +35,20 @@ public class BuiltByteParser {
         public Integer getType(){return stringType;}
         public Object get(){return str;}
     }
+
+
+    public class intArrayObject extends parsedObject{
+        int[] arr;
+        public Integer getType(){return intArrayType;}
+        public Object get(){return arr;}
+    }
+    public class stringArrayObject extends parsedObject{
+        String[] arr;
+        public Integer getType(){return stringArrayType;}
+        public Object get(){return arr;}
+    }
+
+
     public class rawObject extends parsedObject {
         private int type;
         public rawObject(int type){this.type = type;}
@@ -72,6 +93,35 @@ public class BuiltByteParser {
                     stringObject so = new stringObject();
                     so.str = new String(block, StandardCharsets.UTF_8);
                     objects.add(so);
+                    break;
+                case 2:
+                    BuiltByteParser int_bbp = new BuiltByteParser(block);
+                    ArrayList<parsedObject> intArrayObjects = int_bbp.parse();
+
+                    int[] intArr = new int[intArrayObjects.size()];
+
+                    for(int i = 0; i < intArrayObjects.size(); i ++){
+                        intArr[i] = (int) intArrayObjects.get(i).get();
+                    }
+
+                    intArrayObject ia = new intArrayObject();
+                    ia.arr = intArr;
+                    objects.add(ia);
+                    break;
+                case 3:
+
+                    BuiltByteParser str_bbp = new BuiltByteParser(block);
+                    ArrayList<parsedObject> strArrayObjects = str_bbp.parse();
+
+                    String[] StringArr = new String[strArrayObjects.size()];
+
+                    for(int i = 0; i < strArrayObjects.size(); i ++){
+                        StringArr[i] = (String) strArrayObjects.get(i).get();
+                    }
+
+                    stringArrayObject sa = new stringArrayObject();
+                    sa.arr = StringArr;
+                    objects.add(sa);
                     break;
                 default:
                     rawObject ro = new rawObject(type);

@@ -8,6 +8,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class ByteBuilder {
+    public static final int int_id = 0;
+    public static final int string_id = 1;
+    public static final int int_arr_id = 2;
+    public static final int string_arr_id = 3;
+
     ArrayList<byteType> bytesToBuild = new ArrayList<>();
 
     public class buildingException extends Exception {
@@ -26,7 +31,7 @@ public class ByteBuilder {
     private class intType extends byteType {
         public int precision;
         public int num;
-        public byte getType(){return 0;}
+        public byte getType(){return int_id;}
         public int length(){return precision;}
         public byte[] build(){
             return fileEditor.toBytes(num, precision);
@@ -60,7 +65,7 @@ public class ByteBuilder {
 
     private class stringType extends byteType {
         public byte[] bytes;
-        public byte getType(){return 1;}
+        public byte getType(){return string_id;}
         public int length(){return bytes.length;}
         public byte[] build(){
             return bytes;
@@ -75,6 +80,54 @@ public class ByteBuilder {
         stringType.bytes = str.getBytes(StandardCharsets.UTF_8);
 
         bytesToBuild.add(stringType);
+        return this;
+    }
+
+    private class intArrayType extends byteType {
+        public byte[] bytes;
+        public byte getType(){return int_arr_id;}
+        public int length(){return bytes.length;}
+        public byte[] build(){
+            return bytes;
+//            return str.getBytes(charset);
+        }
+    }
+    public ByteBuilder addIntArray(int[] arr) throws buildingException {
+        intArrayType intArrayType = new intArrayType();
+
+        ByteBuilder bb = new ByteBuilder();
+
+        for(int i = 0; i < arr.length; i++){
+            bb.addInt(arr[i]);
+        }
+
+        intArrayType.bytes = bb.build();
+
+        bytesToBuild.add(intArrayType);
+        return this;
+    }
+
+    private class stringArrayType extends byteType {
+        public byte[] bytes;
+        public byte getType(){return string_arr_id;}
+        public int length(){return bytes.length;}
+        public byte[] build(){
+            return bytes;
+//            return str.getBytes(charset);
+        }
+    }
+    public ByteBuilder addStringArray(String[] arr) throws buildingException {
+        stringArrayType stringArrayType = new stringArrayType();
+
+        ByteBuilder bb = new ByteBuilder();
+
+        for(int i = 0; i < arr.length; i++){
+            bb.addString(arr[i]);
+        }
+
+        stringArrayType.bytes = bb.build();
+
+        bytesToBuild.add(stringArrayType);
         return this;
     }
 

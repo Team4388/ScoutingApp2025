@@ -10,8 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.astatin3.scoutingapp2025.ScoutingDataVersion.MatchScouting;
-import com.astatin3.scoutingapp2025.ScoutingDataVersion.ScoutingVersion;
+import com.astatin3.scoutingapp2025.BuiltByteParser;
+import com.astatin3.scoutingapp2025.ByteBuilder;
+import com.astatin3.scoutingapp2025.ScoutingDataVersion.fields;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentScoutingBinding;
 
@@ -33,27 +34,50 @@ public class scoutingFragment extends Fragment {
         }
 
         binding.matchScoutingButton.setOnClickListener(v -> {
-            MatchScouting.MatchScoutingArray msa = MatchScouting.ms.new MatchScoutingArray(0, new ScoutingVersion.dataType[]{
-                MatchScouting.msv.new stringType("name", "test-username"),
-                MatchScouting.msv.new intType("How good is robot", 12)
-            });
-//            System.out.println(Arrays.toString(msa.array));
+//            byte[] bytes = fields.save();
+//            System.out.println(bytes.length);
+//            System.out.println(fields.load(bytes)[0].length);
 
-            msa.update();
+            System.out.println(fields.load());
 
-            for(ScoutingVersion.dataType dt : msa.array){
-                if(dt == null) continue;
-                switch (dt.getValueType()){
-                    case NUM:
-                        System.out.println(dt.name + " " + (int) dt.get());
-                        break;
-                    case STRING:
-                        System.out.println(dt.name + " " + (String) dt.get());
-                        break;
-                }
-//                case ScoutingVersion.valueTypes.NUM:
+            fields.test();
 
-            }
+//            fields.test();
+
+//            ByteBuilder bb = new ByteBuilder();
+//            try {
+//                bb.addInt(1243);
+//                bb.addStringArray(new String[]{"Test", "Test2", "Tljewhgr"});
+//                bb.addIntArray(new int[]{4, 3, 8, 8});
+//                byte[] bytes = bb.build();
+//
+//                BuiltByteParser bbp = new BuiltByteParser(bytes);
+//                BuiltByteParser.parsedObject[] objects = bbp.parse().toArray(new BuiltByteParser.parsedObject[0]);
+//
+//                for(BuiltByteParser.parsedObject object : objects){
+//                    switch (object.getType()){
+//                        case 0:
+//                            System.out.println((int) object.get());
+//                            break;
+//                        case 1:
+//                            System.out.println((String) object.get());
+//                            break;
+//                        case 2:
+//                            System.out.println(Arrays.toString((int[]) object.get()));
+//                            break;
+//                        case 3:
+//                            System.out.println(Arrays.toString((String[]) object.get()));
+//                            break;
+//                    }
+//                }
+//
+//
+//            } catch (ByteBuilder.buildingException e) {
+//                throw new RuntimeException(e);
+//            } catch (BuiltByteParser.byteParsingExeption e) {
+//                throw new RuntimeException(e);
+//            }
+
         });
 //
 //        binding.pitScoutingButton.setOnClickListener(v -> {
