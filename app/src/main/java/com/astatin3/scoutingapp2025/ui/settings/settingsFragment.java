@@ -108,6 +108,53 @@ public class settingsFragment extends Fragment {
 
 
 
+
+
+
+
+
+        PowerSpinnerView alliance_pos_spinnerView = binding.alliancePosDropdown;
+
+        List<IconSpinnerItem> alliance_pos_iconSpinnerItems = new ArrayList<>();
+
+        String target_alliance_pos = latestSettings.settings.get_alliance_pos();
+        int alliance_pos_target_index = -1;
+
+        String[] alliance_pos_list = new String[]{"red-1", "red-2", "red-3",
+                                                  "blue-1", "blue-2", "blue-3"};
+
+        for(int i = 0; i < alliance_pos_list.length; i++){
+            if(alliance_pos_list[i].equals(target_alliance_pos)){
+                alliance_pos_target_index = i;
+            }
+            alliance_pos_iconSpinnerItems.add(new IconSpinnerItem(alliance_pos_list[i]));
+        }
+
+        IconSpinnerAdapter alliance_pos_iconSpinnerAdapter = new IconSpinnerAdapter(alliance_pos_spinnerView);
+        alliance_pos_spinnerView.setSpinnerAdapter(alliance_pos_iconSpinnerAdapter);
+        alliance_pos_spinnerView.setItems(alliance_pos_iconSpinnerItems);
+        alliance_pos_spinnerView.setLifecycleOwner(this);
+
+        if(alliance_pos_target_index != -1){
+            alliance_pos_spinnerView.selectItemByIndex(alliance_pos_target_index);
+        }
+
+        alliance_pos_spinnerView.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<IconSpinnerItem>() {
+            @Override
+            public void onItemSelected(int oldIndex, @Nullable IconSpinnerItem oldItem, int newIndex,
+                                       IconSpinnerItem newItem) {
+                latestSettings.settings.set_alliance_pos(newItem.getText().toString());
+            }
+        });
+
+
+
+
+
+
+
+
+
 //
 //        CheckBox practice_mode = binding.practiceMode;
 //        practice_mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -155,6 +202,7 @@ public class settingsFragment extends Fragment {
                     spinnerView.clearSelectedItem();
 //                    practice_mode.setChecked(latestSettings.settings.get_practice_mode());
                     wifi_mode.setChecked(latestSettings.settings.get_wifi_mode());
+                    alliance_pos_spinnerView.selectItemByIndex(0);
                 });
 
                 alert.setNegativeButton("Cancel", null);

@@ -28,19 +28,22 @@ public class scoutingFragment extends Fragment {
         binding = FragmentScoutingBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        binding.buttons.setVisibility(View.VISIBLE);
+        binding.matchScoutingView.setVisibility(View.GONE);
+
         if(latestSettings.settings.get_evcode().equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);
             binding.buttons.setVisibility(View.GONE);
         }
 
         binding.matchScoutingButton.setOnClickListener(v -> {
+            binding.buttons.setVisibility(View.GONE);
+            binding.matchScoutingView.setVisibility(View.VISIBLE);
+            binding.matchScoutingView.init(binding);
+
 //            byte[] bytes = fields.save();
 //            System.out.println(bytes.length);
 //            System.out.println(fields.load(bytes)[0].length);
-
-            System.out.println(fields.load());
-
-            fields.test();
 
 //            fields.test();
 

@@ -7,7 +7,7 @@ import com.astatin3.scoutingapp2025.fileEditor;
 import java.util.ArrayList;
 
 public class fields {
-    private static ScoutingVersion sv = new ScoutingVersion();
+    public static ScoutingVersion sv = new ScoutingVersion();
     public static final String fieldsFilename = "data.fields";
 
     public static ScoutingVersion.inputType[][] values = new ScoutingVersion.inputType[][]{};
