@@ -1,6 +1,6 @@
 package com.astatin3.scoutingapp2025.scoutingData;
 
-import com.astatin3.scoutingapp2025.fileEditor;
+import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 
@@ -8,36 +8,40 @@ import java.util.ArrayList;
 
 public class fields {
     public static ScoutingVersion sv = new ScoutingVersion();
-    public static final String fieldsFilename = "data.fields";
 
-//    public static ScoutingVersion.inputType[][] values = new ScoutingVersion.inputType[][]{};
+    public static final String matchFieldsFilename = "matches.fields";
+    public static final String pitsFieldsFilename = "matches.fields";
 
-    public static ScoutingVersion.inputType[][] values = new ScoutingVersion.inputType[][] {
+    public static final ScoutingVersion.inputType[][] default_match_fields = new ScoutingVersion.inputType[][] {
         {
-            sv.new notesType("name", "Unset-Username"),
-            sv.new sliderType("How good is robot", 5, 0, 10)
-        }, {
-            sv.new notesType("name", "Unset-Username"),
             sv.new sliderType("How good is robot", 5, 0, 10),
-            sv.new notesType("notes", "No-Notes")
-        }, {
-            sv.new notesType("name", "Unset-Username"),
-            sv.new notesType("notes", "No-Notes")
-        }, {
-            sv.new notesType("name", "Unset-Username")
-        }, {
-            sv.new notesType("name", "Unset-Username"),
-            sv.new sliderType("How good is robot", 5, 0, 10)
+            sv.new notesType("notes", "<no-notes>"),
+        },{
+            sv.new sliderType("How good is robot", 5, 0, 10),
+            sv.new sliderType("Test", 1, 0, 10),
+            sv.new notesType("notes", "<no-notes>"),
         }
     };
 
-    public static boolean save(){
+    public static final ScoutingVersion.inputType[][] default_pit_fields = new ScoutingVersion.inputType[][] {
+        {
+            sv.new sliderType("How good is robot", 5, 0, 10),
+            sv.new notesType("notes", "<no-notes>"),
+        },{
+            sv.new sliderType("How good is robot", 5, 0, 10),
+            sv.new sliderType("Test", 1, 0, 10),
+            sv.new notesType("notes", "<no-notes>"),
+        }
+    };
+
+
+    public static boolean save(String filename, ScoutingVersion.inputType[][] values){
         try {
             ByteBuilder bb = new ByteBuilder();
             for (int i = 0; i < values.length; i++) {
                 bb.addRaw(127, save_version(values[i]));
             }
-            fileEditor.writeFile(fieldsFilename, bb.build());
+            fileEditor.writeFile(filename, bb.build());
             return true;
         }catch (ByteBuilder.buildingException e) {
             e.printStackTrace();
@@ -54,25 +58,39 @@ public class fields {
         return bb.build();
     }
 
-    public static boolean load(){
-        byte[] bytes = fileEditor.readFile(fieldsFilename);
+    public static ScoutingVersion.inputType[][] load(String filename){
+        byte[] bytes = fileEditor.readFile(filename);
 
         System.out.println(bytes);
 
         try {
             BuiltByteParser bbp = new BuiltByteParser(bytes);
             ArrayList<BuiltByteParser.parsedObject> objects = bbp.parse();
-            values = new ScoutingVersion.inputType[objects.size()][];
+            ScoutingVersion.inputType[][] values = new ScoutingVersion.inputType[objects.size()][];
 
             for(int i = 0 ; i < objects.size(); i++){
                 values[i] = load_version((byte[]) objects.get(i).get());
             }
 
-            return true;
+
+            return values;
+//            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return null;
+//            return false;
         }
+
+//        return new ScoutingVersion.inputType[][] {
+//            {
+//                sv.new sliderType("How good is robot", 5, 0, 10),
+//                sv.new notesType("notes", "<no-notes>"),
+//            },{
+//                sv.new sliderType("How good is robot", 5, 0, 10),
+//                sv.new sliderType("Test", 1, 0, 10),
+//                sv.new notesType("notes", "<no-notes>"),
+//            }
+//        };
     }
 
     private static ScoutingVersion.inputType[] load_version(byte[] bytes) throws BuiltByteParser.byteParsingExeption{
@@ -103,27 +121,27 @@ public class fields {
         return output;
     }
 
-    public static void test(){
-        ScoutingVersion.transferType[][] transferValues = sv.get_transfer_values(values);
-
-        ScoutingVersion.ScoutingArray msa = sv.new ScoutingArray(0, new ScoutingVersion.dataType[]{
-                sv.new stringType("name", "test-username"),
-                sv.new intType("How good is robot", 12)
-        }, values, transferValues);
-
-        msa.update();
-
-        for(ScoutingVersion.dataType dt : msa.array){
-            if(dt == null) continue;
-            switch (dt.getValueType()){
-                case NUM:
-                    System.out.println(dt.name + " " + (int) dt.get());
-                    break;
-                case STRING:
-                    System.out.println(dt.name + " " + (String) dt.get());
-                    break;
-            }
-
-        }
-    }
+//    public static void test(){
+//        ScoutingVersion.transferType[][] transferValues = sv.get_transfer_values(values);
+//
+//        ScoutingVersion.ScoutingArray msa = sv.new ScoutingArray(0, new ScoutingVersion.dataType[]{
+//                sv.new stringType("name", "test-username"),
+//                sv.new intType("How good is robot", 12)
+//        }, values, transferValues);
+//
+//        msa.update();
+//
+//        for(ScoutingVersion.dataType dt : msa.array){
+//            if(dt == null) continue;
+//            switch (dt.getValueType()){
+//                case NUM:
+//                    System.out.println(dt.name + " " + (int) dt.get());
+//                    break;
+//                case STRING:
+//                    System.out.println(dt.name + " " + (String) dt.get());
+//                    break;
+//            }
+//
+//        }
+//    }
 }

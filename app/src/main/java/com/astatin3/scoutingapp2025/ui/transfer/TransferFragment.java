@@ -1,7 +1,6 @@
 package com.astatin3.scoutingapp2025.ui.transfer;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +12,6 @@ import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
-import com.astatin3.scoutingapp2025.fileEditor;
-
-import java.util.Objects;
-import java.util.Scanner;
 
 public class TransferFragment extends Fragment {
     private FragmentTransferBinding binding;

@@ -26,7 +26,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
-import com.astatin3.scoutingapp2025.fileEditor;
+import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.nio.ByteBuffer;

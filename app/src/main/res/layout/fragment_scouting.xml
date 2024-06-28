@@ -61,26 +61,15 @@
 
     <com.astatin3.scoutingapp2025.ui.scouting.matchScoutingView
         android:id="@+id/matchScoutingView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
-
-
-        <TextView
-            android:id="@+id/bar_team_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Temp"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/next_button"
-            app:layout_constraintStart_toEndOf="@+id/matchnum"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -114,13 +103,77 @@
             </LinearLayout>
         </ScrollView>
 
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/file_indicator"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Back"
+            app:layout_constraintBottom_toBottomOf="@id/back_button"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="#60ff0000">
+
+            <Button
+                android:id="@+id/back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/alliance_pos_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Temp"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/matchnum"
+                app:layout_constraintStart_toEndOf="@+id/back_button"
+                app:layout_constraintTop_toBottomOf="@id/eventcode" />
+
+            <TextView
+                android:id="@+id/eventcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Temp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/matchnum"
+                app:layout_constraintStart_toEndOf="@+id/back_button"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/matchnum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Temp"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/bar_team_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Temp"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/next_button"
+                app:layout_constraintStart_toEndOf="@+id/matchnum"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <Button
@@ -129,47 +182,8 @@
             android:layout_height="wrap_content"
             android:text="Save"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/next_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Next"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/alliance_pos_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Temp"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toStartOf="@+id/matchnum"
-            app:layout_constraintStart_toEndOf="@+id/back_button"
-            app:layout_constraintTop_toBottomOf="@id/eventcode" />
-
-        <TextView
-            android:id="@+id/eventcode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Temp"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toStartOf="@+id/matchnum"
-            app:layout_constraintStart_toEndOf="@+id/back_button"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/matchnum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Temp"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
 
     </com.astatin3.scoutingapp2025.ui.scouting.matchScoutingView>

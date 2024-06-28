@@ -4,13 +4,13 @@ import android.os.Handler;
 import android.os.Looper;
 
 public class AutoSaveManager {
-    private static final long AUTO_SAVE_DELAY = 5000; // 5 seconds
+    private static final long AUTO_SAVE_DELAY = 2000; // 2 seconds
 
     private final Handler handler;
     private final Runnable autoSaveRunnable;
     private boolean isAutoSaveScheduled = false;
     private final AutoSaveFunction autoSaveFunction;
-    private boolean isRunning = false;
+    public boolean isRunning = false;
 
     // Functional interface for the auto-save function
     @FunctionalInterface

@@ -3,6 +3,7 @@ package com.astatin3.scoutingapp2025;
 import android.os.Bundle;
 
 import com.astatin3.scoutingapp2025.scoutingData.fields;
+import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,8 +26,12 @@ public class MainActivity extends AppCompatActivity {
 
         latestSettings.update();
 
-        if(!fileEditor.fileExist(fields.fieldsFilename)){
-            fields.save();
+        if(!fileEditor.fileExist(fields.matchFieldsFilename)){
+            fields.save(fields.matchFieldsFilename, fields.default_match_fields);
+        }
+
+        if(!fileEditor.fileExist(fields.pitsFieldsFilename)){
+            fields.save(fields.pitsFieldsFilename, fields.default_pit_fields);
         }
 
         super.onCreate(savedInstanceState);

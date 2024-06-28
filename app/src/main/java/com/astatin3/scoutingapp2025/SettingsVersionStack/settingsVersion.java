@@ -1,6 +1,6 @@
 package com.astatin3.scoutingapp2025.SettingsVersionStack;
 
-import com.astatin3.scoutingapp2025.fileEditor;
+import com.astatin3.scoutingapp2025.utility.fileEditor;
 
 import java.nio.charset.StandardCharsets;
 

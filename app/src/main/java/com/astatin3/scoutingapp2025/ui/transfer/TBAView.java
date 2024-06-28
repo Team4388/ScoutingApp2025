@@ -17,7 +17,7 @@ import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcMatch;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
-import com.astatin3.scoutingapp2025.fileEditor;
+import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.utility.JSONUtil;
 
 import org.json.JSONArray;

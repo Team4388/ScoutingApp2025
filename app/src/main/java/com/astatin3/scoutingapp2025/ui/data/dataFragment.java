@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,9 +13,8 @@ import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentDataBinding;
-import com.astatin3.scoutingapp2025.fileEditor;
+import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.types.frcEvent;
-import com.astatin3.scoutingapp2025.types.frcTeam;
 
 public class dataFragment extends Fragment {
 

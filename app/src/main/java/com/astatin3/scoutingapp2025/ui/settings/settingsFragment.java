@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -20,10 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentSettingsBinding;
-import com.astatin3.scoutingapp2025.fileEditor;
+import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;

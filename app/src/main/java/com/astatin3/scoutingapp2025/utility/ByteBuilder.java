@@ -1,7 +1,5 @@
 package com.astatin3.scoutingapp2025.utility;
 
-import com.astatin3.scoutingapp2025.fileEditor;
-
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 

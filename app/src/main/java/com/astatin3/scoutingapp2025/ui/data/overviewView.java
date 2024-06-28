@@ -5,22 +5,17 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ScrollView;
-import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentDataBinding;
-import com.astatin3.scoutingapp2025.fileEditor;
+import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcMatch;
 import com.astatin3.scoutingapp2025.types.frcTeam;
-
-import org.w3c.dom.Text;
 
 public class overviewView extends ScrollView {
     public overviewView(@NonNull Context context) {

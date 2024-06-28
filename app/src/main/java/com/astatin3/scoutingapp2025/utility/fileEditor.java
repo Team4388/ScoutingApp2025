@@ -1,4 +1,4 @@
-package com.astatin3.scoutingapp2025;
+package com.astatin3.scoutingapp2025.utility;
 
 import android.content.Context;
 
