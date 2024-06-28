@@ -1,4 +1,4 @@
-package com.astatin3.scoutingapp2025;
+package com.astatin3.scoutingapp2025.ui.transfer;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;

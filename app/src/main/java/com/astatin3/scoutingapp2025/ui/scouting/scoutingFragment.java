@@ -10,13 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.astatin3.scoutingapp2025.BuiltByteParser;
-import com.astatin3.scoutingapp2025.ByteBuilder;
-import com.astatin3.scoutingapp2025.ScoutingDataVersion.fields;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentScoutingBinding;
-
-import java.util.Arrays;
 
 public class scoutingFragment extends Fragment {
 

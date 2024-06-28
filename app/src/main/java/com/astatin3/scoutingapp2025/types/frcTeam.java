@@ -2,11 +2,10 @@ package com.astatin3.scoutingapp2025.types;
 
 import androidx.annotation.NonNull;
 
-import com.astatin3.scoutingapp2025.BuiltByteParser;
-import com.astatin3.scoutingapp2025.ByteBuilder;
+import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
+import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class frcTeam {
     public static final int typecode = 252;

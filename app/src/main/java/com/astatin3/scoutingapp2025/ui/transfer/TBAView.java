@@ -12,25 +12,23 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.astatin3.scoutingapp2025.RequestTask;
+import com.astatin3.scoutingapp2025.utility.RequestTask;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcMatch;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
-import com.astatin3.scoutingapp2025.ui.JSONUtil;
+import com.astatin3.scoutingapp2025.utility.JSONUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Objects;
 
 public class TBAView extends ScrollView {
     private final String TBAAddress = "https://www.thebluealliance.com/api/v3/";

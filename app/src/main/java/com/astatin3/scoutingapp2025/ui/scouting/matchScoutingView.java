@@ -1,8 +1,8 @@
 package com.astatin3.scoutingapp2025.ui.scouting;
 
-import static com.astatin3.scoutingapp2025.ScoutingDataVersion.fields.sv;
-
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -11,14 +11,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.astatin3.scoutingapp2025.ScoutingDataVersion.ScoutingVersion;
-import com.astatin3.scoutingapp2025.ScoutingDataVersion.fields;
+import com.astatin3.scoutingapp2025.scoutingData.ScoutingVersion;
+import com.astatin3.scoutingapp2025.scoutingData.fields;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentScoutingBinding;
 import com.astatin3.scoutingapp2025.fileEditor;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcMatch;
 import com.astatin3.scoutingapp2025.types.frcTeam;
+import com.astatin3.scoutingapp2025.utility.AutoSaveManager;
+import com.google.android.material.slider.Slider;
+
+import java.util.ArrayList;
 
 public class matchScoutingView extends ConstraintLayout {
     public matchScoutingView(Context context) {
@@ -33,6 +37,11 @@ public class matchScoutingView extends ConstraintLayout {
     String evcode;
     int cur_match_num;
     frcEvent event;
+    AutoSaveManager asm = new AutoSaveManager(this::save);
+
+    public void save(){
+        System.out.println("Saved!");
+    }
 
     public void init(FragmentScoutingBinding tmp_binding){
         binding = tmp_binding;
@@ -82,8 +91,7 @@ public class matchScoutingView extends ConstraintLayout {
         update_scouting_data();
     }
 
-    public void update_scouting_data(){
-        frcMatch match = event.matches.get(cur_match_num);
+    private frcTeam get_team(frcMatch match){
 
         // Get team number
         String[] split = alliance_position.split("-");
@@ -109,40 +117,85 @@ public class matchScoutingView extends ConstraintLayout {
             }
         }
 
+        return team;
+    }
+
+    ArrayList<View> views = new ArrayList<>();
+
+    public void update_scouting_data(){
+
+        asm.start();
+
+        frcMatch match = event.matches.get(cur_match_num);
+        frcTeam team = get_team(match);
+
         binding.teamName.setText(team.teamName);
         binding.teamDescription.setText(team.getDescription());
 
-        fields.load();
+        for(int i = 0; i < views.size(); i++){
+            binding.MatchScoutArea.removeView(views.get(i));
+        }
+
+        views = new ArrayList<>();
+
+        boolean success = fields.load();
+
+        if(!success){
+            TextView tv = new TextView(getContext());
+            tv.setText("Failed to load fields.\nTry to either download or create match scouting fields.");
+            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            binding.MatchScoutArea.addView(tv);
+            views.add(tv);
+            return;
+        }
+
+        if(fields.values.length == 0){
+            return;
+        }
+
         ScoutingVersion.inputType[] values = fields.values[fields.values.length-1];
 
-        int prev_text = binding.teamDescription.getId();
+//        int prev_text = binding.teamDescription.getId();
 
         for(int i = 0 ; i < values.length; i++){
             TextView tv = new TextView(getContext());
+            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            tv.setTextSize(24);
+            binding.MatchScoutArea.addView(tv);
+            views.add(tv);
 
-//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-////            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-//            params.addRule(RelativeLayout.ALIGN_LEFT, prev_text);
-//            tv.setLayoutParams(params);
-
-
-            String text = "Fallback";
             switch (values[i].getInputType()){
                 case SLIDER:
-                    text = "Slider";
+                    ScoutingVersion.sliderType sliderType = (ScoutingVersion.sliderType) values[i];
+                    tv.setText(sliderType.name);
+
+                    Slider slider = new Slider(getContext());
+
+                    slider.setStepSize((float) 1 / sliderType.max);
+                    slider.setValue((int) sliderType.default_value / (float) sliderType.max);
+
+                    slider.addOnChangeListener(new Slider.OnChangeListener() {
+                        @Override
+                        public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                            System.out.println(value * sliderType.max);
+                            asm.update();
+                        }
+                    });
+
+                    binding.MatchScoutArea.addView(slider);
+                    views.add(slider);
                     break;
                 case DROPDOWN:
-                    text = "Dropdown";
+                    ScoutingVersion.dropdownType dropdownType = (ScoutingVersion.dropdownType) values[i];
+                    tv.setText(dropdownType.name);
                     break;
                 case NOTES_INPUT:
-                    text = "Notes";
+                    ScoutingVersion.notesType notesType = (ScoutingVersion.notesType) values[i];
+                    tv.setText(notesType.name);
                     break;
             }
-            System.out.println(text);
-            tv.setText(text);
 
-            binding.MatchScoutArea.addView(tv);
-            prev_text = tv.getId();
+//            prev_text = tv.getId();
         }
     }
 }

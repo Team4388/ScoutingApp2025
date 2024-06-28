@@ -2,6 +2,7 @@ package com.astatin3.scoutingapp2025;
 
 import android.os.Bundle;
 
+import com.astatin3.scoutingapp2025.scoutingData.fields;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +22,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         latestSettings.update();
+
+        if(!fileEditor.fileExist(fields.fieldsFilename)){
+            fields.save();
+        }
+
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());

@@ -1,11 +1,9 @@
 package com.astatin3.scoutingapp2025.types;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.astatin3.scoutingapp2025.BuiltByteParser;
-import com.astatin3.scoutingapp2025.ByteBuilder;
+import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
+import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 
 import java.util.ArrayList;
 

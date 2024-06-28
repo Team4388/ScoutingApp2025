@@ -1,9 +1,7 @@
-package com.astatin3.scoutingapp2025;
+package com.astatin3.scoutingapp2025.utility;
 
-import android.util.Log;
+import com.astatin3.scoutingapp2025.fileEditor;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
