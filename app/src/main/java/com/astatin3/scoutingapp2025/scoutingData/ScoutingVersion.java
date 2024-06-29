@@ -1,9 +1,28 @@
 package com.astatin3.scoutingapp2025.scoutingData;
 
+import android.app.slice.Slice;
+import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
+import com.google.android.material.slider.Slider;
+import com.skydoves.powerspinner.IconSpinnerAdapter;
+import com.skydoves.powerspinner.IconSpinnerItem;
+import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
+import com.skydoves.powerspinner.PowerSpinnerView;
+import com.skydoves.powerspinner.SpinnerGravity;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 public class ScoutingVersion {
     public static final int slider_type_id = 255;
@@ -34,6 +53,11 @@ public class ScoutingVersion {
         }
         public abstract byte[] encode() throws ByteBuilder.buildingException;
         public abstract void decode(byte[] bytes) throws BuiltByteParser.byteParsingExeption;
+
+        public abstract View createView(Context context, Function<dataType, Integer> onUpdate);
+        public void setViewValue(dataType type){setViewValue(type.get());}
+        public abstract void setViewValue(Object value);
+        public abstract dataType getViewValue();
     }
 
 //    public class usernameType extends inputType {
@@ -77,7 +101,36 @@ public class ScoutingVersion {
             min           = (int)    objects.get(2).get();
             max           = (int)    objects.get(3).get();
         }
+
+        public Slider slider = null;
+
+        public View createView(Context context, Function<dataType, Integer> onUpdate){
+            slider = new Slider(context);
+            setViewValue(default_value);
+            slider.setStepSize((float) 1 / max);
+            slider.addOnChangeListener(new Slider.OnChangeListener() {
+                @Override
+                public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                    onUpdate.apply(getViewValue());
+                }
+            });
+            return slider;
+
+        }
+        public void setViewValue(Object value) {
+            if(slider == null) return;
+            float slider_position = (float) ((int) value-min) / (max-min);
+            float step_size = (float) 1/max;
+            int round_position = Math.round(slider_position / step_size);
+            slider.setValue(round_position*step_size);
+        }
+        public dataType getViewValue(){
+            if(slider == null) return null;
+            return new intType(name,  min + (int) (slider.getValue() * (max-min)));
+        }
     }
+
+
 
     public class dropdownType extends inputType {
         public String[] text_options;
@@ -105,6 +158,57 @@ public class ScoutingVersion {
             default_value =            objects.get(1).get();
             text_options  = (String[]) objects.get(2).get();
         }
+
+        public PowerSpinnerView dropdown = null;
+
+        public View createView(Context context, Function<dataType, Integer> onUpdate){
+            dropdown = new PowerSpinnerView(context);
+
+            List<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
+            for(int i = 0; i < text_options.length; i++){
+                iconSpinnerItems.add(new IconSpinnerItem(text_options[i]));
+            }
+            IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(dropdown);
+            dropdown.setSpinnerAdapter(iconSpinnerAdapter);
+            dropdown.setItems(iconSpinnerItems);
+
+            dropdown.selectItemByIndex((int) default_value);
+
+            dropdown.setPadding(10,10,10,10);
+            dropdown.setBackgroundColor(0xf0000000);
+            dropdown.setTextSize(15);
+            dropdown.setArrowGravity(SpinnerGravity.END);
+            dropdown.setArrowPadding(8);
+            dropdown.setSpinnerItemHeight(46);
+            dropdown.setSpinnerPopupElevation(14);
+
+
+            dropdown.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<IconSpinnerItem>() {
+                @Override
+                public void onItemSelected(int oldIndex, @Nullable IconSpinnerItem oldItem, int newIndex,
+                                           IconSpinnerItem newItem) {
+                    onUpdate.apply(getViewValue());
+                }
+            });
+
+//            dropdown.setLifecycleOwner(context.life);
+//            slider.addOnChangeListener(new Slider.OnChangeListener() {
+//                @Override
+//                public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+//                    onUpdate.apply(getViewValue());
+//                }
+//            });
+            return dropdown;
+
+        };
+        public void setViewValue(Object value) {
+            if(dropdown == null) return;
+            dropdown.selectItemByIndex((int) value);
+        }
+        public dataType getViewValue(){
+            if(dropdown == null) return null;
+            return new intType(name, dropdown.getSelectedIndex());
+        }
     }
 
     public class notesType extends inputType {
@@ -128,6 +232,30 @@ public class ScoutingVersion {
 
             name          = (String) objects.get(0).get();
             default_value =          objects.get(1).get();
+        }
+
+        public EditText text = null;
+
+        public View createView(Context context, Function<dataType, Integer> onUpdate){
+            text = new EditText(context);
+            text.setText((String)default_value);
+            text.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                    onUpdate.apply(getViewValue());                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            });
+
+            return text;
+
+        };
+        public void setViewValue(Object value) {
+            if(text == null) return;
+            text.setText((String) value);
+        }
+        public dataType getViewValue(){
+            if(text == null) return null;
+            return new stringType(name, text.getText().toString());
         }
     }
 
@@ -259,7 +387,6 @@ public class ScoutingVersion {
                             new_values[i] = create_transfer((createTransferType) tv);
                             continue;
                     }
-                    System.out.println(new_values[i]);
                 }
                 this.array = new_values;
                 version++;
@@ -297,14 +424,12 @@ public class ScoutingVersion {
 
         private dataType create_transfer(createTransferType tv){
             inputType it = get_input_type_by_name(version+1, tv.name);
-//            System.out.println(tv.name);
             switch (it.getValueType()){
                 case NUM:
                     return new intType(it.name, (int) it.default_value);
                 case STRING:
                     return new stringType(it.name, (String) it.default_value);
             }
-            System.out.println(2);
             return null;
         }
 

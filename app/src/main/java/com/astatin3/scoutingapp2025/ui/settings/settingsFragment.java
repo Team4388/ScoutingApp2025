@@ -88,7 +88,7 @@ public class settingsFragment extends Fragment {
         IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(spinnerView);
         spinnerView.setSpinnerAdapter(iconSpinnerAdapter);
         spinnerView.setItems(iconSpinnerItems);
-        spinnerView.setLifecycleOwner(this);
+//        spinnerView.setLifecycleOwner(this);
 
         if(!iconSpinnerItems.isEmpty() && target_index != -1){
             spinnerView.selectItemByIndex(target_index);

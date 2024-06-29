@@ -23,6 +23,7 @@ import com.google.android.material.slider.Slider;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public class matchScoutingView extends ConstraintLayout {
     public matchScoutingView(Context context) {
@@ -32,8 +33,8 @@ public class matchScoutingView extends ConstraintLayout {
         super(context, attributeSet);
     }
 
-    int unsaved_color = 0x60ff0000;
-    int saved_color = 0x6000ff00;
+    private static final int unsaved_color = 0x60ff0000;
+    private static final int saved_color = 0x6000ff00;
 
     FragmentScoutingBinding binding;
     String alliance_position;
@@ -131,7 +132,7 @@ public class matchScoutingView extends ConstraintLayout {
             binding.MatchScoutArea.removeView(views.get(i));
         }
 
-        views = new ArrayList<>();
+//        views = new ArrayList<>();
 
         create_fields();
         update_scouting_data();
@@ -141,46 +142,28 @@ public class matchScoutingView extends ConstraintLayout {
 
 
     private void create_fields(){
+        if(asm.isRunning){
+            asm.stop();
+        }
+
         for(int i = 0 ; i < latest_values.length; i++) {
             TextView tv = new TextView(getContext());
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            tv.setText(latest_values[i].name);
             tv.setTextSize(24);
             binding.MatchScoutArea.addView(tv);
-//            views.add(tv);
 
-            switch (latest_values[i].getInputType()) {
-                case SLIDER:
-                    ScoutingVersion.sliderType sliderType = (ScoutingVersion.sliderType) latest_values[i];
-//                    dataTypes.add()
-                    tv.setText(sliderType.name);
+            View v = latest_values[i].createView(getContext(), new Function<ScoutingVersion.dataType, Integer>() {
+                @Override
+                public Integer apply(ScoutingVersion.dataType dataType) {
+//                    edited = true;
+                    if(asm.isRunning)
+                        update_asm();
+                    return 0;
+                }
+            });
 
-                    Slider slider = new Slider(getContext());
-
-                    slider.setStepSize((float) 1 / sliderType.max);
-                    slider.setValue((int) sliderType.default_value / (float) sliderType.max);
-
-                    slider.addOnChangeListener(new Slider.OnChangeListener() {
-                        @Override
-                        public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-                            System.out.println(value * sliderType.max);
-                            update_asm();
-                        }
-                    });
-
-                    binding.MatchScoutArea.addView(slider);
-                    views.add(slider);
-                    break;
-                case DROPDOWN:
-                    ScoutingVersion.dropdownType dropdownType = (ScoutingVersion.dropdownType) latest_values[i];
-                    tv.setText(dropdownType.name);
-                    views.add(new PowerSpinnerView(getContext()));
-                    break;
-                case NOTES_INPUT:
-                    ScoutingVersion.notesType notesType = (ScoutingVersion.notesType) latest_values[i];
-                    tv.setText(notesType.name);
-                    views.add(new EditText(getContext()));
-                    break;
-            }
+            binding.MatchScoutArea.addView(v);
         }
     }
 
@@ -193,8 +176,6 @@ public class matchScoutingView extends ConstraintLayout {
         edited = false;
 
         binding.matchnum.setText(String.valueOf(cur_match_num+1));
-
-        System.out.println(cur_match_num);
 
         if(cur_match_num <= 0){
             binding.backButton.setVisibility(View.GONE);
@@ -275,14 +256,9 @@ public class matchScoutingView extends ConstraintLayout {
 
 
     public void default_fields(){
-        for(int i = 0; i < views.size(); i++){
-            if(views.get(i).getClass() == Slider.class){
-                ScoutingVersion.sliderType sliderType = (ScoutingVersion.sliderType) latest_values[i];
-                ((Slider) views.get(i)).setValue((int) sliderType.default_value / (float) sliderType.max);
-            }
-//            } else if (views.get(i).getClass() == .class) {
-//
-//            }
+        for(int i = 0; i < latest_values.length; i++){
+            ScoutingVersion.inputType input = latest_values[i];
+            input.setViewValue(input.default_value);
         }
     }
 
@@ -293,27 +269,10 @@ public class matchScoutingView extends ConstraintLayout {
         ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, values, transferValues);
         ScoutingVersion.dataType[] types = psdr.data.array;
 
-        for(int i = 0; i < views.size(); i++){
-
-            View view = views.get(i);
-            Class<? extends View> c = view.getClass();
-
-            if(c == Slider.class){
-                ScoutingVersion.sliderType sliderType = (ScoutingVersion.sliderType) latest_values[i];
-                ((Slider) view).setValue((float) (sliderType.min + (int) types[i].get()) / (sliderType.max-sliderType.min));
-
-
-//                types[i] = fields.sv.new intType(latest_values[i].name, (int) ((Slider) view).getValue());
-
-
-            } else if (c == PowerSpinnerView.class) {
-//                types[i] = fields.sv.new intType(latest_values[i].name, 0);
-            } else if (c == EditText.class) {
-//                types[i] = fields.sv.new stringType(latest_values[i].name, "Test String");
-            }
+        for(int i = 0; i < latest_values.length; i++){
+//            types[i] = latest_values[i].getViewValue();
+            latest_values[i].setViewValue(types[i]);
         }
-
-//        System.out.println(ScoutingDataWriter.save(values.length, username, filename, types));
     }
 
 
@@ -322,26 +281,10 @@ public class matchScoutingView extends ConstraintLayout {
 
         ScoutingVersion.dataType[] types = new ScoutingVersion.dataType[latest_values.length];
 
-        for(int i = 0; i < views.size(); i++){
-
-            View view = views.get(i);
-            Class<? extends View> c = view.getClass();
-
-            if(c == Slider.class){
-                ScoutingVersion.sliderType sliderType = (ScoutingVersion.sliderType) latest_values[i];
-
-                types[i] = fields.sv.new intType(latest_values[i].name,
-                        sliderType.min + (int)(((Slider) view).getValue() * (sliderType.max-sliderType.min)));
-
-
-            } else if (c == PowerSpinnerView.class) {
-                types[i] = fields.sv.new intType(latest_values[i].name, 0);
-            } else if (c == EditText.class) {
-                types[i] = fields.sv.new stringType(latest_values[i].name, "Test String");
-            }
+        for(int i = 0; i < latest_values.length; i++){
+            types[i] = latest_values[i].getViewValue();
         }
 
-        System.out.println(types.length);
         System.out.println(ScoutingDataWriter.save(values.length-1, username, filename, types));
     }
 }
