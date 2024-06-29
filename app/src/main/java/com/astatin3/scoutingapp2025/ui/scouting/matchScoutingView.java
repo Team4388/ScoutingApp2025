@@ -54,8 +54,6 @@ public class matchScoutingView extends ConstraintLayout {
 
     ArrayList<ScoutingVersion.dataType> dataTypes;
 
-    ArrayList<View> views = new ArrayList<>();
-
 
 
     public void save(){
@@ -98,7 +96,6 @@ public class matchScoutingView extends ConstraintLayout {
             tv.setText("Failed to load fields.\nTry to either download or create match scouting fields.");
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             binding.MatchScoutArea.addView(tv);
-//            views.add(tv);
             return;
         }
 
@@ -121,18 +118,12 @@ public class matchScoutingView extends ConstraintLayout {
             update_scouting_data();
         });
 
-        binding.middleButton.setOnClickListener(v -> {
-            if(edited) save();
-        });
+//        binding.middleButton.setOnClickListener(v -> {
+//            if(edited) save();
+//        });
 
         latest_values = values[values.length-1];
         transferValues = fields.sv.get_transfer_values(values);
-
-        for(int i = 0; i < views.size(); i++){
-            binding.MatchScoutArea.removeView(views.get(i));
-        }
-
-//        views = new ArrayList<>();
 
         create_fields();
         update_scouting_data();

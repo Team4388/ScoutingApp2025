@@ -2,7 +2,7 @@
  Ridgebotics 2025 scouting app in Android
 
 TODO:
-- Copy matchScoutingView to create pitScoutingView
+- Handle saving team list data from TBA without matches. For the practice day.
 - Make the file browser UI
 - Add white border around the datamatrix code to allow file transfer in dark mode
 - Fix the code scanning progress indicator

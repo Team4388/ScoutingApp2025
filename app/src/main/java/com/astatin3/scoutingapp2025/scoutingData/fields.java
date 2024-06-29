@@ -10,7 +10,7 @@ public class fields {
     public static ScoutingVersion sv = new ScoutingVersion();
 
     public static final String matchFieldsFilename = "matches.fields";
-    public static final String pitsFieldsFilename = "matches.fields";
+    public static final String pitsFieldsFilename = "pits.fields";
 
     public static final ScoutingVersion.inputType[][] default_match_fields = new ScoutingVersion.inputType[][] {
         {

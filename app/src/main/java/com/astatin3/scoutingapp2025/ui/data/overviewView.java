@@ -17,6 +17,8 @@ import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcMatch;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 
+import java.util.Arrays;
+
 public class overviewView extends ScrollView {
     public overviewView(@NonNull Context context) {
         super(context);
@@ -48,9 +50,19 @@ public class overviewView extends ScrollView {
         tv.setTextSize(28);
         binding.matchTable.addView(tv);
 
+        int[] teams = new int[event.teams.size()];
+
+        for(int i = 0 ; i < event.teams.size(); i++){
+            teams[i] = event.teams.get(i).teamNumber;
+        }
+
+        Arrays.sort(teams);
+
         TableRow tr = null;
         for(int i=0; i < event.teams.size(); i++){
-            frcTeam team = event.teams.get(i);
+//            frcTeam team = event.teams.get(i);
+            int num = teams[i];
+
             if(i % 7 == 0){
                 if(i != 0)
                     binding.matchTable.addView(tr);
@@ -61,8 +73,8 @@ public class overviewView extends ScrollView {
             text.setTextSize(18);
             text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-            text.setText(String.valueOf(team.teamNumber));
-            if(fileEditor.fileExist(event.eventCode + "-" + team.teamNumber + ".pitscoutdata")){
+            text.setText(String.valueOf(num));
+            if(fileEditor.fileExist(event.eventCode + "-" + num + ".pitscoutdata")){
                 text.setBackgroundColor(0x3000FF00);
             }else{
                 text.setBackgroundColor(0x30FF0000);
