@@ -67,9 +67,6 @@ public class pitScoutingView extends ConstraintLayout {
         }
 
         System.out.println(ScoutingDataWriter.save(values.length-1, username, filename, types));
-
-//        fileEditor.createFile(filename);
-//        save_fields();
     }
 
     public void set_indicator_color(int color){
