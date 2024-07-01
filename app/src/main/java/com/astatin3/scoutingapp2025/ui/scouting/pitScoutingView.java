@@ -136,6 +136,8 @@ public class pitScoutingView extends ConstraintLayout {
         binding.pitTeamName.setVisibility(View.GONE);
         binding.pitTeamDescription.setVisibility(View.GONE);
 
+        clear_fields();
+
 
         int[] teamNums = new int[event.teams.size()];
 

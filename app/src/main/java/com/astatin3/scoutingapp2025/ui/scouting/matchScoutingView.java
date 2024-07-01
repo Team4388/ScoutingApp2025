@@ -76,6 +76,19 @@ public class matchScoutingView extends ConstraintLayout {
     }
 
 
+    public void clear_fields(){
+        int childCount = binding.MatchScoutArea.getChildCount();
+        View[] views = new View[childCount];
+
+        for(int i = 0; i < childCount; i++){
+            views[i] = binding.MatchScoutArea.getChildAt(i);
+        }
+
+        for(int i = 0; i < childCount; i++){
+            if(!views[i].isShown()) continue;
+            binding.MatchScoutArea.removeView(views[i]);
+        }
+    }
 
 
     public void init(FragmentScoutingBinding tmp_binding){
@@ -88,6 +101,13 @@ public class matchScoutingView extends ConstraintLayout {
 
         binding.eventcode.setText(evcode);
         binding.alliancePosText.setText(alliance_position);
+
+        binding.teamDescription.setVisibility(View.GONE);
+        binding.teamName.setVisibility(View.GONE);
+        clear_fields();
+        binding.teamDescription.setVisibility(View.VISIBLE);
+        binding.teamName.setVisibility(View.VISIBLE);
+
 
         values = fields.load(fields.matchFieldsFilename);
 

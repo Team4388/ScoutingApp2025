@@ -23,6 +23,8 @@ public class dataFragment extends Fragment {
 
     private FragmentDataBinding binding;
 
+    private boolean submenu = false;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
@@ -40,17 +42,20 @@ public class dataFragment extends Fragment {
 
         frcEvent event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
 
-//        for(frcTeam team : event.teams){
-//            System.out.println(team.getDescription());
-//        }
-
         binding.overviewButton.setOnClickListener(v -> {
             binding.buttons.setVisibility(View.GONE);
             binding.overviewView.setVisibility(View.VISIBLE);
             binding.overviewView.start(binding, event);
+            submenu = true;
         });
 
         return root;
+    }
+
+    public void show_ui(){
+        binding.buttons.setVisibility(View.VISIBLE);
+        binding.overviewView.setVisibility(View.GONE);
+        submenu = false;
     }
 
     @Override
@@ -67,10 +72,10 @@ public class dataFragment extends Fragment {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK && submenu){
                     // handle back button's click listener
 
-                    System.out.println("Back");
+                    show_ui();
 
                     return true;
                 }
