@@ -109,10 +109,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-<!--            <TableLayout-->
-<!--                android:id="@+id/matchTable"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent" />-->
+            <ScrollView
+                android:id="@+id/searchArea"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+<!--                <TableLayout-->
+<!--                    android:id="@+id/searchTable"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content" />-->
+
+            </ScrollView>
 
         </LinearLayout>
     </com.astatin3.scoutingapp2025.ui.data.searchView>

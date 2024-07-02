@@ -22,6 +22,7 @@ public class sv1 extends sv0 {
         writeTag("selected_event_code", "unset");
 //        writeTag("practice_mode", "false");
         writeTag("wifi_mode", "false");
+        writeTag("team_num", "4388");
 
         writeTag("match_num", "0");
         writeTag("alliance_pos", "red-1");
@@ -48,4 +49,16 @@ public class sv1 extends sv0 {
     public void set_alliance_pos(String pos){
         writeTag("alliance_pos", pos);
     }
+
+    public int get_team_num(){return Integer.parseInt(readTag("team_num"));}
+    public void set_team_num(String str){
+
+        if(str.isEmpty()) {
+            set_team_num(0);
+            return;
+        }
+
+        set_team_num(Integer.parseInt(str));
+    }
+    public void set_team_num(int num){writeTag("team_num", String.valueOf(num));}
 }

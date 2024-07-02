@@ -44,14 +44,11 @@
                     android:id="@+id/textView2"
                     android:layout_width="66dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="172dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="173dp"
                     android:text="Name"
                     android:textAlignment="center"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -140,17 +137,47 @@
                     app:spinner_popup_background="@color/black_2"
                     app:spinner_popup_elevation="14dp" />
 
+                <TextView
+                    android:id="@+id/team_num_settings_label"
+                    android:layout_width="107dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="152dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="152dp"
+                    android:text="Team number"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/alliance_pos_dropdown" />
+
+                <EditText
+                    android:id="@+id/team_number"
+                    android:layout_width="193dp"
+                    android:layout_height="65dp"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:padding="10dp"
+                    android:text="4388"
+                    android:textColor="@color/main_500"
+                    android:textColorHint="@color/teal_700"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/team_num_settings_label" />
+
                 <CheckBox
                     android:id="@+id/wifi_mode"
                     android:layout_width="412dp"
                     android:layout_height="79dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="24dp"
                     android:text="Wifi Mode"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/alliance_pos_dropdown" />
+                    app:layout_constraintTop_toBottomOf="@+id/team_number" />
 
                 <Button
                     android:id="@+id/reset_button"

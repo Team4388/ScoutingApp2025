@@ -167,6 +167,20 @@ public class settingsFragment extends Fragment {
 
 
 
+        EditText team_num = binding.teamNumber;
+        team_num.setText(String.valueOf(latestSettings.settings.get_team_num()));
+        team_num.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                latestSettings.settings.set_team_num(team_num.getText().toString());
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
+
+
+
+
 
 
         CheckBox wifi_mode = binding.wifiMode;
@@ -201,6 +215,7 @@ public class settingsFragment extends Fragment {
 //                    practice_mode.setChecked(latestSettings.settings.get_practice_mode());
                     wifi_mode.setChecked(latestSettings.settings.get_wifi_mode());
                     alliance_pos_spinnerView.selectItemByIndex(0);
+                    team_num.setText(String.valueOf(latestSettings.settings.get_team_num()));
                 });
 
                 alert.setNegativeButton("Cancel", null);

@@ -18,7 +18,9 @@ import java.nio.BufferOverflowException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -215,6 +217,37 @@ public final class fileEditor {
         Collections.sort(outFiles);
         return outFiles;
     }
+
+
+    public static String[] getMatchesByTeamNum(int teamNum){
+        File f = new File(baseDir);
+        File[] files = f.listFiles();
+        
+        ArrayList<String> outFiles = new ArrayList<>();
+
+        if(files == null){return new String[0];}
+
+        for (File file : files) {
+            if(!file.isDirectory() && file.getName().endsWith(teamNum+".matchscoutdata")) {
+                outFiles.add(file.getName());
+            }
+        }
+
+        String[] filenames = outFiles.toArray(new String[0]);
+
+        Arrays.sort(filenames, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return Integer.valueOf(o1.split("-")[1]).compareTo(Integer.valueOf(o2.split("-")[1]));
+            }
+        });
+
+
+        return filenames;
+    }
+
+
+
 
 
     public static boolean setTeams(Context context, String key, ArrayList<frcTeam> teams){

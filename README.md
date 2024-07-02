@@ -15,4 +15,6 @@ Also TODO:
 Also Also TODO:
 - Make practice mode
 - Make server software to allow for easy sync over wifi
+- AI overview of scouting data for a team???
+- Bluetooth data sync
 - Test the scouting app

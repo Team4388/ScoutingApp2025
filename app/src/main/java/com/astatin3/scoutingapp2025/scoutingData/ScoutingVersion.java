@@ -4,8 +4,13 @@ import android.app.slice.Slice;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,13 +26,17 @@ import com.skydoves.powerspinner.PowerSpinnerView;
 import com.skydoves.powerspinner.SpinnerGravity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-public class ScoutingVersion {
+public class
+ScoutingVersion {
     public static final int slider_type_id = 255;
     public static final int dropdownType = 254;
     public static final int notesType = 253;
+
+
 
     public enum inputTypes {
 //        USERNAME,
@@ -40,6 +49,25 @@ public class ScoutingVersion {
         NUM,
         STRING
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public abstract class inputType {
         public String name;
@@ -58,17 +86,15 @@ public class ScoutingVersion {
         public void setViewValue(dataType type){setViewValue(type.get());}
         public abstract void setViewValue(Object value);
         public abstract dataType getViewValue();
+        public abstract void add_individual_view(LinearLayout parent, dataType data);
     }
 
-//    public class usernameType extends inputType {
-//        public String defaultValue;
-//        public inputTypes getInputType(){return inputTypes.USERNAME;}
-//        public valueTypes getValueType(){return valueTypes.STRING;}
-//        public usernameType(String name, String defaultValue){
-//            super(name);
-//            this.defaultValue = defaultValue;
-//        }
-//    }
+
+
+
+
+
+
 
     public class sliderType extends inputType {
 //        public int defaultValue;
@@ -128,7 +154,29 @@ public class ScoutingVersion {
             if(slider == null) return null;
             return new intType(name,  min + (int) (slider.getValue() * (max-min)));
         }
+        public void add_individual_view(LinearLayout parent, dataType data){
+            Slider slider = new Slider(parent.getContext());
+
+            float slider_position = (float) ((int) data.get()-min) / (max-min);
+            float step_size = (float) 1/max;
+            int round_position = Math.round(slider_position / step_size);
+            slider.setValue(round_position*step_size);
+
+            slider.setStepSize((float) 1 / max);
+            slider.setEnabled(false);
+            parent.addView(slider);
+        }
     }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -209,7 +257,29 @@ public class ScoutingVersion {
             if(dropdown == null) return null;
             return new intType(name, dropdown.getSelectedIndex());
         }
+        public void add_individual_view(LinearLayout parent, dataType data){
+            TextView tv = new TextView(parent.getContext());
+            tv.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tv.setPadding(20,20,20,20);
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tv.setText(text_options[(int) data.get()]);
+            tv.setTextSize(18);
+            parent.addView(tv);
+        }
     }
+
+
+
+
+
+
+
+
+
+
 
     public class notesType extends inputType {
         public int get_byte_id() {return notesType;}
@@ -257,7 +327,37 @@ public class ScoutingVersion {
             if(text == null) return null;
             return new stringType(name, text.getText().toString());
         }
+        public void add_individual_view(LinearLayout parent, dataType data){
+            TextView tv = new TextView(parent.getContext());
+            tv.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tv.setText((String) data.get());
+            tv.setTextSize(18);
+            parent.addView(tv);
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

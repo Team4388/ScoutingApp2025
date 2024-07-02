@@ -32,18 +32,20 @@ public class scoutingFragment extends Fragment {
         binding.matchScoutingView.setVisibility(View.GONE);
         binding.pitScoutingView.setVisibility(View.GONE);
 
+
         String evcode = latestSettings.settings.get_evcode();
-        frcEvent event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
-
-        if(event.matches.isEmpty())
-            binding.matchScoutingButton.setVisibility(View.GONE);
-
 
         if(evcode.equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);
             binding.buttons.setVisibility(View.GONE);
             is_main_page = false;
+            return root;
         }
+
+        frcEvent event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
+
+        if(event.matches.isEmpty())
+            binding.matchScoutingButton.setVisibility(View.GONE);
 
         binding.matchScoutingButton.setOnClickListener(v -> {
             binding.buttons.setVisibility(View.GONE);
