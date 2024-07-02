@@ -81,7 +81,8 @@ public class overviewView extends ScrollView {
             }
             tr.addView(text);
         }
-        binding.matchTable.addView(tr);
+        if(tr != null)
+            binding.matchTable.addView(tr);
     }
 
 

@@ -81,11 +81,11 @@ public class pitScoutingView extends ConstraintLayout {
     }
 
 
-    public void init(FragmentScoutingBinding tmp_binding){
+    public void init(FragmentScoutingBinding tmp_binding, frcEvent event){
         binding = tmp_binding;
 
-        evcode = latestSettings.settings.get_evcode();
-        event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
+        evcode = event.eventCode;
+        this.event = event;
         username = latestSettings.settings.get_username();
 
         binding.eventcode.setText(evcode);

@@ -19,6 +19,7 @@ import com.astatin3.scoutingapp2025.types.frcTeam;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.utility.JSONUtil;
+import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -202,7 +204,8 @@ public class TBAView extends ScrollView {
         Table.bringToFront();
 
         try {
-            final JSONArray matchData = new JSONArray(matchesString);
+//            final JSONArray matchData = new JSONArray(matchesString);
+            final JSONArray matchData = new JSONArray();
             final JSONArray teamData = new JSONArray(teamsString);
 
             String matchKey = eventData.getString("key");
@@ -234,15 +237,7 @@ public class TBAView extends ScrollView {
             tv.setTextSize(28);
             Table.addView(tv);
 
-            if(matchData.length() == 0){
-                TableRow tr = new TableRow(getContext());
-                addTableText(tr, "This event has no matches released yet...");
-                Table.addView(tr);
-                tr = new TableRow(getContext());
-                addTableText(tr, "Try manually adding practice matches.");
-                Table.addView(tr);
-                return;
-            }
+
 
             // Save button
             Button btn = new Button(getContext());
@@ -255,7 +250,130 @@ public class TBAView extends ScrollView {
             Table.addView(btn);
 
 
-            TableRow tr = new TableRow(getContext());
+
+
+            if(teamData.length() == 0){
+                tv = new TextView(getContext());
+                tv.setLayoutParams(new LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                ));
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                tv.setText("This event has no teams released yet...");
+                tv.setTextSize(18);
+                Table.addView(tv);
+
+                tv = new TextView(getContext());
+                tv.setLayoutParams(new LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                ));
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                tv.setText("This event has no teams released yet...");
+                tv.setTextSize(18);
+                Table.addView(tv);
+
+                btn.setVisibility(View.GONE);
+                return;
+            }else if(matchData.length() == 0){
+                tv = new TextView(getContext());
+                tv.setLayoutParams(new LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                ));
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                tv.setText("This event has no matches released yet...");
+                tv.setTextSize(18);
+                Table.addView(tv);
+
+                tv = new TextView(getContext());
+                tv.setLayoutParams(new LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                ));
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                tv.setText("Try manually adding practice matches.");
+                tv.setTextSize(18);
+                Table.addView(tv);
+            }
+
+
+
+            tv = new TextView(getContext());
+            tv.setLayoutParams(new LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tv.setText("Teams");
+            tv.setTextSize(28);
+            Table.addView(tv);
+
+
+
+
+
+
+            int[] teams = new int[teamData.length()];
+
+            for(int i = 0 ; i < teamData.length(); i++){
+                teams[i] = teamData.getJSONObject(i).getInt("team_number");
+            }
+
+            Arrays.sort(teams);
+
+            TableRow tr = null;
+            for(int i=0; i < teamData.length(); i++){
+//            frcTeam team = event.teams.get(i);
+                int num = teams[i];
+
+                if(i % 7 == 0){
+                    if(i != 0)
+                        Table.addView(tr);
+                    tr = new TableRow(getContext());
+                }
+
+                TextView text = new TextView(getContext());
+                text.setTextSize(18);
+                text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+                text.setText(String.valueOf(num));
+//                if(fileEditor.fileExist(event.eventCode + "-" + num + ".pitscoutdata")){
+//                    text.setBackgroundColor(0x3000FF00);
+//                }else{
+//                    text.setBackgroundColor(0x30FF0000);
+//                }
+                tr.addView(text);
+            }
+            if(tr != null)
+                Table.addView(tr);
+
+            final ArrayList<frcMatch> matchesOBJ = new ArrayList<>();
+
+            btn.setOnClickListener(v -> {
+                if(saveData(matchesOBJ, teamData, eventData)){
+                    alert("Info", "Saved!");
+                }else{
+                    alert("Error", "Error saving files.");
+                }
+            });
+
+
+
+            tv = new TextView(getContext());
+            tv.setLayoutParams(new LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tv.setText("Matches");
+            tv.setTextSize(28);
+            Table.addView(tv);
+
+
+
+
+            tr = new TableRow(getContext());
             addTableText(tr, "#");
             addTableText(tr, "Red-1");
             addTableText(tr, "Red-2");
@@ -264,6 +382,10 @@ public class TBAView extends ScrollView {
             addTableText(tr, "Blue-2");
             addTableText(tr, "Blue-3");
             Table.addView(tr);
+
+
+            if(matchData.length() == 0)
+                return;
 
 
             final JSONArray sortedMatchData = JSONUtil.sort(matchData, (a, b) -> {
@@ -277,7 +399,6 @@ public class TBAView extends ScrollView {
             });
 
 
-            final ArrayList<frcMatch> matchesOBJ = new ArrayList<>();
             boolean toggle = false;
             int matchCount = 1;
 
@@ -335,13 +456,13 @@ public class TBAView extends ScrollView {
                 toggle = !toggle;
             }
 
-            btn.setOnClickListener(v -> {
-                if(saveData(matchesOBJ, teamData, eventData)){
-                    alert("Info", "Saved!");
-                }else{
-                    alert("Error", "Error saving files.");
-                }
-            });
+//            btn.setOnClickListener(v -> {
+//                if(saveData(matchesOBJ, teamData, eventData)){
+//                    alert("Info", "Saved!");
+//                }else{
+//                    alert("Error", "Error saving files.");
+//                }
+//            });
 
         }catch (JSONException j){
             j.printStackTrace();

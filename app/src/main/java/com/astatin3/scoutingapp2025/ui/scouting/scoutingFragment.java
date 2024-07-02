@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import com.astatin3.scoutingapp2025.MainActivity;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentScoutingBinding;
+import com.astatin3.scoutingapp2025.types.frcEvent;
+import com.astatin3.scoutingapp2025.utility.fileEditor;
 
 public class scoutingFragment extends Fragment {
 
@@ -30,7 +32,14 @@ public class scoutingFragment extends Fragment {
         binding.matchScoutingView.setVisibility(View.GONE);
         binding.pitScoutingView.setVisibility(View.GONE);
 
-        if(latestSettings.settings.get_evcode().equals("unset")){
+        String evcode = latestSettings.settings.get_evcode();
+        frcEvent event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
+
+        if(event.matches.isEmpty())
+            binding.matchScoutingButton.setVisibility(View.GONE);
+
+
+        if(evcode.equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);
             binding.buttons.setVisibility(View.GONE);
             is_main_page = false;
@@ -39,7 +48,7 @@ public class scoutingFragment extends Fragment {
         binding.matchScoutingButton.setOnClickListener(v -> {
             binding.buttons.setVisibility(View.GONE);
             binding.matchScoutingView.setVisibility(View.VISIBLE);
-            binding.matchScoutingView.init(binding);
+            binding.matchScoutingView.init(binding, event);
             is_main_page = false;
         });
 
@@ -47,7 +56,7 @@ public class scoutingFragment extends Fragment {
             binding.pitScoutingView.setVisibility(View.VISIBLE);
             binding.buttons.setVisibility(View.GONE);
             //            binding.pitScoutArea.setVisibility(View.VISIBLE);
-            binding.pitScoutingView.init(binding);
+            binding.pitScoutingView.init(binding, event);
             is_main_page = false;
         });
 

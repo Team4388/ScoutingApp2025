@@ -49,12 +49,22 @@ public class dataFragment extends Fragment {
             submenu = true;
         });
 
+        binding.searchButton.setOnClickListener(v -> {
+            binding.buttons.setVisibility(View.GONE);
+            binding.searchView.setVisibility(View.VISIBLE);
+            binding.searchView.init(binding, event);
+            submenu = true;
+        });
+
+        show_ui();
+
         return root;
     }
 
     public void show_ui(){
         binding.buttons.setVisibility(View.VISIBLE);
         binding.overviewView.setVisibility(View.GONE);
+        binding.searchView.setVisibility(View.GONE);
         submenu = false;
     }
 

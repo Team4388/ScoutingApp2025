@@ -2,7 +2,6 @@
  Ridgebotics 2025 scouting app in Android
 
 TODO:
-- Allow the option to save event data without matches, and handle only having matches. This is where practice mode should be selected.
 - Make the file browser UI
 - Add white border around the datamatrix code to allow file transfer in dark mode
 - Fix the code scanning progress indicator
