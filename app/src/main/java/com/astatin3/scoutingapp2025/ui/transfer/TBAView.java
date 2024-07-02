@@ -204,8 +204,8 @@ public class TBAView extends ScrollView {
         Table.bringToFront();
 
         try {
-//            final JSONArray matchData = new JSONArray(matchesString);
-            final JSONArray matchData = new JSONArray();
+            final JSONArray matchData = new JSONArray(matchesString);
+//            final JSONArray matchData = new JSONArray();
             final JSONArray teamData = new JSONArray(teamsString);
 
             String matchKey = eventData.getString("key");
