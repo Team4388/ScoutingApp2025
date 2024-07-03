@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentDataBinding;
 import com.astatin3.scoutingapp2025.scoutingData.ScoutingDataWriter;
 import com.astatin3.scoutingapp2025.scoutingData.ScoutingVersion;
@@ -37,8 +40,10 @@ public class searchView extends ConstraintLayout {
     frcEvent event;
 
     ScoutingVersion.inputType[][] match_values;
+    ScoutingVersion.inputType[] latest_match_values;
     ScoutingVersion.transferType[][] match_transferValues;
     ScoutingVersion.inputType[][] pit_values;
+    ScoutingVersion.inputType[] latest_pit_values;
     ScoutingVersion.transferType[][] pit_transferValues;
 
     public void init(FragmentDataBinding binding, frcEvent event){
@@ -48,8 +53,10 @@ public class searchView extends ConstraintLayout {
 
 
         match_values = fields.load(fields.matchFieldsFilename);
+        latest_match_values = match_values[match_values.length-1];
         match_transferValues = fields.sv.get_transfer_values(match_values);
         pit_values = fields.load(fields.pitsFieldsFilename);
+        latest_pit_values = pit_values[pit_values.length-1];
         pit_transferValues = fields.sv.get_transfer_values(pit_values);
 
 
@@ -102,12 +109,12 @@ public class searchView extends ConstraintLayout {
 
             frcTeam finalTeam = team;
             tr.setOnClickListener(v -> {
-                loadTeam(finalTeam);
+                loadTeam(finalTeam, latestSettings.settings.get_compiled_mode());
             });
         }
     }
 
-    public void loadTeam(frcTeam team){
+    public void loadTeam(frcTeam team, boolean compiled_mode){
         binding.searchArea.removeAllViews();
 
         LinearLayout ll = new LinearLayout(getContext());
@@ -117,6 +124,22 @@ public class searchView extends ConstraintLayout {
         ));
         ll.setOrientation(LinearLayout.VERTICAL);
         binding.searchArea.addView(ll);
+
+        CheckBox cb = new CheckBox(getContext());
+        cb.setLayoutParams(new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        cb.setText("Compiled mode");
+        cb.setChecked(compiled_mode);
+        ll.addView(cb);
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                latestSettings.settings.set_compiled_mode(isChecked);
+                loadTeam(team, isChecked);
+            }
+        });
 
         TextView tv = new TextView(getContext());
         tv.setLayoutParams(new FrameLayout.LayoutParams(
@@ -138,47 +161,82 @@ public class searchView extends ConstraintLayout {
         tv.setTextSize(16);
         ll.addView(tv);
 
+
         String[] files = fileEditor.getMatchesByTeamNum(team.teamNumber);
 
-        for(int i = 0; i < files.length; i++){
-            String[] split = files[i].split("-");
-            int match_num = Integer.parseInt(split[1]);
-
-            ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
-
+        if(files.length == 0){
             tv = new TextView(getContext());
             tv.setLayoutParams(new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
-            tv.setPadding(0,20,0,5);
             tv.setGravity(Gravity.CENTER_HORIZONTAL);
-            tv.setText("Match " + (match_num) + " by " + psda.username);
-            tv.setTextSize(30);
+            tv.setText("No match data has been collected!");
+            tv.setTextSize(23);
             ll.addView(tv);
+            return;
+        }
 
-            for(int a = 0 ; a < psda.data.array.length; a++){
+        if(!compiled_mode){
+
+            for (int i = 0; i < files.length; i++) {
+                String[] split = files[i].split("-");
+                int match_num = Integer.parseInt(split[1]);
+
+                ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
+
                 tv = new TextView(getContext());
                 tv.setLayoutParams(new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
+                tv.setPadding(0, 20, 0, 5);
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                tv.setText(psda.data.array[a].name);
-                tv.setTextSize(25);
+                tv.setText("Match " + (match_num) + " by " + psda.username);
+                tv.setTextSize(30);
                 ll.addView(tv);
 
+                for (int a = 0; a < psda.data.array.length; a++) {
+                    tv = new TextView(getContext());
+                    tv.setLayoutParams(new FrameLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    ));
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                    tv.setText(psda.data.array[a].name);
+                    tv.setTextSize(25);
+                    ll.addView(tv);
 
-                match_values[match_values.length-1][a].add_individual_view(ll, psda.data.array[a]);
+
+                    latest_match_values[a].add_individual_view(ll, psda.data.array[a]);
+                }
+            }
+
+
+        } else {
+            ScoutingVersion.dataType[][] data = new ScoutingVersion.dataType[latest_match_values.length][files.length];
+            for (int i = 0; i < files.length; i++) {
+
+                ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
+                for (int a = 0; a < data.length; a++) {
+                    data[a][i] = psda.data.array[a];
+                }
+            }
+
+            for(int i = 0; i < latest_match_values.length; i++){
+                tv = new TextView(getContext());
+                tv.setLayoutParams(new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                ));
+                tv.setPadding(0, 20, 0, 5);
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                tv.setText(latest_match_values[i].name);
+                tv.setTextSize(30);
+                ll.addView(tv);
+
+                latest_match_values[i].add_compiled_view(ll, data[i]);
             }
         }
-
-        System.out.println(ll.getChildCount());
-
-//        ScoutingDataWriter.ParsedScoutingDataResult[] scoutingData;
-    }
-
-    public void display_uncompiled_data(){
-
     }
 }

@@ -2,6 +2,7 @@ package com.astatin3.scoutingapp2025.scoutingData;
 
 import android.app.slice.Slice;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -18,6 +19,11 @@ import androidx.annotation.Nullable;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.material.slider.Slider;
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
@@ -74,6 +80,7 @@ ScoutingVersion {
         public Object default_value;
         public abstract inputTypes getInputType();
         public abstract valueTypes getValueType();
+        public abstract Object get_fallback_value();
         public abstract int get_byte_id();
         public inputType(){}
         public inputType(String name){
@@ -87,6 +94,8 @@ ScoutingVersion {
         public abstract void setViewValue(Object value);
         public abstract dataType getViewValue();
         public abstract void add_individual_view(LinearLayout parent, dataType data);
+        public abstract void add_compiled_view(LinearLayout parent, dataType[] data);
+
     }
 
 
@@ -103,6 +112,7 @@ ScoutingVersion {
         public int get_byte_id() {return slider_type_id;}
         public inputTypes getInputType(){return inputTypes.SLIDER;}
         public valueTypes getValueType(){return valueTypes.NUM;}
+        public Object get_fallback_value(){return 0;}
         public sliderType(){};
         public sliderType(String name, int defaultValue, int min, int max){
             super(name);
@@ -166,6 +176,111 @@ ScoutingVersion {
             slider.setEnabled(false);
             parent.addView(slider);
         }
+
+
+        private float calculateMean(int[] data) {
+            float sum = 0;
+            for (int value : data) {
+                sum += (float) value;
+            }
+            return sum / data.length;
+        }
+
+        private float calculateStandardDeviation(int[] data, float mean) {
+            float sum = 0;
+            for (int value : data) {
+                sum += Math.pow((float) value - mean, 2);
+            }
+            return (float) Math.sqrt(sum / (data.length - 1));
+        }
+
+        private List<Entry> generateNormalDistribution(float mean, float stdDev, int count, int scale) {
+            List<Entry> entries = new ArrayList<>();
+            for (int i = 0; i < count; i++) {
+                float x = i;
+                float y = (float) ((1 / (stdDev * Math.sqrt(2 * Math.PI)))
+                        * Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2)));
+                entries.add(new Entry(x, y*scale)); // Scale y for visibility
+            }
+            return entries;
+        }
+
+
+
+        public void add_compiled_view(LinearLayout parent, dataType[] data){
+            LineChart chart = new LineChart(parent.getContext());
+            FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            layout.height = 350;
+            chart.setLayoutParams(layout);
+            chart.setBackgroundColor(0xff252025);
+
+            int[] values = new int[max-min];
+            for (int i = 0; i < data.length; i++)
+                values[(int) data[i].get()-min-1]++;
+
+
+            int[] temp = new int[data.length];
+            for (int i = 0; i < data.length; i++)
+                temp[i] = (int) data[i].get();
+
+
+
+            List<Entry> entries = new ArrayList<>();
+            for (int i = 0; i < values.length; i++)
+                entries.add(new Entry(i, values[i]));
+
+
+            LineDataSet dataSet = new LineDataSet(entries, name);
+            dataSet.setColor(Color.BLUE);
+            dataSet.setValueTextColor(Color.BLACK);
+            dataSet.setDrawCircles(false);
+            dataSet.setDrawValues(false);
+
+
+
+            // Calculate mean and standard deviation
+            float mean = calculateMean(temp);
+            float stdDev = calculateStandardDeviation(temp, mean);
+
+            // Generate normal distribution curve
+            List<Entry> normalDistEntries = generateNormalDistribution(mean-min, stdDev, max-min, (max-min)/data.length);
+
+
+            LineDataSet normalDistSet = new LineDataSet(normalDistEntries, "Normal Distribution");
+            normalDistSet.setColor(Color.RED);
+            normalDistSet.setDrawCircles(false);
+            normalDistSet.setDrawValues(false);
+            normalDistSet.setLineWidth(2f);
+
+
+
+
+            LineData lineData = new LineData(dataSet, normalDistSet);
+
+
+
+            chart.setData(lineData);
+            chart.invalidate();
+
+            chart.getDescription().setEnabled(false);
+            chart.setTouchEnabled(false);
+            chart.setDragEnabled(false);
+            chart.setScaleEnabled(false);
+
+            dataSet.setValueTextColor(Color.RED);
+
+            chart.getXAxis().setTextColor(Color.BLUE);
+            chart.getAxisLeft().setTextColor(Color.GREEN);
+            chart.getAxisRight().setTextColor(Color.GREEN);
+
+            Legend legend = chart.getLegend();
+            legend.setTextColor(Color.MAGENTA);
+
+            parent.addView(chart);
+        }
     }
 
 
@@ -185,6 +300,7 @@ ScoutingVersion {
         public int get_byte_id() {return dropdownType;}
         public inputTypes getInputType(){return inputTypes.DROPDOWN;}
         public valueTypes getValueType(){return valueTypes.NUM;}
+        public Object get_fallback_value(){return 0;}
         public dropdownType(){};
         public dropdownType(String name, String[] text_options, int defaultSelIndex){
             super(name);
@@ -269,6 +385,17 @@ ScoutingVersion {
             tv.setTextSize(18);
             parent.addView(tv);
         }
+        public void add_compiled_view(LinearLayout parent, dataType[] data){
+            TextView tv = new TextView(parent.getContext());
+            tv.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tv.setText("<add pie chart thing here>");
+            tv.setTextSize(20);
+            parent.addView(tv);
+        }
     }
 
 
@@ -285,6 +412,7 @@ ScoutingVersion {
         public int get_byte_id() {return notesType;}
         public inputTypes getInputType(){return inputTypes.NOTES_INPUT;}
         public valueTypes getValueType(){return valueTypes.STRING;}
+        public Object get_fallback_value(){return "<no-notes>";}
         public notesType(){};
         public notesType(String name, String default_text){
             super(name);
@@ -336,6 +464,17 @@ ScoutingVersion {
             tv.setGravity(Gravity.CENTER_HORIZONTAL);
             tv.setText((String) data.get());
             tv.setTextSize(18);
+            parent.addView(tv);
+        }
+        public void add_compiled_view(LinearLayout parent, dataType[] data){
+            TextView tv = new TextView(parent.getContext());
+            tv.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tv.setText("<add word cloud thing here>");
+            tv.setTextSize(20);
             parent.addView(tv);
         }
     }

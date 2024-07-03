@@ -14,14 +14,14 @@ public class fields {
 
     public static final ScoutingVersion.inputType[][] default_match_fields = new ScoutingVersion.inputType[][] {
         {
-            sv.new sliderType("How good is robot", 5, 0, 10),
+            sv.new sliderType("How good is robot", 5, 1, 10),
             sv.new notesType("notes", "<no-notes>"),
         },{
-            sv.new sliderType("How good is robot", 5, 0, 10),
+            sv.new sliderType("How good is robot", 5, 1, 10),
             sv.new sliderType("Test", 128, 64, 256),
             sv.new notesType("notes", "<no-notes>"),
         },{
-            sv.new sliderType("How good is robot", 5, 0, 10),
+            sv.new sliderType("How good is robot", 5, 1, 10),
             sv.new sliderType("Test", 128, 64, 256),
             sv.new dropdownType("test-dropdown", new String[]{"Test1", "test2", "Three"}, 1),
             sv.new notesType("notes", "<no-notes>"),

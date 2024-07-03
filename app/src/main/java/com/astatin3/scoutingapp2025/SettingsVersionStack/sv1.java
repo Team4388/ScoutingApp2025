@@ -26,6 +26,7 @@ public class sv1 extends sv0 {
 
         writeTag("match_num", "0");
         writeTag("alliance_pos", "red-1");
+        writeTag("compiled_mode", "false");
     }
 
     public int get_match_num(){
@@ -61,4 +62,12 @@ public class sv1 extends sv0 {
         set_team_num(Integer.parseInt(str));
     }
     public void set_team_num(int num){writeTag("team_num", String.valueOf(num));}
+
+    public boolean get_compiled_mode(){
+        return readTag("compiled_mode").equals("true");
+    }
+
+    public void set_compiled_mode(boolean state){
+        writeTag("compiled_mode", state ? "true" : "false");
+    }
 }
