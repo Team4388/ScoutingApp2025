@@ -1,5 +1,11 @@
 package com.astatin3.scoutingapp2025.scoutingData;
 
+import com.astatin3.scoutingapp2025.scoutingData.transfer.transferType;
+import com.astatin3.scoutingapp2025.types.ScoutingArray;
+import com.astatin3.scoutingapp2025.types.data.dataType;
+import com.astatin3.scoutingapp2025.types.data.stringType;
+import com.astatin3.scoutingapp2025.types.input.inputType;
+import com.astatin3.scoutingapp2025.types.data.intType;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
@@ -10,7 +16,7 @@ public class ScoutingDataWriter {
 //    private static final int int_type_id = 255;
 //    private static final int string_type_id = 254;
 
-    public static boolean save(int version, String username, String filename, ScoutingVersion.dataType[] data){
+    public static boolean save(int version, String username, String filename, dataType[] data){
         ByteBuilder bb = new ByteBuilder();
         try {
             bb.addInt(version);
@@ -38,15 +44,15 @@ public class ScoutingDataWriter {
         public String filename;
         public String username;
         public int version;
-        public ScoutingVersion.ScoutingArray data;
+        public ScoutingArray data;
     }
 
-    public static ParsedScoutingDataResult load(String filename, ScoutingVersion.inputType[][] values , ScoutingVersion.transferType[][] transferValues){
+    public static ParsedScoutingDataResult load(String filename, inputType[][] values , transferType[][] transferValues){
         byte[] bytes = fileEditor.readFile(filename);
         BuiltByteParser bbp = new BuiltByteParser(bytes);
         try {
             ArrayList<BuiltByteParser.parsedObject> objects = bbp.parse();
-            ScoutingVersion.dataType[] dataTypes = new ScoutingVersion.dataType[objects.size()-2];
+            dataType[] dataTypes = new dataType[objects.size()-2];
 
             int version = ((int)objects.get(0).get());
             System.out.println(version);
@@ -55,17 +61,17 @@ public class ScoutingDataWriter {
             for(int i = 0; i < values[version].length; i++){
                 switch (objects.get(i+2).getType()){
                     case 0:
-                        dataTypes[i] = fields.sv.new intType(values[version][i].name, (int) objects.get(i+2).get());
+                        dataTypes[i] = new intType(values[version][i].name, (int) objects.get(i+2).get());
                         break;
                     case 1:
                         String name = values[version][i].name;
                         String value = (String) objects.get(i+2).get();
-                        dataTypes[i] = fields.sv.new stringType(name,value);
+                        dataTypes[i] = new stringType(name,value);
                         break;
                 }
             }
 
-            ScoutingVersion.ScoutingArray msa = fields.sv.new ScoutingArray(version, dataTypes, values, transferValues);
+            ScoutingArray msa = new ScoutingArray(version, dataTypes, values, transferValues);
             msa.update();
 
             ParsedScoutingDataResult psda = new ParsedScoutingDataResult();

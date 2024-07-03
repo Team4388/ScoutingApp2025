@@ -8,17 +8,17 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentScoutingBinding;
 import com.astatin3.scoutingapp2025.scoutingData.ScoutingDataWriter;
-import com.astatin3.scoutingapp2025.scoutingData.ScoutingVersion;
 import com.astatin3.scoutingapp2025.scoutingData.fields;
+import com.astatin3.scoutingapp2025.scoutingData.transfer.transferType;
+import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.frcEvent;
-import com.astatin3.scoutingapp2025.types.frcMatch;
 import com.astatin3.scoutingapp2025.types.frcTeam;
+import com.astatin3.scoutingapp2025.types.input.inputType;
 import com.astatin3.scoutingapp2025.utility.AutoSaveManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 
@@ -47,20 +47,20 @@ public class pitScoutingView extends ConstraintLayout {
     String filename;
     String username;
 
-    ScoutingVersion.inputType[][] values;
-    ScoutingVersion.inputType[] latest_values;
-    ScoutingVersion.transferType[][] transferValues;
+    inputType[][] values;
+    inputType[] latest_values;
+    transferType[][] transferValues;
 
     AutoSaveManager asm = new AutoSaveManager(this::save);
 
-    ArrayList<ScoutingVersion.dataType> dataTypes;
+    ArrayList<dataType> dataTypes;
 
     public void save(){
         System.out.println("Saved!");
         edited = false;
         set_indicator_color(saved_color);
 
-        ScoutingVersion.dataType[] types = new ScoutingVersion.dataType[latest_values.length];
+        dataType[] types = new dataType[latest_values.length];
 
         for(int i = 0; i < latest_values.length; i++){
             types[i] = latest_values[i].getViewValue();
@@ -109,7 +109,7 @@ public class pitScoutingView extends ConstraintLayout {
         }
 
         latest_values = values[values.length-1];
-        transferValues = fields.sv.get_transfer_values(values);
+        transferValues = transferType.get_transfer_values(values);
 
 //        create_fields();
 //        update_scouting_data();
@@ -243,9 +243,9 @@ public class pitScoutingView extends ConstraintLayout {
             tv.setTextSize(24);
             binding.pitScoutArea.addView(tv);
 
-            View v = latest_values[i].createView(getContext(), new Function<ScoutingVersion.dataType, Integer>() {
+            View v = latest_values[i].createView(getContext(), new Function<dataType, Integer>() {
                 @Override
-                public Integer apply(ScoutingVersion.dataType dataType) {
+                public Integer apply(dataType dataType) {
 //                    edited = true;
                     if(asm.isRunning)
                         update_asm();
@@ -259,7 +259,7 @@ public class pitScoutingView extends ConstraintLayout {
 
     public void default_fields(){
         for(int i = 0; i < latest_values.length; i++){
-            ScoutingVersion.inputType input = latest_values[i];
+            inputType input = latest_values[i];
             input.setViewValue(input.default_value);
         }
     }
@@ -267,7 +267,7 @@ public class pitScoutingView extends ConstraintLayout {
     public void get_fields(){
 
         ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, values, transferValues);
-        ScoutingVersion.dataType[] types = psdr.data.array;
+        dataType[] types = psdr.data.array;
 
         for(int i = 0; i < latest_values.length; i++){
 //            types[i] = latest_values[i].getViewValue();

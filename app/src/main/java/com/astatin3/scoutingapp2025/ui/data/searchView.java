@@ -18,13 +18,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentDataBinding;
 import com.astatin3.scoutingapp2025.scoutingData.ScoutingDataWriter;
-import com.astatin3.scoutingapp2025.scoutingData.ScoutingVersion;
 import com.astatin3.scoutingapp2025.scoutingData.fields;
+import com.astatin3.scoutingapp2025.scoutingData.transfer.transferType;
+import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcTeam;
+import com.astatin3.scoutingapp2025.types.input.inputType;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class searchView extends ConstraintLayout {
@@ -39,12 +40,12 @@ public class searchView extends ConstraintLayout {
     String evcode;
     frcEvent event;
 
-    ScoutingVersion.inputType[][] match_values;
-    ScoutingVersion.inputType[] latest_match_values;
-    ScoutingVersion.transferType[][] match_transferValues;
-    ScoutingVersion.inputType[][] pit_values;
-    ScoutingVersion.inputType[] latest_pit_values;
-    ScoutingVersion.transferType[][] pit_transferValues;
+    inputType[][] match_values;
+    inputType[] latest_match_values;
+    transferType[][] match_transferValues;
+    inputType[][] pit_values;
+    inputType[] latest_pit_values;
+    transferType[][] pit_transferValues;
 
     public void init(FragmentDataBinding binding, frcEvent event){
         this.binding = binding;
@@ -54,10 +55,10 @@ public class searchView extends ConstraintLayout {
 
         match_values = fields.load(fields.matchFieldsFilename);
         latest_match_values = match_values[match_values.length-1];
-        match_transferValues = fields.sv.get_transfer_values(match_values);
+        match_transferValues = transferType.get_transfer_values(match_values);
         pit_values = fields.load(fields.pitsFieldsFilename);
         latest_pit_values = pit_values[pit_values.length-1];
-        pit_transferValues = fields.sv.get_transfer_values(pit_values);
+        pit_transferValues = transferType.get_transfer_values(pit_values);
 
 
         binding.searchArea.removeAllViews();
@@ -214,7 +215,7 @@ public class searchView extends ConstraintLayout {
 
 
         } else {
-            ScoutingVersion.dataType[][] data = new ScoutingVersion.dataType[latest_match_values.length][files.length];
+            dataType[][] data = new dataType[latest_match_values.length][files.length];
             for (int i = 0; i < files.length; i++) {
 
                 ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);

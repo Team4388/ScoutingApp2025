@@ -1,5 +1,9 @@
 package com.astatin3.scoutingapp2025.scoutingData;
 
+import com.astatin3.scoutingapp2025.types.input.dropdownType;
+import com.astatin3.scoutingapp2025.types.input.inputType;
+import com.astatin3.scoutingapp2025.types.input.notesType;
+import com.astatin3.scoutingapp2025.types.input.sliderType;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
@@ -7,40 +11,40 @@ import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 import java.util.ArrayList;
 
 public class fields {
-    public static ScoutingVersion sv = new ScoutingVersion();
+//    public static ScoutingVersion sv = new ScoutingVersion();
 
     public static final String matchFieldsFilename = "matches.fields";
     public static final String pitsFieldsFilename = "pits.fields";
 
-    public static final ScoutingVersion.inputType[][] default_match_fields = new ScoutingVersion.inputType[][] {
+    public static final inputType[][] default_match_fields = new inputType[][] {
         {
-            sv.new sliderType("How good is robot", 5, 1, 10),
-            sv.new notesType("notes", "<no-notes>"),
+            new sliderType("How good is robot", 5, 1, 10),
+            new notesType("notes", "<no-notes>"),
         },{
-            sv.new sliderType("How good is robot", 5, 1, 10),
-            sv.new sliderType("Test", 128, 64, 256),
-            sv.new notesType("notes", "<no-notes>"),
+            new sliderType("How good is robot", 5, 1, 10),
+            new sliderType("Test", 128, 64, 256),
+            new notesType("notes", "<no-notes>"),
         },{
-            sv.new sliderType("How good is robot", 5, 1, 10),
-            sv.new sliderType("Test", 128, 64, 256),
-            sv.new dropdownType("test-dropdown", new String[]{"Test1", "test2", "Three"}, 1),
-            sv.new notesType("notes", "<no-notes>"),
+            new sliderType("How good is robot", 5, 1, 10),
+            new sliderType("Test", 128, 64, 256),
+            new dropdownType("test-dropdown", new String[]{"Test1", "test2", "Three"}, 1),
+            new notesType("notes", "<no-notes>"),
         }
     };
 
-    public static final ScoutingVersion.inputType[][] default_pit_fields = new ScoutingVersion.inputType[][] {
+    public static final inputType[][] default_pit_fields = new inputType[][] {
         {
-            sv.new sliderType("How good is robot", 5, 0, 10),
-            sv.new notesType("notes", "<no-notes>"),
+            new sliderType("How good is robot", 5, 0, 10),
+            new notesType("notes", "<no-notes>"),
         },{
-            sv.new sliderType("How good is robot", 5, 0, 10),
-            sv.new sliderType("Test", 1, 0, 10),
-            sv.new notesType("notes", "<no-notes>"),
+            new sliderType("How good is robot", 5, 0, 10),
+            new sliderType("Test", 1, 0, 10),
+            new notesType("notes", "<no-notes>"),
         }
     };
 
 
-    public static boolean save(String filename, ScoutingVersion.inputType[][] values){
+    public static boolean save(String filename, inputType[][] values){
         try {
             ByteBuilder bb = new ByteBuilder();
             for (int i = 0; i < values.length; i++) {
@@ -55,7 +59,7 @@ public class fields {
         }
     }
 
-    private static byte[] save_version(ScoutingVersion.inputType[] values) throws ByteBuilder.buildingException {
+    private static byte[] save_version(inputType[] values) throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         for(int i =0; i < values.length; i++){
             bb.addRaw(values[i].get_byte_id(), values[i].encode());
@@ -63,7 +67,7 @@ public class fields {
         return bb.build();
     }
 
-    public static ScoutingVersion.inputType[][] load(String filename){
+    public static inputType[][] load(String filename){
         byte[] bytes = fileEditor.readFile(filename);
 
         System.out.println(bytes);
@@ -71,7 +75,7 @@ public class fields {
         try {
             BuiltByteParser bbp = new BuiltByteParser(bytes);
             ArrayList<BuiltByteParser.parsedObject> objects = bbp.parse();
-            ScoutingVersion.inputType[][] values = new ScoutingVersion.inputType[objects.size()][];
+            inputType[][] values = new inputType[objects.size()][];
 
             for(int i = 0 ; i < objects.size(); i++){
                 values[i] = load_version((byte[]) objects.get(i).get());
@@ -85,36 +89,25 @@ public class fields {
             return null;
 //            return false;
         }
-
-//        return new ScoutingVersion.inputType[][] {
-//            {
-//                sv.new sliderType("How good is robot", 5, 0, 10),
-//                sv.new notesType("notes", "<no-notes>"),
-//            },{
-//                sv.new sliderType("How good is robot", 5, 0, 10),
-//                sv.new sliderType("Test", 1, 0, 10),
-//                sv.new notesType("notes", "<no-notes>"),
-//            }
-//        };
     }
 
-    private static ScoutingVersion.inputType[] load_version(byte[] bytes) throws BuiltByteParser.byteParsingExeption{
+    private static inputType[] load_version(byte[] bytes) throws BuiltByteParser.byteParsingExeption{
         BuiltByteParser bbp = new BuiltByteParser(bytes);
         ArrayList<BuiltByteParser.parsedObject> objects = bbp.parse();
-        ScoutingVersion.inputType[] output = new ScoutingVersion.inputType[objects.size()];
+        inputType[] output = new inputType[objects.size()];
 
         for(int i = 0 ; i < objects.size(); i++){
             BuiltByteParser.parsedObject obj = objects.get(i);
-            ScoutingVersion.inputType t = null;
+            inputType t = null;
             switch (obj.getType()){
-                case ScoutingVersion.slider_type_id:
-                    t = sv.new sliderType();
+                case inputType.slider_type_id:
+                    t = new sliderType();
                     break;
-                case ScoutingVersion.dropdownType:
-                    t = sv.new dropdownType();
+                case inputType.dropdownType:
+                    t = new dropdownType();
                     break;
-                case ScoutingVersion.notesType:
-                    t = sv.new notesType();
+                case inputType.notesType:
+                    t = new notesType();
                     break;
             }
 
