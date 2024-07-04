@@ -1,6 +1,7 @@
 package com.astatin3.scoutingapp2025.types.input;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,17 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.data.intType;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
@@ -69,6 +77,7 @@ public class dropdownType extends inputType {
 
         dropdown.setPadding(10,10,10,10);
         dropdown.setBackgroundColor(0xf0000000);
+        dropdown.setTextColor(0xff00ff00);
         dropdown.setTextSize(15);
         dropdown.setArrowGravity(SpinnerGravity.END);
         dropdown.setArrowPadding(8);
@@ -114,16 +123,47 @@ public class dropdownType extends inputType {
         tv.setTextSize(18);
         parent.addView(tv);
     }
+    private static int[] generateEquidistantColors(int N) {
+        int[] colors = new int[N];
+        float[] hsv = new float[3]; // Hue, Saturation, Value
+
+        for (int i = 0; i < N; i++) {
+            float hue = i * 1.0F / N;
+            hsv[0] = hue * 360; // Convert hue to degrees (0 to 360)
+            hsv[1] = 1; // Maximum saturation
+            hsv[2] = 1; // Maximum brightness (value)
+
+            colors[i] = Color.HSVToColor(hsv);
+        }
+        return colors;
+    }
+
     public void add_compiled_view(LinearLayout parent, dataType[] data){
-        TextView tv = new TextView(parent.getContext());
-        tv.setLayoutParams(new FrameLayout.LayoutParams(
+        PieChart chart = new PieChart(parent.getContext());
+        FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
-        tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        tv.setText("<add pie chart thing here>");
-        tv.setTextSize(20);
-        parent.addView(tv);
+        );
+        layout.height = 350;
+        chart.setLayoutParams(layout);
+        chart.setBackgroundColor(0xff252025);
+        parent.addView(chart);
+
+        int[] data_2 = new int[text_options.length];
+        for(int i = 0; i < data.length; i++)
+            data_2[(int) data[i].get()]++;
+
+        List<PieEntry> entries = new ArrayList<>();
+        for(int i = 0; i < data_2.length; i++) {
+            PieEntry entry = new PieEntry((float) data_2[i], text_options[i]);
+            entries.add(entry);
+        }
+
+        PieDataSet pieDataSet = new PieDataSet(entries, name);
+        pieDataSet.setColors(generateEquidistantColors(text_options.length));
+        PieData pieData = new PieData(pieDataSet);
+        chart.setDrawHoleEnabled(false);
+        chart.setData(pieData);
     }
 }
 

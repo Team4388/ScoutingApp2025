@@ -55,7 +55,7 @@ public class ScoutingDataWriter {
             dataType[] dataTypes = new dataType[objects.size()-2];
 
             int version = ((int)objects.get(0).get());
-            System.out.println(version);
+//            System.out.println(version);
             String username = (String) objects.get(1).get();
 
             for(int i = 0; i < values[version].length; i++){

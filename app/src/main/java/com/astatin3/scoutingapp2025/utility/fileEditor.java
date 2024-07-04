@@ -219,7 +219,7 @@ public final class fileEditor {
     }
 
 
-    public static String[] getMatchesByTeamNum(int teamNum){
+    public static String[] getMatchesByTeamNum(String evcode, int teamNum){
         File f = new File(baseDir);
         File[] files = f.listFiles();
         
@@ -228,7 +228,8 @@ public final class fileEditor {
         if(files == null){return new String[0];}
 
         for (File file : files) {
-            if(!file.isDirectory() && file.getName().endsWith(teamNum+".matchscoutdata")) {
+            String name = file.getName();
+            if(!file.isDirectory() && name.startsWith(evcode+"-") && name.endsWith("-"+teamNum+".matchscoutdata")) {
                 outFiles.add(file.getName());
             }
         }

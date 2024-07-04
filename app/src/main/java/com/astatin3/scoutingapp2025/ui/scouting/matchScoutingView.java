@@ -294,6 +294,9 @@ public class matchScoutingView extends ConstraintLayout {
             types[i] = latest_values[i].getViewValue();
         }
 
-        System.out.println(ScoutingDataWriter.save(values.length-1, username, filename, types));
+        if(ScoutingDataWriter.save(values.length-1, username, filename, types))
+            System.out.println("Saved!");
+        else
+            System.out.println("Error saving");
     }
 }

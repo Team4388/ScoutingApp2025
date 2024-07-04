@@ -15,17 +15,18 @@ import com.astatin3.scoutingapp2025.databinding.FragmentDataBinding;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcMatch;
-import com.astatin3.scoutingapp2025.types.frcTeam;
 
 import java.util.Arrays;
 
-public class overviewView extends ScrollView {
-    public overviewView(@NonNull Context context) {
+public class statusView extends ScrollView {
+    public statusView(@NonNull Context context) {
         super(context);
     }
-    public overviewView(Context context, AttributeSet attributeSet){
+    public statusView(Context context, AttributeSet attributeSet){
         super(context, attributeSet);
     }
+    public static int color_found = 0x7f00ff00;
+    public static int color_not_found = 0x7f7f0000;
     private void addTableText(TableRow tr, String textStr){
         TextView text = new TextView(getContext());
         text.setTextSize(18);
@@ -34,6 +35,7 @@ public class overviewView extends ScrollView {
         tr.addView(text);
     }
     public void start(FragmentDataBinding binding, frcEvent event) {
+        binding.matchTable.removeAllViews();
         binding.matchTable.setStretchAllColumns(true);
         add_pit_scouting(binding, event);
         add_match_scouting(binding, event);
@@ -75,9 +77,9 @@ public class overviewView extends ScrollView {
 
             text.setText(String.valueOf(num));
             if(fileEditor.fileExist(event.eventCode + "-" + num + ".pitscoutdata")){
-                text.setBackgroundColor(0x3000FF00);
+                text.setBackgroundColor(color_found);
             }else{
-                text.setBackgroundColor(0x30FF0000);
+                text.setBackgroundColor(color_not_found);
             }
             tr.addView(text);
         }
@@ -108,7 +110,6 @@ public class overviewView extends ScrollView {
         addTableText(tr, "Blue-3");
         binding.matchTable.addView(tr);
 
-        boolean toggle = false;
         for(frcMatch match : event.matches){
 
             tr = new TableRow(getContext());
@@ -132,9 +133,9 @@ public class overviewView extends ScrollView {
 
                 text.setText(String.valueOf(team_num));
                 if(fileEditor.fileExist(event.eventCode + "-" + match.matchIndex + "-" + alliance_position + "-" + team_num + ".matchscoutdata")){
-                    text.setBackgroundColor(0x3000FF00);
+                    text.setBackgroundColor(color_found);
                 }else{
-                    text.setBackgroundColor(0x30FF0000);
+                    text.setBackgroundColor(color_not_found);
                 }
                 tr.addView(text);
             }

@@ -56,7 +56,6 @@ public class pitScoutingView extends ConstraintLayout {
     ArrayList<dataType> dataTypes;
 
     public void save(){
-        System.out.println("Saved!");
         edited = false;
         set_indicator_color(saved_color);
 
@@ -66,7 +65,10 @@ public class pitScoutingView extends ConstraintLayout {
             types[i] = latest_values[i].getViewValue();
         }
 
-        System.out.println(ScoutingDataWriter.save(values.length-1, username, filename, types));
+        if(ScoutingDataWriter.save(values.length-1, username, filename, types))
+            System.out.println("Saved!");
+        else
+            System.out.println("Error saving");
     }
 
     public void set_indicator_color(int color){

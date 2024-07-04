@@ -42,7 +42,7 @@ public class dataFragment extends Fragment {
 
         frcEvent event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
 
-        binding.overviewButton.setOnClickListener(v -> {
+        binding.overviewView.setOnClickListener(v -> {
             binding.buttons.setVisibility(View.GONE);
             binding.overviewView.setVisibility(View.VISIBLE);
             binding.overviewView.start(binding, event);

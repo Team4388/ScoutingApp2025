@@ -17,6 +17,8 @@ import com.astatin3.scoutingapp2025.databinding.ActivityMainBinding;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         if(!fileEditor.fileExist(fields.pitsFieldsFilename)){
             fields.save(fields.pitsFieldsFilename, fields.default_pit_fields);
         }
+
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         super.onCreate(savedInstanceState);
 

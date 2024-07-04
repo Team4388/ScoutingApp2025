@@ -62,7 +62,7 @@ public class sliderType extends inputType {
     public View createView(Context context, Function<dataType, Integer> onUpdate){
         slider = new Slider(context);
         setViewValue(default_value);
-        slider.setStepSize((float) 1 / max);
+        slider.setStepSize((float) 1 / (max-min));
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
@@ -75,7 +75,7 @@ public class sliderType extends inputType {
     public void setViewValue(Object value) {
         if(slider == null) return;
         float slider_position = (float) ((int) value-min) / (max-min);
-        float step_size = (float) 1/max;
+        float step_size = (float) 1/(max-min);
         int round_position = Math.round(slider_position / step_size);
         slider.setValue(round_position*step_size);
     }
@@ -136,9 +136,9 @@ public class sliderType extends inputType {
         chart.setLayoutParams(layout);
         chart.setBackgroundColor(0xff252025);
 
-        int[] values = new int[max-min];
+        int[] values = new int[max-min+1];
         for (int i = 0; i < data.length; i++)
-            values[(int) data[i].get()-min-1]++;
+            values[(int) data[i].get()-min]++;
 
 
         int[] temp = new int[data.length];
@@ -165,7 +165,7 @@ public class sliderType extends inputType {
         float stdDev = calculateStandardDeviation(temp, mean);
 
         // Generate normal distribution curve
-        List<Entry> normalDistEntries = generateNormalDistribution(mean-min, stdDev, max-min, (max-min)/data.length);
+        List<Entry> normalDistEntries = generateNormalDistribution(mean-min, stdDev, max-min+1, (max-min)/data.length);
 
 
         LineDataSet normalDistSet = new LineDataSet(normalDistEntries, "Normal Distribution");
@@ -191,12 +191,12 @@ public class sliderType extends inputType {
 
         dataSet.setValueTextColor(Color.RED);
 
-        chart.getXAxis().setTextColor(Color.BLUE);
-        chart.getAxisLeft().setTextColor(Color.GREEN);
-        chart.getAxisRight().setTextColor(Color.GREEN);
+        chart.getXAxis().setTextColor(Color.WHITE);
+        chart.getAxisLeft().setTextColor(Color.WHITE);
+        chart.getAxisRight().setTextColor(Color.WHITE);
 
         Legend legend = chart.getLegend();
-        legend.setTextColor(Color.MAGENTA);
+        legend.setTextColor(Color.WHITE);
 
         parent.addView(chart);
     }

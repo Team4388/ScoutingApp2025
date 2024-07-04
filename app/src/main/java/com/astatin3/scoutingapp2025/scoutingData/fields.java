@@ -25,7 +25,7 @@ public class fields {
             new sliderType("Test", 128, 64, 256),
             new notesType("notes", "<no-notes>"),
         },{
-            new sliderType("How good is robot", 5, 1, 10),
+            new sliderType("How good is robot", 5, 5, 10),
             new sliderType("Test", 128, 64, 256),
             new dropdownType("test-dropdown", new String[]{"Test1", "test2", "Three"}, 1),
             new notesType("notes", "<no-notes>"),
@@ -70,7 +70,7 @@ public class fields {
     public static inputType[][] load(String filename){
         byte[] bytes = fileEditor.readFile(filename);
 
-        System.out.println(bytes);
+//        System.out.println(bytes);
 
         try {
             BuiltByteParser bbp = new BuiltByteParser(bytes);

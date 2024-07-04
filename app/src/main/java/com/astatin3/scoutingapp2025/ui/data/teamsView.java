@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
-import com.astatin3.scoutingapp2025.databinding.FragmentDataBinding;
 import com.astatin3.scoutingapp2025.scoutingData.ScoutingDataWriter;
 import com.astatin3.scoutingapp2025.scoutingData.fields;
 import com.astatin3.scoutingapp2025.scoutingData.transfer.transferType;
@@ -25,18 +24,19 @@ import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 import com.astatin3.scoutingapp2025.types.input.inputType;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
+import com.google.android.material.divider.MaterialDivider;
 
 import java.util.Arrays;
 
-public class searchView extends ConstraintLayout {
-    public searchView(@NonNull Context context) {
+public class teamsView extends ConstraintLayout {
+    public teamsView(@NonNull Context context) {
         super(context);
     }
-    public searchView(Context context, AttributeSet attributeSet){
+    public teamsView(Context context, AttributeSet attributeSet){
         super(context, attributeSet);
     }
 
-    FragmentDataBinding binding;
+    com.astatin3.scoutingapp2025.databinding.FragmentDataBinding binding;
     String evcode;
     frcEvent event;
 
@@ -47,7 +47,7 @@ public class searchView extends ConstraintLayout {
     inputType[] latest_pit_values;
     transferType[][] pit_transferValues;
 
-    public void init(FragmentDataBinding binding, frcEvent event){
+    public void init(com.astatin3.scoutingapp2025.databinding.FragmentDataBinding binding, frcEvent event){
         this.binding = binding;
         this.evcode = event.eventCode;
         this.event = event;
@@ -115,7 +115,7 @@ public class searchView extends ConstraintLayout {
         }
     }
 
-    public void loadTeam(frcTeam team, boolean compiled_mode){
+    public void loadTeam(frcTeam team, boolean compiled_mode) {
         binding.searchArea.removeAllViews();
 
         LinearLayout ll = new LinearLayout(getContext());
@@ -148,6 +148,16 @@ public class searchView extends ConstraintLayout {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setText(String.valueOf(team.teamNumber));
+        tv.setTextSize(28);
+        ll.addView(tv);
+
+        tv = new TextView(getContext());
+        tv.setLayoutParams(new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
         tv.setText(team.teamName);
         tv.setTextSize(28);
         ll.addView(tv);
@@ -162,8 +172,87 @@ public class searchView extends ConstraintLayout {
         tv.setTextSize(16);
         ll.addView(tv);
 
+        add_pit_data(ll, team);
+        add_match_data(ll, team, compiled_mode);
+    }
 
-        String[] files = fileEditor.getMatchesByTeamNum(team.teamNumber);
+    public void add_pit_data(LinearLayout ll, frcTeam team){
+        final String filename = evcode+"-"+team.teamNumber+".pitscoutdata";
+
+        ll.addView(new MaterialDivider(getContext()));
+
+        TextView tv = new TextView(getContext());
+        tv.setLayoutParams(new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setPadding(0,10,0,10);
+        tv.setText("----- Pit data -----");
+        tv.setTextSize(30);
+        ll.addView(tv);
+
+        ll.addView(new MaterialDivider(getContext()));
+
+        if(!fileEditor.fileExist(filename)){
+            tv = new TextView(getContext());
+            tv.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tv.setText("No pit data has been collected!");
+            tv.setTextSize(23);
+            ll.addView(tv);
+            return;
+        }
+
+        ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(filename, pit_values, pit_transferValues);
+
+        tv = new TextView(getContext());
+        tv.setLayoutParams(new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        tv.setPadding(0, 20, 0, 5);
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setText("Pit scouting by " + psda.username);
+        tv.setTextSize(30);
+        ll.addView(tv);
+
+        for (int a = 0; a < psda.data.array.length; a++) {
+            tv = new TextView(getContext());
+            tv.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tv.setText(psda.data.array[a].name);
+            tv.setTextSize(25);
+            ll.addView(tv);
+
+
+            latest_pit_values[a].add_individual_view(ll, psda.data.array[a]);
+        }
+    }
+
+    public void add_match_data(LinearLayout ll, frcTeam team, boolean compiled_mode){
+        String[] files = fileEditor.getMatchesByTeamNum(evcode, team.teamNumber);
+
+        ll.addView(new MaterialDivider(getContext()));
+
+        TextView tv = new TextView(getContext());
+        tv.setLayoutParams(new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setText("----- Match data -----");
+        tv.setPadding(0,10,0,10);
+        tv.setTextSize(30);
+        ll.addView(tv);
+
+        ll.addView(new MaterialDivider(getContext()));
 
         if(files.length == 0){
             tv = new TextView(getContext());
@@ -179,7 +268,6 @@ public class searchView extends ConstraintLayout {
         }
 
         if(!compiled_mode){
-
             for (int i = 0; i < files.length; i++) {
                 String[] split = files[i].split("-");
                 int match_num = Integer.parseInt(split[1]);
@@ -191,9 +279,9 @@ public class searchView extends ConstraintLayout {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
-                tv.setPadding(0, 20, 0, 5);
+                tv.setPadding(0, 40, 0, 5);
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                tv.setText("Match " + (match_num) + " by " + psda.username);
+                tv.setText("M" + (match_num) + " " + split[2] + "-" + split[3] + " by " + psda.username);
                 tv.setTextSize(30);
                 ll.addView(tv);
 
