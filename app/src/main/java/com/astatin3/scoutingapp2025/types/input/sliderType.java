@@ -87,11 +87,11 @@ public class sliderType extends inputType {
         Slider slider = new Slider(parent.getContext());
 
         float slider_position = (float) ((int) data.get()-min) / (max-min);
-        float step_size = (float) 1/max;
+        float step_size = (float) 1/(max-min);
         int round_position = Math.round(slider_position / step_size);
         slider.setValue(round_position*step_size);
 
-        slider.setStepSize((float) 1 / max);
+        slider.setStepSize((float) 1 / (max-min));
         slider.setEnabled(false);
         parent.addView(slider);
     }

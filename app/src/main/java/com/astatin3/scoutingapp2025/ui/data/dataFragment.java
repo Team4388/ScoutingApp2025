@@ -33,6 +33,8 @@ public class dataFragment extends Fragment {
 
         String evcode = latestSettings.settings.get_evcode();
 
+
+
         if(evcode.equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);
             binding.buttons.setVisibility(View.GONE);
@@ -42,17 +44,17 @@ public class dataFragment extends Fragment {
 
         frcEvent event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
 
-        binding.overviewView.setOnClickListener(v -> {
+        binding.statusButton.setOnClickListener(v -> {
             binding.buttons.setVisibility(View.GONE);
-            binding.overviewView.setVisibility(View.VISIBLE);
-            binding.overviewView.start(binding, event);
+            binding.statusView.setVisibility(View.VISIBLE);
+            binding.statusView.start(binding, event);
             submenu = true;
         });
 
-        binding.searchButton.setOnClickListener(v -> {
+        binding.teamsButton.setOnClickListener(v -> {
             binding.buttons.setVisibility(View.GONE);
-            binding.searchView.setVisibility(View.VISIBLE);
-            binding.searchView.init(binding, event);
+            binding.teamsView.setVisibility(View.VISIBLE);
+            binding.teamsView.init(binding, event);
             submenu = true;
         });
 
@@ -63,8 +65,8 @@ public class dataFragment extends Fragment {
 
     public void show_ui(){
         binding.buttons.setVisibility(View.VISIBLE);
-        binding.overviewView.setVisibility(View.GONE);
-        binding.searchView.setVisibility(View.GONE);
+        binding.statusView.setVisibility(View.GONE);
+        binding.teamsView.setVisibility(View.GONE);
         submenu = false;
     }
 

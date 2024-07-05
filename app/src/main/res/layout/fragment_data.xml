@@ -20,19 +20,19 @@
             android:id="@+id/status_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Overview"
+            android:text="status"
             android:textSize="34sp"
-            app:layout_constraintBottom_toTopOf="@+id/searchButton"
+            app:layout_constraintBottom_toTopOf="@+id/teamsButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.307" />
 
         <Button
-            android:id="@+id/searchButton"
+            android:id="@+id/teamsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"
+            android:text="teams"
             android:textSize="34sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchButton"
+            app:layout_constraintTop_toBottomOf="@+id/teamsButton"
             app:layout_constraintVertical_bias="0.689" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -66,10 +66,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.astatin3.scoutingapp2025.ui.data.statusView
-        android:id="@+id/overviewView"
+        android:id="@+id/statusView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,10 +93,11 @@
     </com.astatin3.scoutingapp2025.ui.data.statusView>
 
     <com.astatin3.scoutingapp2025.ui.data.teamsView
-        android:id="@+id/searchView"
+        android:id="@+id/teamsView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,14 +112,14 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ScrollView
-                android:id="@+id/searchArea"
+                android:id="@+id/teamsArea"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-<!--                <TableLayout-->
-<!--                    android:id="@+id/searchTable"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content" />-->
+                <!--                <TableLayout-->
+                <!--                    android:id="@+id/searchTable"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content" />-->
 
             </ScrollView>
 

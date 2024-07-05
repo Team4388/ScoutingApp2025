@@ -61,11 +61,11 @@ public class teamsView extends ConstraintLayout {
         pit_transferValues = transferType.get_transfer_values(pit_values);
 
 
-        binding.searchArea.removeAllViews();
+        binding.teamsArea.removeAllViews();
 
         TableLayout table = new TableLayout(getContext());
         table.setStretchAllColumns(true);
-        binding.searchArea.addView(table);
+        binding.teamsArea.addView(table);
 
 //        binding.searchTable.addView(table);
 
@@ -116,7 +116,7 @@ public class teamsView extends ConstraintLayout {
     }
 
     public void loadTeam(frcTeam team, boolean compiled_mode) {
-        binding.searchArea.removeAllViews();
+        binding.teamsArea.removeAllViews();
 
         LinearLayout ll = new LinearLayout(getContext());
         ll.setLayoutParams(new LinearLayout.LayoutParams(
@@ -124,7 +124,7 @@ public class teamsView extends ConstraintLayout {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         ll.setOrientation(LinearLayout.VERTICAL);
-        binding.searchArea.addView(ll);
+        binding.teamsArea.addView(ll);
 
         CheckBox cb = new CheckBox(getContext());
         cb.setLayoutParams(new FrameLayout.LayoutParams(

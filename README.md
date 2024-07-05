@@ -1,14 +1,16 @@
 # ScoutingApp2025
-1 Ridgebotics 2025 scouting app in Android
+Ridgebotics 2025 scouting app in Android
 
 TODO:
-- Make a word cloud for the compiled mode of 
+- Make a word cloud for the compiled mode of notes input type
 - Make pit and match data field builder UIs. I don't want to have to keep editing a variable
+- Add "history" view type to the teams view menu.
 
-- Add more types of data fields.
 - Make the "Compile" menu
+- The compile menu should be a shortcut to view all the team's stats from the upcoming match, from the teams view
 - Make the file browser UI
 - Fix the code scanning progress indicator
+- Add more types of data fields.
 
 - Make server software to allow for easy sync over wifi
 - Make practice mode
