@@ -2,6 +2,7 @@
 Ridgebotics 2025 scouting app in Android
 
 TODO:
+- Add an "unselect" option to all of the scouting fields
 - Make a word cloud for the compiled mode of notes input type
 - Make pit and match data field builder UIs. I don't want to have to keep editing a variable
 - Add "history" view type to the teams view menu.
