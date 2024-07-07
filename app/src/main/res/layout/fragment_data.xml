@@ -34,10 +34,10 @@
             android:layout_height="wrap_content"
             android:text="teams"
             android:textSize="34sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/status_button"
+            app:layout_constraintBottom_toTopOf="@id/compileButton" />
 
         <Button
             android:id="@+id/compileButton"
@@ -45,10 +45,21 @@
             android:layout_height="wrap_content"
             android:text="Compile"
             android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/fieldsButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/teamsButton" />
+
+        <Button
+            android:id="@+id/fieldsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fields"
+            android:textSize="34sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/teamsButton"
+            app:layout_constraintTop_toBottomOf="@+id/compileButton"
             app:layout_constraintVertical_bias="0.689" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -125,5 +136,82 @@
 
         </LinearLayout>
     </com.astatin3.scoutingapp2025.ui.data.teamsView>
+
+    <com.astatin3.scoutingapp2025.ui.data.fieldsView
+        android:id="@+id/fieldsView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fields_select_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/matchScoutingButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Matches"
+                android:textSize="34sp"
+                app:layout_constraintBottom_toTopOf="@id/pitScoutingButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/pitScoutingButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pits"
+                android:textSize="34sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/matchScoutingButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableLayout
+                    android:id="@+id/fieldsArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </TableLayout>
+
+                <!--                <TableLayout-->
+                <!--                    android:id="@+id/searchTable"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content" />-->
+
+            </ScrollView>
+
+        </LinearLayout>
+
+
+    </com.astatin3.scoutingapp2025.ui.data.fieldsView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

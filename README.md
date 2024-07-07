@@ -6,6 +6,7 @@ TODO:
 - Make a word cloud for the compiled mode of notes input type
 - Make pit and match data field builder UIs. I don't want to have to keep editing a variable
 - Add "history" view type to the teams view menu.
+- Add CSV exporting
 
 - Make the "Compile" menu
 - The compile menu should be a shortcut to view all the team's stats from the upcoming match, from the teams view
@@ -17,4 +18,5 @@ TODO:
 - Make practice mode
 - AI overview of scouting data for a team???
 - Bluetooth data sync
+- Statbotics intigration
 - Test the scouting app

@@ -37,7 +37,14 @@ public class dataFragment extends Fragment {
 
         if(evcode.equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);
-            binding.buttons.setVisibility(View.GONE);
+
+            binding.buttons.setVisibility(View.VISIBLE);
+            binding.statusButton.setVisibility(View.GONE);
+            binding.teamsButton.setVisibility(View.GONE);
+            binding.compileButton.setVisibility(View.GONE);
+            binding.fieldsButton.setVisibility(View.VISIBLE);
+
+
             binding.matchTable.setVisibility(View.GONE);
             return root;
         }
@@ -55,6 +62,22 @@ public class dataFragment extends Fragment {
             binding.buttons.setVisibility(View.GONE);
             binding.teamsView.setVisibility(View.VISIBLE);
             binding.teamsView.init(binding, event);
+            submenu = true;
+        });
+
+
+
+        binding.compileButton.setOnClickListener(v -> {
+//            binding.buttons.setVisibility(View.GONE);
+//            binding.teamsView.setVisibility(View.VISIBLE);
+//            binding.teamsView.init(binding, event);
+//            submenu = true;
+        });
+
+        binding.fieldsButton.setOnClickListener(v -> {
+            binding.buttons.setVisibility(View.GONE);
+            binding.fieldsView.setVisibility(View.VISIBLE);
+            binding.fieldsView.init(binding);
             submenu = true;
         });
 
