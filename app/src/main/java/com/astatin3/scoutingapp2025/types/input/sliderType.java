@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.data.intType;
+import com.astatin3.scoutingapp2025.types.data.stringType;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 import com.github.mikephil.charting.charts.LineChart;
@@ -81,7 +82,8 @@ public class sliderType extends inputType {
     }
     public dataType getViewValue(){
         if(slider == null) return null;
-        return new intType(name,  min + (int) (slider.getValue() * (max-min)));
+        if(slider.getVisibility() == View.GONE) return new intType(name, (int) intType.getNullValue());
+        return new intType(name, min + (int) (slider.getValue() * (max-min)));
     }
     public void add_individual_view(LinearLayout parent, dataType data){
         Slider slider = new Slider(parent.getContext());

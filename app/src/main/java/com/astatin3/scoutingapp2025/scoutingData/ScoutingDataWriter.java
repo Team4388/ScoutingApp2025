@@ -60,13 +60,13 @@ public class ScoutingDataWriter {
 
             for(int i = 0; i < values[version].length; i++){
                 switch (objects.get(i+2).getType()){
-                    case 0:
+                    case 1:
                         dataTypes[i] = new intType(values[version][i].name, (int) objects.get(i+2).get());
                         break;
-                    case 1:
+                    case 2:
                         String name = values[version][i].name;
                         String value = (String) objects.get(i+2).get();
-                        dataTypes[i] = new stringType(name,value);
+                        dataTypes[i] = new stringType(name, value);
                         break;
                 }
             }

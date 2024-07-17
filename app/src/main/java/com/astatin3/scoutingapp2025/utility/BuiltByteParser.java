@@ -4,10 +4,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class BuiltByteParser {
-    public static final Integer intType = 0;
-    public static final Integer stringType = 1;
-    public static final Integer intArrayType = 2;
-    public static final Integer stringArrayType = 3;
+    public static final Integer boolType = 0;
+    public static final Integer intType = 1;
+    public static final Integer stringType = 2;
+    public static final Integer intArrayType = 3;
+    public static final Integer stringArrayType = 4;
 
     public class byteParsingExeption extends Exception {
         public byteParsingExeption() {}
@@ -22,6 +23,11 @@ public class BuiltByteParser {
         public abstract Object get();
     }
 
+    public class boolObject extends parsedObject{
+        boolean val;
+        public Integer getType(){return boolType;}
+        public Object get(){return val;}
+    }
 
     public class intObject extends parsedObject{
         int num;
@@ -83,16 +89,21 @@ public class BuiltByteParser {
 
             switch(type){
                 case 0:
+                    boolObject bo = new boolObject();
+                    bo.val = block[0] == (byte) 1;
+                    objects.add(bo);
+                    break;
+                case 1:
                     intObject io = new intObject();
                     io.num = fileEditor.fromBytes(block, length);
                     objects.add(io);
                     break;
-                case 1:
+                case 2:
                     stringObject so = new stringObject();
                     so.str = new String(block, StandardCharsets.UTF_8);
                     objects.add(so);
                     break;
-                case 2:
+                case 3:
                     BuiltByteParser int_bbp = new BuiltByteParser(block);
                     ArrayList<parsedObject> intArrayObjects = int_bbp.parse();
 
@@ -106,7 +117,7 @@ public class BuiltByteParser {
                     ia.arr = intArr;
                     objects.add(ia);
                     break;
-                case 3:
+                case 4:
 
                     BuiltByteParser str_bbp = new BuiltByteParser(block);
                     ArrayList<parsedObject> strArrayObjects = str_bbp.parse();

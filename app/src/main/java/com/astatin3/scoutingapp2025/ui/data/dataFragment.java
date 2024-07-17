@@ -72,6 +72,7 @@ public class dataFragment extends Fragment {
 //            binding.teamsView.setVisibility(View.VISIBLE);
 //            binding.teamsView.init(binding, event);
 //            submenu = true;
+
         });
 
         binding.fieldsButton.setOnClickListener(v -> {
@@ -90,6 +91,7 @@ public class dataFragment extends Fragment {
         binding.buttons.setVisibility(View.VISIBLE);
         binding.statusView.setVisibility(View.GONE);
         binding.teamsView.setVisibility(View.GONE);
+        binding.fieldsView.setVisibility(View.GONE);
         submenu = false;
     }
 

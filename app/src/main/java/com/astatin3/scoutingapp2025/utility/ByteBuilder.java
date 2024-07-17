@@ -4,10 +4,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class ByteBuilder {
-    public static final int int_id = 0;
-    public static final int string_id = 1;
-    public static final int int_arr_id = 2;
-    public static final int string_arr_id = 3;
+    public static final int bool_id = 0;
+    public static final int int_id = 1;
+    public static final int string_id = 2;
+    public static final int int_arr_id = 3;
+    public static final int string_arr_id = 4;
 
     ArrayList<byteType> bytesToBuild = new ArrayList<>();
 
@@ -22,6 +23,23 @@ public class ByteBuilder {
         public abstract byte getType();
         public abstract int length();
         public abstract byte[] build();
+    }
+
+    private class boolType extends byteType {
+        public boolean val;
+        public byte getType(){return bool_id;}
+        public int length(){return 1;}
+        public byte[] build(){
+            return new byte[]{(byte) (val ? 1 : 0)};
+        }
+    }
+
+    public ByteBuilder addBool(boolean n) throws buildingException {
+        boolType boolType = new boolType();
+        boolType.val = n;
+
+        bytesToBuild.add(boolType);
+        return this;
     }
 
     private class intType extends byteType {

@@ -2,7 +2,10 @@ package com.astatin3.scoutingapp2025.types.input;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
@@ -20,8 +23,6 @@ public abstract class inputType {
         DROPDOWN,
         NOTES_INPUT
     }
-
-
 
     public String name;
     public Object default_value;

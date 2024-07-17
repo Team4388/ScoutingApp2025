@@ -7,6 +7,9 @@ public abstract class dataType {
     }
     public String name;
     public Object value;
+
+    public abstract boolean isNull();
+//    public abstract Object getNullValue();
     public abstract valueTypes getValueType();
     public Object get(){
         return value;

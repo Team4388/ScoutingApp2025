@@ -35,6 +35,7 @@ public class fieldsView extends ConstraintLayout {
         this.binding = binding;
 
         binding.fieldsSelectButtons.setVisibility(VISIBLE);
+        binding.fieldsArea.removeAllViews();
         binding.fieldsSelectButtons.bringToFront();
 
         binding.fieldsArea.setStretchAllColumns(true);

@@ -2,7 +2,9 @@ package com.astatin3.scoutingapp2025.ui.scouting;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -13,6 +15,7 @@ import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentScoutingBinding;
 import com.astatin3.scoutingapp2025.scoutingData.transfer.transferType;
 import com.astatin3.scoutingapp2025.types.data.dataType;
+import com.astatin3.scoutingapp2025.types.data.intType;
 import com.astatin3.scoutingapp2025.types.input.inputType;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.types.frcEvent;
@@ -147,8 +150,7 @@ public class matchScoutingView extends ConstraintLayout {
         update_scouting_data();
     }
 
-
-
+    private int default_text_color = 0;
 
     private void create_fields(){
         if(asm.isRunning){
@@ -156,19 +158,41 @@ public class matchScoutingView extends ConstraintLayout {
         }
 
         for(int i = 0 ; i < latest_values.length; i++) {
-            TextView tv = new TextView(getContext());
+            final TextView tv = new TextView(getContext());
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             tv.setText(latest_values[i].name);
+            tv.setPadding(8,8,8,8);
             tv.setTextSize(24);
-            binding.MatchScoutArea.addView(tv);
 
-            View v = latest_values[i].createView(getContext(), new Function<dataType, Integer>() {
+            default_text_color = tv.getCurrentTextColor();
+
+            final View v = latest_values[i].createView(getContext(), new Function<dataType, Integer>() {
                 @Override
                 public Integer apply(dataType dataType) {
 //                    edited = true;
                     if(asm.isRunning)
                         update_asm();
                     return 0;
+                }
+            });
+
+            binding.MatchScoutArea.addView(tv);
+            int fi = i;
+            tv.setOnClickListener(p -> {
+                boolean blank = latest_values[fi].getViewValue().isNull();
+
+                System.out.println(blank);
+
+                if(blank){
+                    tv.setBackgroundColor(0xffff0000);
+                    tv.setTextColor(0xff000000);
+                    v.setVisibility(GONE);
+                    latest_values[fi].setViewValue(intType.getNullValue());
+                }else{
+                    tv.setBackgroundColor(0x00000000);
+                    tv.setTextColor(default_text_color);
+                    v.setVisibility(VISIBLE);
+                    latest_values[fi].setViewValue(latest_values[fi].default_value);
                 }
             });
 

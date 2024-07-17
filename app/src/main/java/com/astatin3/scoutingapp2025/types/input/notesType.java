@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.astatin3.scoutingapp2025.types.data.dataType;
+import com.astatin3.scoutingapp2025.types.data.intType;
 import com.astatin3.scoutingapp2025.types.data.stringType;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
@@ -64,6 +65,7 @@ public class notesType extends inputType {
     }
     public dataType getViewValue(){
         if(text == null) return null;
+        if(text.getVisibility() == View.GONE) return new stringType(name, (String) stringType.getNullValue());
         return new stringType(name, text.getText().toString());
     }
     public void add_individual_view(LinearLayout parent, dataType data){

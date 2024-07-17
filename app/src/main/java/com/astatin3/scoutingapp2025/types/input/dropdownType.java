@@ -109,6 +109,7 @@ public class dropdownType extends inputType {
     }
     public dataType getViewValue(){
         if(dropdown == null) return null;
+        if(dropdown.getVisibility() == View.GONE) return new intType(name, (int)intType.getNullValue());
         return new intType(name, dropdown.getSelectedIndex());
     }
     public void add_individual_view(LinearLayout parent, dataType data){
