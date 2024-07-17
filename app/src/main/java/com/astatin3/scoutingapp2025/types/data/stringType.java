@@ -1,7 +1,7 @@
 package com.astatin3.scoutingapp2025.types.data;
 
 public class stringType extends dataType{
-    private static final String nulval = "Joe";
+    public static final String nulval = "Joe";
 
     public valueTypes getValueType() {return valueTypes.STRING;}
     public stringType(String name, String value){
@@ -11,7 +11,10 @@ public class stringType extends dataType{
     public boolean isNull(){
         return value.equals(nulval);
     }
-    public static Object getNullValue(){
+    public Object getNullValue(){
         return nulval;
+    }
+    public static stringType nullify(String name){
+        return new stringType(name, nulval);
     }
 }

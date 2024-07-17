@@ -23,7 +23,6 @@ public abstract class inputType {
         DROPDOWN,
         NOTES_INPUT
     }
-
     public String name;
     public Object default_value;
     public abstract inputTypes getInputType();
@@ -36,8 +35,9 @@ public abstract class inputType {
     }
     public abstract byte[] encode() throws ByteBuilder.buildingException;
     public abstract void decode(byte[] bytes) throws BuiltByteParser.byteParsingExeption;
-
     public abstract View createView(Context context, Function<dataType, Integer> onUpdate);
+    public boolean isBlank = false;
+    public abstract void nullify();
     public void setViewValue(dataType type){setViewValue(type.get());}
     public abstract void setViewValue(Object value);
     public abstract dataType getViewValue();

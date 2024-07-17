@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.data.intType;
+import com.astatin3.scoutingapp2025.types.data.stringType;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 import com.github.mikephil.charting.charts.LineChart;
@@ -105,14 +106,27 @@ public class dropdownType extends inputType {
     };
     public void setViewValue(Object value) {
         if(dropdown == null) return;
+        if(value.equals(intType.nulval)){
+            nullify();
+            return;
+        }
+
+        isBlank = false;
+
+        dropdown.setVisibility(View.VISIBLE);
         dropdown.selectItemByIndex((int) value);
+    }
+    public void nullify(){
+        isBlank = true;
+        dropdown.setVisibility(View.GONE);
     }
     public dataType getViewValue(){
         if(dropdown == null) return null;
-        if(dropdown.getVisibility() == View.GONE) return new intType(name, (int)intType.getNullValue());
+        if(dropdown.getVisibility() == View.GONE) return new intType(name, intType.nulval);
         return new intType(name, dropdown.getSelectedIndex());
     }
     public void add_individual_view(LinearLayout parent, dataType data){
+        if(data.isNull()) return;
         TextView tv = new TextView(parent.getContext());
         tv.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -152,7 +166,8 @@ public class dropdownType extends inputType {
 
         int[] data_2 = new int[text_options.length];
         for(int i = 0; i < data.length; i++)
-            data_2[(int) data[i].get()]++;
+            if(!data[i].isNull())
+                data_2[(int) data[i].get()]++;
 
         List<PieEntry> entries = new ArrayList<>();
         for(int i = 0; i < data_2.length; i++) {

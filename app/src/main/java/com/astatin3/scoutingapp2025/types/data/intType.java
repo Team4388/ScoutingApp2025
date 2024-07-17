@@ -1,7 +1,7 @@
 package com.astatin3.scoutingapp2025.types.data;
 
 public class intType extends dataType {
-    private static final int nulval = 255;
+    public static final int nulval = 255;
 
     public valueTypes getValueType() {
         return valueTypes.NUM;
@@ -15,7 +15,10 @@ public class intType extends dataType {
     public boolean isNull() {
         return ((int) value) == nulval;
     }
-    public static Object getNullValue(){
+    public Object getNullValue(){
         return nulval;
+    }
+    public static intType nullify(String name){
+        return new intType(name, nulval);
     }
 }

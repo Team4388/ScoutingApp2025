@@ -9,7 +9,7 @@ public abstract class dataType {
     public Object value;
 
     public abstract boolean isNull();
-//    public abstract Object getNullValue();
+    public abstract Object getNullValue();
     public abstract valueTypes getValueType();
     public Object get(){
         return value;

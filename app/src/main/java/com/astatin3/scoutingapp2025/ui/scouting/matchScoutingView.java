@@ -47,6 +47,7 @@ public class matchScoutingView extends ConstraintLayout {
 
     boolean edited = false;
 
+    TextView[] titles;
     inputType[][] values;
     inputType[] latest_values;
     transferType[][] transferValues;
@@ -157,12 +158,15 @@ public class matchScoutingView extends ConstraintLayout {
             asm.stop();
         }
 
+        titles = new TextView[latest_values.length];
+
         for(int i = 0 ; i < latest_values.length; i++) {
             final TextView tv = new TextView(getContext());
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             tv.setText(latest_values[i].name);
             tv.setPadding(8,8,8,8);
             tv.setTextSize(24);
+            titles[i] = tv;
 
             default_text_color = tv.getCurrentTextColor();
 
@@ -179,19 +183,19 @@ public class matchScoutingView extends ConstraintLayout {
             binding.MatchScoutArea.addView(tv);
             int fi = i;
             tv.setOnClickListener(p -> {
-                boolean blank = latest_values[fi].getViewValue().isNull();
+//                boolean blank = !latest_values[fi].getViewValue().isNull();
 
-                System.out.println(blank);
+//                System.out.println(blank);
 
-                if(blank){
+                asm.update();
+
+                if(!latest_values[fi].isBlank){
                     tv.setBackgroundColor(0xffff0000);
                     tv.setTextColor(0xff000000);
-                    v.setVisibility(GONE);
-                    latest_values[fi].setViewValue(intType.getNullValue());
+                    latest_values[fi].nullify();
                 }else{
                     tv.setBackgroundColor(0x00000000);
                     tv.setTextColor(default_text_color);
-                    v.setVisibility(VISIBLE);
                     latest_values[fi].setViewValue(latest_values[fi].default_value);
                 }
             });
@@ -292,6 +296,9 @@ public class matchScoutingView extends ConstraintLayout {
         for(int i = 0; i < latest_values.length; i++){
             inputType input = latest_values[i];
             input.setViewValue(input.default_value);
+
+            titles[i].setBackgroundColor(0x00000000);
+            titles[i].setTextColor(default_text_color);
         }
     }
 
@@ -305,6 +312,14 @@ public class matchScoutingView extends ConstraintLayout {
         for(int i = 0; i < latest_values.length; i++){
 //            types[i] = latest_values[i].getViewValue();
             latest_values[i].setViewValue(types[i]);
+
+            if(latest_values[i].isBlank){
+                titles[i].setBackgroundColor(0xffff0000);
+                titles[i].setTextColor(0xff000000);
+            }else{
+                titles[i].setBackgroundColor(0x00000000);
+                titles[i].setTextColor(default_text_color);
+            }
         }
     }
 

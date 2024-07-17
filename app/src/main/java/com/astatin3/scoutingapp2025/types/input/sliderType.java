@@ -75,17 +75,28 @@ public class sliderType extends inputType {
     }
     public void setViewValue(Object value) {
         if(slider == null) return;
+        if(value.equals(intType.nulval)){
+            nullify();
+            return;
+        }
         float slider_position = (float) ((int) value-min) / (max-min);
         float step_size = (float) 1/(max-min);
         int round_position = Math.round(slider_position / step_size);
+        isBlank = false;
+        slider.setVisibility(View.VISIBLE);
         slider.setValue(round_position*step_size);
     }
     public dataType getViewValue(){
         if(slider == null) return null;
-        if(slider.getVisibility() == View.GONE) return new intType(name, (int) intType.getNullValue());
+        if(slider.getVisibility() == View.GONE) return new intType(name, intType.nulval);
         return new intType(name, min + (int) (slider.getValue() * (max-min)));
     }
+    public void nullify(){
+        isBlank = true;
+        slider.setVisibility(View.GONE);
+    }
     public void add_individual_view(LinearLayout parent, dataType data){
+        if(data.isNull()) return;
         Slider slider = new Slider(parent.getContext());
 
         float slider_position = (float) ((int) data.get()-min) / (max-min);
@@ -139,15 +150,18 @@ public class sliderType extends inputType {
         chart.setBackgroundColor(0xff252025);
 
         int[] values = new int[max-min+1];
+
         for (int i = 0; i < data.length; i++)
-            values[(int) data[i].get()-min]++;
+            if((int) data[i].get() != intType.nulval)
+                values[(int) data[i].get()-min]++;
 
 
-        int[] temp = new int[data.length];
+        ArrayList<Integer> mean_temp = new ArrayList<>();
         for (int i = 0; i < data.length; i++)
-            temp[i] = (int) data[i].get();
+            if(!data[i].isNull())
+                mean_temp.add((int) data[i].get());
 
-
+        int[] mean_vals = mean_temp.stream().mapToInt(Integer::intValue).toArray();
 
         List<Entry> entries = new ArrayList<>();
         for (int i = 0; i < values.length; i++)
@@ -163,8 +177,8 @@ public class sliderType extends inputType {
 
 
         // Calculate mean and standard deviation
-        float mean = calculateMean(temp);
-        float stdDev = calculateStandardDeviation(temp, mean);
+        float mean = calculateMean(mean_vals);
+        float stdDev = calculateStandardDeviation(mean_vals, mean);
 
         // Generate normal distribution curve
         List<Entry> normalDistEntries = generateNormalDistribution(mean-min, stdDev, max-min+1, (max-min)/data.length);

@@ -229,6 +229,13 @@ public class teamsView extends ConstraintLayout {
             tv.setGravity(Gravity.CENTER_HORIZONTAL);
             tv.setText(psda.data.array[a].name);
             tv.setTextSize(25);
+
+            if(psda.data.array[a].isNull()){
+                tv.setBackgroundColor(0xffff0000);
+                tv.setTextColor(0xff000000);
+            }
+
+
             ll.addView(tv);
 
 
@@ -294,6 +301,12 @@ public class teamsView extends ConstraintLayout {
                     tv.setGravity(Gravity.CENTER_HORIZONTAL);
                     tv.setText(psda.data.array[a].name);
                     tv.setTextSize(25);
+
+                    if(psda.data.array[a].isNull()){
+                        tv.setBackgroundColor(0xffff0000);
+                        tv.setTextColor(0xff000000);
+                    }
+
                     ll.addView(tv);
 
 

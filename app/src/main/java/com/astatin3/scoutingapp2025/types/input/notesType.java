@@ -61,14 +61,25 @@ public class notesType extends inputType {
     };
     public void setViewValue(Object value) {
         if(text == null) return;
+        if(value.equals(stringType.nulval)){
+            nullify();
+            return;
+        }
+        isBlank = false;
+        text.setVisibility(View.VISIBLE);
         text.setText((String) value);
+    }
+    public void nullify(){
+        isBlank = true;
+        text.setVisibility(View.GONE);
     }
     public dataType getViewValue(){
         if(text == null) return null;
-        if(text.getVisibility() == View.GONE) return new stringType(name, (String) stringType.getNullValue());
+        if(text.getVisibility() == View.GONE) return new stringType(name, stringType.nulval);
         return new stringType(name, text.getText().toString());
     }
     public void add_individual_view(LinearLayout parent, dataType data){
+        if(data.isNull()) return;
         TextView tv = new TextView(parent.getContext());
         tv.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -80,6 +91,7 @@ public class notesType extends inputType {
         parent.addView(tv);
     }
     public void add_compiled_view(LinearLayout parent, dataType[] data){
+//        if(data.get().equals(stringType.nulval)) return;
         TextView tv = new TextView(parent.getContext());
         tv.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
