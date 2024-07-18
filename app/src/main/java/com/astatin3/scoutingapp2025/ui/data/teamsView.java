@@ -37,6 +37,9 @@ public class teamsView extends ConstraintLayout {
     }
 
     com.astatin3.scoutingapp2025.databinding.FragmentDataBinding binding;
+
+    private static final int background_color = 0x5000ff00;
+
     String evcode;
     frcEvent event;
 
@@ -96,7 +99,7 @@ public class teamsView extends ConstraintLayout {
             tr.setPadding(20,20,20,20);
             table.addView(tr);
 
-            tr.setBackgroundColor(0x1000ff00);
+            tr.setBackgroundColor(background_color);
 
             TextView tv = new TextView(getContext());
             tv.setText(String.valueOf(team.teamNumber));
