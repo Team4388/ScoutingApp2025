@@ -34,6 +34,7 @@ public class sliderType extends inputType {
     public dataType.valueTypes getValueType(){return dataType.valueTypes.NUM;}
     public Object get_fallback_value(){return 0;}
     public sliderType(){};
+    public String get_type_name(){return "Slider";}
     public sliderType(String name, int defaultValue, int min, int max){
         super(name);
         this.default_value = defaultValue;

@@ -2,8 +2,9 @@ package com.astatin3.scoutingapp2025.scoutingData;
 
 import com.astatin3.scoutingapp2025.types.input.dropdownType;
 import com.astatin3.scoutingapp2025.types.input.inputType;
-import com.astatin3.scoutingapp2025.types.input.notesType;
+import com.astatin3.scoutingapp2025.types.input.textType;
 import com.astatin3.scoutingapp2025.types.input.sliderType;
+import com.astatin3.scoutingapp2025.types.input.textType;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
@@ -19,27 +20,27 @@ public class fields {
     public static final inputType[][] default_match_fields = new inputType[][] {
         {
             new sliderType("How good is robot", 5, 1, 10),
-            new notesType("notes", "<no-notes>"),
+            new textType("notes", "<no-notes>"),
         },{
             new sliderType("How good is robot", 5, 1, 10),
             new sliderType("Test", 128, 64, 256),
-            new notesType("notes", "<no-notes>"),
+            new textType("notes", "<no-notes>"),
         },{
             new sliderType("How good is robot", 5, 5, 10),
             new sliderType("Test", 128, 64, 256),
             new dropdownType("test-dropdown", new String[]{"Test1", "test2", "Three"}, 1),
-            new notesType("notes", "<no-notes>"),
+            new textType("notes", "<no-notes>"),
         }
     };
 
     public static final inputType[][] default_pit_fields = new inputType[][] {
         {
             new sliderType("How good is robot", 5, 0, 10),
-            new notesType("notes", "<no-notes>"),
+            new textType("notes", "<no-notes>"),
         },{
             new sliderType("How good is robot", 5, 0, 10),
             new sliderType("Test", 1, 0, 10),
-            new notesType("notes", "<no-notes>"),
+            new textType("notes", "<no-notes>"),
         }
     };
 
@@ -107,7 +108,7 @@ public class fields {
                     t = new dropdownType();
                     break;
                 case inputType.notesType:
-                    t = new notesType();
+                    t = new textType();
                     break;
             }
 

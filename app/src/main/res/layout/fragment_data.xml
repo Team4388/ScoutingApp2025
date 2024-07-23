@@ -204,12 +204,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TableLayout
+                <com.astatin3.scoutingapp2025.utility.ReorderableTableLayout
                     android:id="@+id/fieldsArea"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                </TableLayout>
+                </com.astatin3.scoutingapp2025.utility.ReorderableTableLayout>
 
                 <!--                <TableLayout-->
                 <!--                    android:id="@+id/searchTable"-->

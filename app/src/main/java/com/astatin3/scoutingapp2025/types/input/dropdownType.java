@@ -40,6 +40,7 @@ public class dropdownType extends inputType {
     public dataType.valueTypes getValueType(){return dataType.valueTypes.NUM;}
     public Object get_fallback_value(){return 0;}
     public dropdownType(){};
+    public String get_type_name(){return "Dropdown";}
     public dropdownType(String name, String[] text_options, int defaultSelIndex){
         super(name);
         this.text_options = text_options;

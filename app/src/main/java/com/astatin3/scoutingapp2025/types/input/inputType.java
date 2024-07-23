@@ -43,5 +43,6 @@ public abstract class inputType {
     public abstract dataType getViewValue();
     public abstract void add_individual_view(LinearLayout parent, dataType data);
     public abstract void add_compiled_view(LinearLayout parent, dataType[] data);
+    public abstract String get_type_name();
 
 }

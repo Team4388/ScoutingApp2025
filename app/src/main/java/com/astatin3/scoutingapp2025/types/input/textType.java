@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.astatin3.scoutingapp2025.types.data.dataType;
-import com.astatin3.scoutingapp2025.types.data.intType;
 import com.astatin3.scoutingapp2025.types.data.stringType;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
@@ -20,16 +19,17 @@ import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-public class notesType extends inputType {
+public class textType extends inputType {
     public int get_byte_id() {return notesType;}
     public inputTypes getInputType(){return inputTypes.NOTES_INPUT;}
     public dataType.valueTypes getValueType(){return dataType.valueTypes.STRING;}
     public Object get_fallback_value(){return "<no-notes>";}
-    public notesType(){};
-    public notesType(String name, String default_text){
+    public textType(){}
+    public textType(String name, String default_text){
         super(name);
         this.default_value = default_text;
     }
+    public String get_type_name(){return "Text";}
     public byte[] encode() throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         bb.addString(name);
