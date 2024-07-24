@@ -37,7 +37,7 @@ public class RequestTask extends AsyncTask<String, String, String> {
                 return null; // See documentation for more info on response handling
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            AlertManager.error(e);
         }
         return null;
     }
@@ -51,13 +51,13 @@ public class RequestTask extends AsyncTask<String, String, String> {
                 response.append(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            AlertManager.error(e);
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    AlertManager.error(e);
                 }
             }
         }

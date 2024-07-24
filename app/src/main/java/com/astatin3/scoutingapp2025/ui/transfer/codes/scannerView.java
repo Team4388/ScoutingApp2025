@@ -27,6 +27,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.types.file;
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -305,7 +306,8 @@ public class scannerView extends ConstraintLayout {
 
             try {
                 byte[] compiledBytes = compiledString.getBytes(StandardCharsets.ISO_8859_1);
-                byte[] resultBytes = blockUncompress(compiledBytes);
+                byte[] resultBytes = fileEditor.blockUncompress(compiledBytes);
+
 
                 String result_filenames = "";
 
@@ -321,30 +323,14 @@ public class scannerView extends ConstraintLayout {
                             result_filenames += f.filename + "\n";
                 }
 
-                alert("Completed!", result_filenames);
+                AlertManager.alert("Completed!", result_filenames);
 
             }catch (Exception e){
-                e.printStackTrace();
+                AlertManager.error(e);
             }
         }
         prevQrIndex = qrIndex;
     }
 
-    private static byte[] blockUncompress(byte[] data) throws DataFormatException {
-        List<byte[]> uncompressedData = new ArrayList<>();
-        int curIndex = 0;
-        while(curIndex < data.length){
 
-            final int blockLength = fileEditor.fromBytes(fileEditor.getByteBlock(data, curIndex, curIndex+2), 2);
-
-            uncompressedData.add(
-                    fileEditor.decompress(
-                            fileEditor.getByteBlock(data, curIndex+2, curIndex+blockLength+2)
-                    )
-            );
-
-            curIndex += blockLength+2;
-        }
-        return fileEditor.combineByteArrays(uncompressedData);
-    }
 }

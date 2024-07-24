@@ -12,6 +12,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.RequestTask;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcMatch;
@@ -45,16 +46,6 @@ public class TBAView extends ScrollView {
     public TBAView(Context context, AttributeSet attributeSet){
         super(context, attributeSet);
     }
-
-    private void alert(String title, String content) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setMessage(content);
-        alert.setTitle(title);
-        alert.setPositiveButton("OK", null);
-        alert.setCancelable(true);
-        alert.create().show();
-    }
-
 
     public void start(FragmentTransferBinding binding, String yearStr) {
 
@@ -143,7 +134,7 @@ public class TBAView extends ScrollView {
                         tr.setBackgroundColor(0x30FFFF00);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    AlertManager.error(e);
                 }
 
 
@@ -179,7 +170,7 @@ public class TBAView extends ScrollView {
                 toggle = !toggle;
             }
         }catch (JSONException j){
-            alert("Error", "Invalid JSON");
+            AlertManager.alert("Error", "Invalid JSON");
         }
     }
 
@@ -352,9 +343,9 @@ public class TBAView extends ScrollView {
 
             btn.setOnClickListener(v -> {
                 if(saveData(matchesOBJ, teamData, eventData)){
-                    alert("Info", "Saved!");
+                    AlertManager.alert("Info", "Saved!");
                 }else{
-                    alert("Error", "Error saving files.");
+                    AlertManager.alert("Error", "Error saving files.");
                 }
             });
 
@@ -465,8 +456,8 @@ public class TBAView extends ScrollView {
 //            });
 
         }catch (JSONException j){
-            j.printStackTrace();
-            alert("Error", "Invalid JSON");
+            AlertManager.error(j);
+            AlertManager.alert("Error", "Invalid JSON");
         }
     }
 
@@ -505,8 +496,8 @@ public class TBAView extends ScrollView {
 
             return fileEditor.setEvent(event);
         }catch (JSONException j){
-            j.printStackTrace();
-            alert("Error", "Invalid JSON");
+            AlertManager.error(j);
+            AlertManager.alert("Error", "Invalid JSON");
             return false;
         }
     }

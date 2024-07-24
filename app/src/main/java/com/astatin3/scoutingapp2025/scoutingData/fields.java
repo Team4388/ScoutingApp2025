@@ -5,6 +5,7 @@ import com.astatin3.scoutingapp2025.types.input.inputType;
 import com.astatin3.scoutingapp2025.types.input.textType;
 import com.astatin3.scoutingapp2025.types.input.sliderType;
 import com.astatin3.scoutingapp2025.types.input.textType;
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
@@ -54,7 +55,7 @@ public class fields {
             fileEditor.writeFile(filename, bb.build());
             return true;
         }catch (ByteBuilder.buildingException e) {
-            e.printStackTrace();
+            AlertManager.error(e);
             return false;
 //            throw new RuntimeException(e);
         }
@@ -86,7 +87,7 @@ public class fields {
             return values;
 //            return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            AlertManager.error(e);
             return null;
 //            return false;
         }

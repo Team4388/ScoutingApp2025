@@ -2,6 +2,7 @@ package com.astatin3.scoutingapp2025.types;
 
 import androidx.annotation.NonNull;
 
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 
@@ -27,7 +28,7 @@ public class frcMatch {
                     .addInt(redAlliance[2])
                     .build();
         } catch (ByteBuilder.buildingException e) {
-            e.printStackTrace();
+            AlertManager.error(e);
             return new byte[1];
         }
     }
@@ -49,7 +50,7 @@ public class frcMatch {
             return frc;
 
         } catch (BuiltByteParser.byteParsingExeption e) {
-            e.printStackTrace();
+            AlertManager.error(e);
             return null;
         }
     }

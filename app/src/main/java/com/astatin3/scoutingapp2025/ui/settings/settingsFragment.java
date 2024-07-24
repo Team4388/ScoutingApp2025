@@ -36,15 +36,6 @@ public class settingsFragment extends Fragment {
     private android.widget.ScrollView ScrollArea;
     private android.widget.TableLayout Table;
 
-    private void alert(String title, String content) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setMessage(content);
-        alert.setTitle(title);
-        alert.setPositiveButton("OK", null);
-        alert.setCancelable(true);
-        alert.create().show();
-    }
-
     private void setDropdownItems(Spinner dropdown, String[] items){
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);

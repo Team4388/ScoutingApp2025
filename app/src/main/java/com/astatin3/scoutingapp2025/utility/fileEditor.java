@@ -82,6 +82,8 @@ public final class fileEditor {
 
 
     public static byte[] getByteBlock(byte[] bytes, int start, int end){
+        end = Math.min(end, bytes.length);
+
         byte[] dataBlock = new byte[end-start];
 
         for(int a=start;a<end;a++){
@@ -106,6 +108,44 @@ public final class fileEditor {
         }
 
         return outputStream.toByteArray();
+    }
+
+    public static byte[] blockCompress(byte[] inputData) {
+        List<byte[]> compiledData = new ArrayList<>();
+
+        for(int i=0;i<Math.ceil((double) inputData.length / fileEditor.maxCompressedBlockSize);i++){
+            final int start = i*fileEditor.maxCompressedBlockSize;
+            int end = ((i+1)*fileEditor.maxCompressedBlockSize);
+            if(end > inputData.length) {
+                end = inputData.length;
+            }
+
+            byte[] dataBlock = fileEditor.getByteBlock(inputData, start, end);
+
+            final byte[] compressedBlock = fileEditor.compress(dataBlock);
+
+            compiledData.add(fileEditor.toBytes(compressedBlock.length, 2));
+            compiledData.add(compressedBlock);
+        }
+        return combineByteArrays(compiledData);
+    }
+
+    public static byte[] blockUncompress(byte[] data) throws DataFormatException {
+        List<byte[]> uncompressedData = new ArrayList<>();
+        int curIndex = 0;
+        while (curIndex < data.length) {
+
+            final int blockLength = fileEditor.fromBytes(fileEditor.getByteBlock(data, curIndex, curIndex + 2), 2);
+
+            uncompressedData.add(
+                    decompress(
+                            fileEditor.getByteBlock(data, curIndex + 2, curIndex + blockLength + 2)
+                    )
+            );
+
+            curIndex += blockLength + 2;
+        }
+        return combineByteArrays(uncompressedData);
     }
 
 
@@ -163,7 +203,7 @@ public final class fileEditor {
             return true;
         }
         catch (IOException e) {
-            e.printStackTrace();
+            AlertManager.error(e);
             return false;
         }
     }
@@ -177,7 +217,7 @@ public final class fileEditor {
             return file.createNewFile();
         }
         catch (IOException e) {
-            e.printStackTrace();
+            AlertManager.error(e);
             return false;
         }
     }
@@ -197,10 +237,10 @@ public final class fileEditor {
             buf.close();
             return bytes;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            AlertManager.error(e);
             return null;
         } catch (IOException e) {
-            e.printStackTrace();
+            AlertManager.error(e);
             return null;
         }
     }

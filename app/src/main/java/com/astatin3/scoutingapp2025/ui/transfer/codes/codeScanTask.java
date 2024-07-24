@@ -3,6 +3,7 @@ package com.astatin3.scoutingapp2025.ui.transfer.codes;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
@@ -46,7 +47,7 @@ public class codeScanTask extends AsyncTask<String, String, String>{
             Result result = reader.decode(binaryBitmap, hints);
             return result.getText();
         } catch (NotFoundException | ChecksumException | FormatException e) {
-            e.printStackTrace();
+//            AlertManager.error(e);
         }
 
         return null;

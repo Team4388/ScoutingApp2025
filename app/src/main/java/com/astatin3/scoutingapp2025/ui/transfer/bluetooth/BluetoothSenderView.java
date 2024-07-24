@@ -10,16 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.astatin3.scoutingapp2025.R;
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 
 public class BluetoothSenderView extends LinearLayout {
@@ -32,36 +29,34 @@ public class BluetoothSenderView extends LinearLayout {
 
     public BluetoothSenderView(Context context) {
         super(context);
-        init(context);
     }
 
     public BluetoothSenderView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
     }
 
     public void set_data(byte[] data){
         data_to_send = data;
     }
 
-    private void init(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.view_bluetooth_sender, this, true);
+    public void init() {
+        LayoutInflater.from(getContext()).inflate(R.layout.view_bluetooth_sender, this, true);
 
-        bluetoothSender = new BluetoothSender(context);
+        bluetoothSender = new BluetoothSender(getContext());
         deviceListView = findViewById(R.id.deviceListView);
         sendFileButton = findViewById(R.id.sendFileButton);
 
         deviceList = new ArrayList<>();
-        deviceArrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
+        deviceArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
         deviceListView.setAdapter(deviceArrayAdapter);
 
         if (!bluetoothSender.isBluetoothSupported()) {
-            Toast.makeText(context, "Bluetooth is not supported on this device", Toast.LENGTH_SHORT).show();
+            AlertManager.toast("Bluetooth is not supported on this device");
             return;
         }
 
         if (!bluetoothSender.isBluetoothEnabled()) {
-            Toast.makeText(context, "Please enable Bluetooth", Toast.LENGTH_SHORT).show();
+            AlertManager.toast("Please enable Bluetooth");
         } else {
             listPairedDevices();
         }
@@ -72,10 +67,10 @@ public class BluetoothSenderView extends LinearLayout {
                 BluetoothDevice selectedDevice = deviceList.get(position);
                 try {
                     bluetoothSender.connectToDevice(selectedDevice);
-                    Toast.makeText(context, "Connected to " + selectedDevice.getName(), Toast.LENGTH_SHORT).show();
+                    AlertManager.toast("Connected to " + selectedDevice.getName());
                     sendFileButton.setEnabled(true);
                 } catch (IOException e) {
-                    Toast.makeText(context, "Failed to connect: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    AlertManager.toast("Failed to connect: " + e.getMessage());
                 }
             }
         });
@@ -83,9 +78,7 @@ public class BluetoothSenderView extends LinearLayout {
         sendFileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // You would typically launch a file picker here
-                // For this example, we'll just send a dummy file
-                sendDummyFile();
+                sendData();
             }
         });
     }
@@ -98,29 +91,35 @@ public class BluetoothSenderView extends LinearLayout {
                 deviceArrayAdapter.add(device.getName() + "\n" + device.getAddress());
             }
         } else {
-            Toast.makeText(getContext(), "No paired devices found", Toast.LENGTH_SHORT).show();
+            AlertManager.toast("No paired devices found");
         }
     }
 
-    private void sendDummyFile() {
+    private void sendData() {
         try {
-            for(int i = 0; i < Math.floor((double) data_to_send.length /1024); i++){
-                bluetoothSender.sendData(fileEditor.getByteBlock(data_to_send, (i*1024), (i+1)*1024));
-//                System.out.println(Arrays.toString(buffer));
+            byte[] compressed = fileEditor.blockCompress(data_to_send);
+
+            for(int i = 0; i < Math.ceil((double) compressed.length/1024); i++){
+                bluetoothSender.sendData(fileEditor.getByteBlock(compressed, i*1024, (i+1)*1024));
             }
 
+            bluetoothSender.close();
+            sendFileButton.setEnabled(false);
 
-            Toast.makeText(getContext(), "File sent successfully", Toast.LENGTH_SHORT).show();
+
+
+            AlertManager.toast("File sent successfully");
         } catch (IOException e) {
-            Toast.makeText(getContext(), "Failed to send file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            AlertManager.toast("Failed to send file: " + e.getMessage());
         }
     }
 
     public void onDestroy() {
-        try {
-            bluetoothSender.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        if(bluetoothSender != null)
+            try {
+                bluetoothSender.close();
+            } catch (IOException e) {
+                AlertManager.error(e);
+            }
     }
 }

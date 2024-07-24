@@ -6,6 +6,7 @@ import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.data.stringType;
 import com.astatin3.scoutingapp2025.types.input.inputType;
 import com.astatin3.scoutingapp2025.types.data.intType;
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
@@ -35,7 +36,7 @@ public class ScoutingDataWriter {
             fileEditor.writeFile(filename, bytes);
             return true;
         } catch (ByteBuilder.buildingException e) {
-            e.printStackTrace();
+            AlertManager.error(e);
             return false;
         }
     }
@@ -84,7 +85,7 @@ public class ScoutingDataWriter {
             return psda;
 
         } catch (BuiltByteParser.byteParsingExeption e){
-            e.printStackTrace();
+            AlertManager.error(e);
             return null;
         }
     }

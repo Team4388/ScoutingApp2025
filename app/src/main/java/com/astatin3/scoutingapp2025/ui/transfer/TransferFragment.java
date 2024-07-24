@@ -99,8 +99,8 @@ public class TransferFragment extends Fragment {
 
     public void show_ui(){
         binding.mainSelectLayout.setVisibility(View.VISIBLE);
-
         binding.noEventError.setVisibility(View.GONE);
+        binding.loadSelectLayout.setVisibility(View.GONE);
 
         binding.bluetoothSenderView.setVisibility(View.GONE);
         binding.bluetoothReceiverView.setVisibility(View.GONE);
@@ -313,6 +313,7 @@ public class TransferFragment extends Fragment {
     private void start_upload_bluetooth(byte[] data){
         binding.loadSelectLayout.setVisibility(View.GONE);
         binding.bluetoothSenderView.setVisibility(View.VISIBLE);
+        binding.bluetoothSenderView.init();
         binding.bluetoothSenderView.set_data(data);
 
 
@@ -321,6 +322,7 @@ public class TransferFragment extends Fragment {
     private void start_download_bluetooth(){
         binding.loadSelectLayout.setVisibility(View.GONE);
         binding.bluetoothReceiverView.setVisibility(View.VISIBLE);
+        binding.bluetoothReceiverView.init();
     }
 
 

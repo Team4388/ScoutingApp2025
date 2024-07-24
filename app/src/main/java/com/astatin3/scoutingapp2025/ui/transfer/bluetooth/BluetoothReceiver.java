@@ -11,6 +11,8 @@ import android.os.Build;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.astatin3.scoutingapp2025.utility.AlertManager;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -48,7 +50,8 @@ public class BluetoothReceiver {
 
     private static final int REQUEST_BLUETOOTH_PERMISSIONS = 1;
 
-    public static void requestBluetoothPermissions(Activity activity) {
+    public static void
+    requestBluetoothPermissions(Activity activity) {
         List<String> permissionsNeeded = new ArrayList<>();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -116,28 +119,36 @@ public class BluetoothReceiver {
                         // Handle incoming data here
                         handleIncomingData();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        AlertManager.error(e);
                     }
                 }
             }
         }).start();
     }
 
-    private void handleIncomingData() throws IOException {
+    private void handleIncomingData() throws IOException  {
         byte[] buffer = new byte[1024];
         int bytes;
-        while (true) {
-            bytes = inputStream.read(buffer);
-            if (bytes != -1) {
-                // Process received data here
-//                receiveddata.processReceivedData(buffer, bytes);
-                System.out.println(Arrays.toString(buffer));
+        try {
+            while (true) {
+                bytes = inputStream.read(buffer);
+                if (bytes != -1) {
+                    receiveddata.processReceivedData(buffer, bytes);
+                }
             }
+        } catch (IOException e) {
+        if (e.getMessage() != null && e.getMessage().contains("bt socket closed, read return: -1")) {
+            receiveddata.onConnectionStop();
+            System.out.println("Bluetooth socket closed, treating as end of stream");
+        } else {
+            throw e;
         }
+    }
     }
 
     public interface receivedData {
         public void processReceivedData(byte[] data, int bytes);
+        public void onConnectionStop();
     }
 
 

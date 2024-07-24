@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -60,16 +61,6 @@ public class generatorView extends ConstraintLayout {
         super(context, attributeSet);
     }
 
-    private void alert(String title, String content) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setMessage(content);
-        alert.setTitle(title);
-        alert.setPositiveButton("OK", null);
-        alert.setCancelable(true);
-        alert.create().show();
-    }
-
-
     private Bitmap generateQrCode(String contents) throws WriterException {
 
         final int size = 512;
@@ -91,7 +82,7 @@ public class generatorView extends ConstraintLayout {
             result = writer.encode(contents, BarcodeFormat.DATA_MATRIX, size, size, hints);
         } catch (IllegalArgumentException e) {
             // Unsupported format
-            e.printStackTrace();
+            AlertManager.error(e);
             return null;
         }
 
@@ -122,39 +113,14 @@ public class generatorView extends ConstraintLayout {
         qrIndexN = binding.qrIndexN;
         qrIndexD = binding.qrIndexD;
 
+        String compressed =  new String(fileEditor.blockCompress(inputData), StandardCharsets.ISO_8859_1);
 
-        String compiledData = "";
-
-        for(int i=0;i<Math.ceil((double) inputData.length / fileEditor.maxCompressedBlockSize);i++){
-            final int start = i*fileEditor.maxCompressedBlockSize;
-            int end = ((i+1)*fileEditor.maxCompressedBlockSize);
-            if(end > inputData.length) {
-                end = inputData.length;
-            }
-
-            byte[] dataBlock = fileEditor.getByteBlock(inputData, start, end);
-
-            final String compressedBlock =
-                new String(
-                    fileEditor.compress(dataBlock),
-                        StandardCharsets.ISO_8859_1);
-
-            compiledData +=
-                new String(
-                    fileEditor.toBytes(compressedBlock.length(), 2),
-                        StandardCharsets.ISO_8859_1) +
-
-                    compressedBlock;
-
-
-        }
-
-        if(compiledData.isEmpty()){
-            alert("Error!", "Empty data!");
+        if(compressed.isEmpty()){
+            AlertManager.alert("Error!", "Empty data!");
             return;
         }
 
-        minQrSize = Math.round(compiledData.length()/maxQrCount)+1;
+        minQrSize = Math.round((float)compressed.length() / maxQrCount)+1;
 
         qrSizeSlider.setMax(maxQrSize-minQrSize);
         qrSpeedSlider.setMax((minQrSpeed-maxQrSpeed)*2);
@@ -162,7 +128,7 @@ public class generatorView extends ConstraintLayout {
         qrSizeSlider.setProgress(minQrSize+qrSize);
         qrSpeedSlider.setProgress(defaultQrDelay+5);
 
-        sendData(compiledData);
+        sendData(compressed);
     }
 
     private void sendData(String data){
@@ -223,7 +189,7 @@ public class generatorView extends ConstraintLayout {
                 ));
 //                alert("title", ""+(qrCount-1));
             }catch (WriterException e){
-                e.printStackTrace();
+                AlertManager.error(e);
             }
         }
         qrIndex = 0;

@@ -1,9 +1,11 @@
 package com.astatin3.scoutingapp2025;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import com.astatin3.scoutingapp2025.scoutingData.fields;
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -27,16 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navView;
 
 
-    private void alert(String title, String content) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage(content);
-        alert.setTitle(title);
-        alert.setPositiveButton("OK", null);
-        alert.setCancelable(true);
-        alert.create().show();
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -49,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         if(!fileEditor.fileExist(fields.pitsFieldsFilename)){
             fields.save(fields.pitsFieldsFilename, fields.default_pit_fields);
         }
+
+        AlertManager.init(this);
 
         Objects.requireNonNull(getSupportActionBar()).hide();
 

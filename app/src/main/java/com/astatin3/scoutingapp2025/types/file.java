@@ -1,5 +1,6 @@
 package com.astatin3.scoutingapp2025.types;
 
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
@@ -33,7 +34,7 @@ public class file {
             return bb.build();
 
         } catch (ByteBuilder.buildingException e) {
-            e.printStackTrace();
+            AlertManager.error(e);
             return null;
         }
     }
@@ -50,7 +51,7 @@ public class file {
             return f;
 
         }catch (BuiltByteParser.byteParsingExeption e){
-            e.printStackTrace();
+            AlertManager.error(e);
             return null;
         }
     }

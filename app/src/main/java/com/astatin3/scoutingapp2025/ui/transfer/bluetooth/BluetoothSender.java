@@ -11,6 +11,8 @@ import android.os.Build;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.astatin3.scoutingapp2025.utility.AlertManager;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ public class BluetoothSender {
     private Context context;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothSocket socket;
-    private OutputStream outputStream;
+    public OutputStream outputStream;
 
     public BluetoothSender(Context context) {
         this.context = context;
@@ -120,7 +122,13 @@ public class BluetoothSender {
 
     public void close() throws IOException {
         if (outputStream != null) {
+            outputStream.flush();
             outputStream.close();
+        }
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            AlertManager.error(e);
         }
         if (socket != null) {
             socket.close();
