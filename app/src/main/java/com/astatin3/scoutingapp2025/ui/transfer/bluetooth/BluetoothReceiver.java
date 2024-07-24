@@ -1,5 +1,6 @@
 package com.astatin3.scoutingapp2025.ui.transfer.bluetooth;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
@@ -102,6 +103,7 @@ public class BluetoothReceiver {
         }
     }
 
+    @SuppressLint("MissingPermission")
     public void startListening() throws IOException {
         if(!hasBluetoothPermissions(context)){
             requestBluetoothPermissions((Activity) context);

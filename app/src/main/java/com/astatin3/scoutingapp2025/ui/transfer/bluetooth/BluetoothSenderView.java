@@ -1,5 +1,6 @@
 package com.astatin3.scoutingapp2025.ui.transfer.bluetooth;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -62,6 +63,7 @@ public class BluetoothSenderView extends LinearLayout {
         }
 
         deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BluetoothDevice selectedDevice = deviceList.get(position);
@@ -83,6 +85,7 @@ public class BluetoothSenderView extends LinearLayout {
         });
     }
 
+    @SuppressLint("MissingPermission")
     private void listPairedDevices() {
         Set<BluetoothDevice> pairedDevices = bluetoothSender.getPairedDevices();
         if (pairedDevices != null && !pairedDevices.isEmpty()) {
