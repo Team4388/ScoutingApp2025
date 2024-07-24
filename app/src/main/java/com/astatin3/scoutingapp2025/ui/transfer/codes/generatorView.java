@@ -1,4 +1,4 @@
-package com.astatin3.scoutingapp2025.ui.transfer;
+package com.astatin3.scoutingapp2025.ui.transfer.codes;
 
 import android.app.AlertDialog;
 import android.content.Context;

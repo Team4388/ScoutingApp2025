@@ -62,4 +62,9 @@ dependencies {
 
     implementation("com.github.skydoves:powerspinner:1.2.7")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    implementation("com.github.douglasjunior:AndroidBluetoothLibrary:0.4.0")
+//    implementation("com.github.DeveloperPaul123:SimpleBluetoothLibrary:1.5.1")
+
 }
+

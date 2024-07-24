@@ -1,5 +1,7 @@
 package com.astatin3.scoutingapp2025.SettingsVersionStack;
 
+import java.util.UUID;
+
 public class sv1 extends sv0 {
     @Override
     public int getVersion() {
@@ -27,6 +29,7 @@ public class sv1 extends sv0 {
         writeTag("match_num", "0");
         writeTag("alliance_pos", "red-1");
         writeTag("compiled_mode", "false");
+        writeTag("bt_uuid", UUID.randomUUID().toString());
     }
 
     public int get_match_num(){
@@ -69,5 +72,13 @@ public class sv1 extends sv0 {
 
     public void set_compiled_mode(boolean state){
         writeTag("compiled_mode", state ? "true" : "false");
+    }
+
+    public void setUUID(UUID uuid){
+        writeTag("bt_uuid", uuid.toString());
+    }
+
+    public UUID getUUID(){
+        return UUID.fromString(readTag("bt_uuid"));
     }
 }

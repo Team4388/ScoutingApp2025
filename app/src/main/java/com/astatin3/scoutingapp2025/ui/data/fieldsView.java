@@ -58,39 +58,14 @@ public class fieldsView extends ConstraintLayout {
             filename = fields.pitsFieldsFilename;
             load_field_menu();
         });
-    }
 
-    private TextView createTextView(String text) {
-        TextView textView = new TextView(getContext());
-        textView.setText(text);
-        textView.setPadding(10, 10, 10, 10);
-        return textView;
     }
-
     private void load_field_menu() {
         values = fields.load(filename);
         binding.fieldsArea.bringToFront();
         binding.fieldsArea.removeAllViews();
         binding.fieldsArea.setReorderingEnabled(false);
         if(values == null) return;
-
-//        List<TableRow> rows = new ArrayList<>();
-//
-//// Create and add rows
-//        TableRow row1 = new TableRow(getContext());
-//        row1.addView(createTextView("Cell 1,1"));
-//        row1.addView(createTextView("Cell 1,2"));
-//        rows.add(row1);
-//
-//        TableRow row2 = new TableRow(getContext());
-//        row2.addView(createTextView("Cell 2,1"));
-//        row2.addView(createTextView("Cell 2,2"));
-//        rows.add(row2);
-//
-//// Set the rows
-//        binding.fieldsArea.setRows(rows);
-//
-//// Or add rows individually
 
         for(int i = 0; i < values.length; i++){
 
@@ -103,7 +78,6 @@ public class fieldsView extends ConstraintLayout {
             rowParams.setMargins(20,20,20,20);
             tr.setLayoutParams(rowParams);
             tr.setPadding(20,20,20,20);
-//            tr.setMinimumWidth();
             tr.setBackgroundColor(background_color);
 
             TextView tv = new TextView(getContext());
@@ -118,10 +92,8 @@ public class fieldsView extends ConstraintLayout {
 
             binding.fieldsArea.addView(tr);
 
-//            frcTeam finalTeam = team;
             int fi = i;
             tr.setOnClickListener(v -> {
-//                loadTeam(finalTeam, latestSettings.settings.get_compiled_mode());
                 display_fields(values[fi]);
             });
         }
@@ -131,7 +103,10 @@ public class fieldsView extends ConstraintLayout {
         binding.fieldsArea.removeAllViews();
         binding.fieldsArea.setReorderingEnabled(true);
 
-//        ArrayList<TableRow> rows = new ArrayList<>();
+        TextView e = null;
+        binding.addButton.setOnClickListener(view -> {
+            e.setText("123");
+        });
 
         for(int i = 0; i < version_values.length; i++){
             TableRow tr = new TableRow(getContext());
@@ -154,17 +129,12 @@ public class fieldsView extends ConstraintLayout {
             tv.setText(version_values[i].name);
             tv.setTextSize(20);
             tr.addView(tv);
-//            rows.add(tr);
-//            tr.addView(tv);
             binding.fieldsArea.addView(tr);
             tr.setOnClickListener(v -> {
 
                 trHighlight(tr);
             });
         }
-
-//        binding.fieldsArea.setSlidingEnabled(true);
-//        binding.fieldsArea.setRows(rows);
     }
 
     private void trHighlight(TableRow self){

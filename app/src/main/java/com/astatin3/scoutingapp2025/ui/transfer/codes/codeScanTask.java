@@ -1,4 +1,4 @@
-package com.astatin3.scoutingapp2025.ui.transfer;
+package com.astatin3.scoutingapp2025.ui.transfer.codes;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -12,12 +12,8 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
-import com.google.zxing.aztec.AztecReader;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.datamatrix.DataMatrixReader;
-import com.google.zxing.maxicode.MaxiCodeReader;
-import com.google.zxing.pdf417.PDF417Reader;
-import com.google.zxing.qrcode.QRCodeReader;
 
 import java.util.EnumSet;
 import java.util.HashMap;

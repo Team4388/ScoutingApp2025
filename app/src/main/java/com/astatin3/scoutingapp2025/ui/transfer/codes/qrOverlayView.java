@@ -1,4 +1,4 @@
-package com.astatin3.scoutingapp2025.ui.transfer;
+package com.astatin3.scoutingapp2025.ui.transfer.codes;
 
 // From https://github.com/dlazaro66/QRCodeReaderView/blob/master/samples/src/main/java/com/example/qr_readerexample/PointsOverlayView.java
 

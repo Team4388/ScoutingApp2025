@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -126,6 +127,33 @@ public final class fileEditor {
 
         return outputStream.toByteArray();
     }
+
+    public static byte[] combineByteArrays(List<byte[]> arrayList) {
+        // Calculate the total length of the combined array
+        int totalLength = arrayList.stream()
+                .mapToInt(array -> array.length)
+                .sum();
+
+        // Create a new byte array with the total length
+        byte[] result = new byte[totalLength];
+
+        // Copy each array into the result array
+        int offset = 0;
+        for (byte[] array : arrayList) {
+            System.arraycopy(array, 0, result, offset, array.length);
+            offset += array.length;
+        }
+
+        return result;
+    }
+
+
+
+
+
+
+
+
 
     public static boolean writeFile(String filepath, byte[] data) {
         try {
@@ -240,6 +268,48 @@ public final class fileEditor {
             @Override
             public int compare(String o1, String o2) {
                 return Integer.valueOf(o1.split("-")[1]).compareTo(Integer.valueOf(o2.split("-")[1]));
+            }
+        });
+
+
+        return filenames;
+    }
+
+
+
+
+
+
+    public static String[] getEventFiles(String evcode){
+        File f = new File(baseDir);
+        File[] files = f.listFiles();
+
+        if(files == null){return new String[0];}
+
+        ArrayList<String> outFiles = new ArrayList<>();
+        outFiles.add("matches.fields");
+        outFiles.add("pits.fields");
+//        outFiles.add(evcode + ".eventdata");
+
+        for (File file : files) {
+            String name = file.getName();
+            if(!file.isDirectory() && name.startsWith(evcode)) {
+                outFiles.add(file.getName());
+            }
+        }
+
+        String[] filenames = outFiles.toArray(new String[0]);
+
+        Arrays.sort(filenames, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                try {
+                    if(!o1.contains("-") || !o2.contains("-"))
+                        return 0;
+                    return Integer.valueOf(o1.split("-")[1]).compareTo(Integer.valueOf(o2.split("-")[1]));
+                } catch (Exception e){
+                    return 0;
+                }
             }
         });
 

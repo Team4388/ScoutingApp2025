@@ -1,4 +1,4 @@
-package com.astatin3.scoutingapp2025.ui.transfer;
+package com.astatin3.scoutingapp2025.ui.transfer.codes;
 
 import static androidx.core.math.MathUtils.clamp;
 
@@ -26,11 +26,15 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
+import com.astatin3.scoutingapp2025.types.file;
+import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -301,7 +305,24 @@ public class scannerView extends ConstraintLayout {
 
             try {
                 byte[] compiledBytes = compiledString.getBytes(StandardCharsets.ISO_8859_1);
-                alert("completed", blockUncompress(compiledBytes));
+                byte[] resultBytes = blockUncompress(compiledBytes);
+
+                String result_filenames = "";
+
+                BuiltByteParser bbp = new BuiltByteParser(resultBytes);
+                ArrayList<BuiltByteParser.parsedObject> result = bbp.parse();
+
+                for(int i = 0; i < result.size(); i++){
+                    if(result.get(i).getType() != file.typecode) continue;
+                    file f = file.decode((byte[]) result.get(i).get());
+
+                    if(f != null)
+                        if(f.write())
+                            result_filenames += f.filename + "\n";
+                }
+
+                alert("Completed!", result_filenames);
+
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -309,20 +330,21 @@ public class scannerView extends ConstraintLayout {
         prevQrIndex = qrIndex;
     }
 
-    private static String blockUncompress(byte[] data) throws DataFormatException {
-        String uncompressedData = "";
+    private static byte[] blockUncompress(byte[] data) throws DataFormatException {
+        List<byte[]> uncompressedData = new ArrayList<>();
         int curIndex = 0;
         while(curIndex < data.length){
 
             final int blockLength = fileEditor.fromBytes(fileEditor.getByteBlock(data, curIndex, curIndex+2), 2);
 
-            uncompressedData += new String(
+            uncompressedData.add(
                     fileEditor.decompress(
                             fileEditor.getByteBlock(data, curIndex+2, curIndex+blockLength+2)
-                    ), StandardCharsets.ISO_8859_1);
+                    )
+            );
 
             curIndex += blockLength+2;
         }
-        return uncompressedData;
+        return fileEditor.combineByteArrays(uncompressedData);
     }
 }

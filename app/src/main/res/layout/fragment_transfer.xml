@@ -6,8 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.transfer.TransferFragment">
 
+    <TextView
+        android:id="@+id/no_event_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No event has been specified\nPlease select one"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/selectLayout"
+        android:id="@+id/main_select_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp"
@@ -53,12 +65,121 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.astatin3.scoutingapp2025.ui.transfer.generatorView
-        android:id="@+id/generatorLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/load_select_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <Button
+            android:id="@+id/cameraButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Camera"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/bluetoothButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/bluetoothButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bluetooth"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/wifiButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cameraButton" />
+
+        <Button
+            android:id="@+id/wifiButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TODO"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bluetoothButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/file_selector_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         tools:visibility="visible">
+
+        <Button
+            android:id="@+id/file_selector_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:height="48dp"
+            android:text="Send"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/file_selector_searchbar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#D33D3D3D"
+            android:ems="10"
+            android:inputType="text"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="53dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/file_selector_searchbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TableLayout
+                    android:id="@+id/file_selector_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="48dp" />
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.astatin3.scoutingapp2025.ui.transfer.bluetooth.BluetoothSenderView
+        android:id="@+id/bluetoothSenderView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="53dp"/>
+
+
+    <com.astatin3.scoutingapp2025.ui.transfer.bluetooth.BluetoothReceiverView
+        android:id="@+id/bluetoothReceiverView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="53dp"/>
+
+    <com.astatin3.scoutingapp2025.ui.transfer.codes.generatorView
+        android:id="@+id/generatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone">
 
         <SeekBar
             android:id="@+id/qrSizeSlider"
@@ -135,10 +256,10 @@
             app:layout_constraintStart_toEndOf="@+id/qrIndexSlash"
             app:layout_constraintTop_toBottomOf="@+id/qrImage" />
 
-    </com.astatin3.scoutingapp2025.ui.transfer.generatorView>
+    </com.astatin3.scoutingapp2025.ui.transfer.codes.generatorView>
 
 
-    <com.astatin3.scoutingapp2025.ui.transfer.scannerView
+    <com.astatin3.scoutingapp2025.ui.transfer.codes.scannerView
         android:id="@+id/scannerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -222,7 +343,7 @@
             tools:context=".TransferFragment" />
 
 
-    </com.astatin3.scoutingapp2025.ui.transfer.scannerView>
+    </com.astatin3.scoutingapp2025.ui.transfer.codes.scannerView>
 
     <com.astatin3.scoutingapp2025.ui.transfer.TBAView
         android:id="@+id/TBAView"

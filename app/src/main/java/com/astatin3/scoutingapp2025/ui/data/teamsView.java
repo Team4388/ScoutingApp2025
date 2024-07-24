@@ -39,6 +39,8 @@ public class teamsView extends ConstraintLayout {
     com.astatin3.scoutingapp2025.databinding.FragmentDataBinding binding;
 
     private static final int background_color = 0x5000ff00;
+    private static final int unsaved_background_color = 0x2000ff00;
+
 
     String evcode;
     frcEvent event;

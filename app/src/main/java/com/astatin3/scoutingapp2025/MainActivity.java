@@ -1,5 +1,6 @@
 package com.astatin3.scoutingapp2025;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import com.astatin3.scoutingapp2025.scoutingData.fields;
@@ -25,6 +26,17 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private BottomNavigationView navView;
 
+
+    private void alert(String title, String content) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(content);
+        alert.setTitle(title);
+        alert.setPositiveButton("OK", null);
+        alert.setCancelable(true);
+        alert.create().show();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -45,9 +57,8 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+//        try()
         navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_scouting, R.id.navigation_transfer, R.id.navigation_settings)
                 .build();
