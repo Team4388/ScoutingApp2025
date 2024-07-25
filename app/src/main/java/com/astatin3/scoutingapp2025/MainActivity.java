@@ -1,16 +1,14 @@
 package com.astatin3.scoutingapp2025;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
 
 import com.astatin3.scoutingapp2025.scoutingData.fields;
+import com.astatin3.scoutingapp2025.ui.data.sentimentAnalysis;
 import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -43,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         AlertManager.init(this);
+        sentimentAnalysis.init(this);
 
         Objects.requireNonNull(getSupportActionBar()).hide();
 

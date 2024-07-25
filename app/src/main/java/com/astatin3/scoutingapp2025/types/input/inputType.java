@@ -33,16 +33,26 @@ public abstract class inputType {
     public inputType(String name){
         this.name = name;
     }
+
+    public abstract String get_type_name();
+
     public abstract byte[] encode() throws ByteBuilder.buildingException;
     public abstract void decode(byte[] bytes) throws BuiltByteParser.byteParsingExeption;
+
+
     public abstract View createView(Context context, Function<dataType, Integer> onUpdate);
     public boolean isBlank = false;
     public abstract void nullify();
     public void setViewValue(dataType type){setViewValue(type.get());}
     public abstract void setViewValue(Object value);
     public abstract dataType getViewValue();
-    public abstract void add_individual_view(LinearLayout parent, dataType data);
-    public abstract void add_compiled_view(LinearLayout parent, dataType[] data);
-    public abstract String get_type_name();
 
+
+    public abstract void add_individual_view(LinearLayout parent, dataType data);
+
+
+    public abstract void add_compiled_view(LinearLayout parent, dataType[] data);
+
+
+    public abstract void add_history_view(LinearLayout parent, dataType[] data);
 }

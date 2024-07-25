@@ -11,10 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.astatin3.scoutingapp2025.MainActivity;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentScoutingBinding;
 import com.astatin3.scoutingapp2025.types.frcEvent;
+import com.astatin3.scoutingapp2025.ui.data.sentimentAnalysis;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 
 public class scoutingFragment extends Fragment {
@@ -31,7 +31,6 @@ public class scoutingFragment extends Fragment {
         binding.buttons.setVisibility(View.VISIBLE);
         binding.matchScoutingView.setVisibility(View.GONE);
         binding.pitScoutingView.setVisibility(View.GONE);
-
 
         String evcode = latestSettings.settings.get_evcode();
 

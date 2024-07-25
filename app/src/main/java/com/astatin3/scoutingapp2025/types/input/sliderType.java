@@ -41,6 +41,10 @@ public class sliderType extends inputType {
         this.min = min;
         this.max = max;
     }
+
+
+
+
     public byte[] encode() throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         bb.addString(name);
@@ -58,6 +62,9 @@ public class sliderType extends inputType {
         min           = (int)    objects.get(2).get();
         max           = (int)    objects.get(3).get();
     }
+
+
+
 
     public Slider slider = null;
 
@@ -96,6 +103,12 @@ public class sliderType extends inputType {
         isBlank = true;
         slider.setVisibility(View.GONE);
     }
+
+
+
+
+
+
     public void add_individual_view(LinearLayout parent, dataType data){
         if(data.isNull()) return;
         Slider slider = new Slider(parent.getContext());
@@ -109,6 +122,12 @@ public class sliderType extends inputType {
         slider.setEnabled(false);
         parent.addView(slider);
     }
+
+
+
+
+
+
 
 
     private float calculateMean(int[] data) {
@@ -137,8 +156,6 @@ public class sliderType extends inputType {
         }
         return entries;
     }
-
-
 
     public void add_compiled_view(LinearLayout parent, dataType[] data){
         LineChart chart = new LineChart(parent.getContext());
@@ -191,12 +208,7 @@ public class sliderType extends inputType {
         normalDistSet.setDrawValues(false);
         normalDistSet.setLineWidth(2f);
 
-
-
-
         LineData lineData = new LineData(dataSet, normalDistSet);
-
-
 
         chart.setData(lineData);
         chart.invalidate();
@@ -214,6 +226,63 @@ public class sliderType extends inputType {
 
         Legend legend = chart.getLegend();
         legend.setTextColor(Color.WHITE);
+
+        parent.addView(chart);
+    }
+
+
+
+
+    public void add_history_view(LinearLayout parent, dataType[] data){
+        LineChart chart = new LineChart(parent.getContext());
+        FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        layout.height = 350;
+        chart.setLayoutParams(layout);
+        chart.setBackgroundColor(0xff252025);
+
+        List<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < data.length; i++){
+            if(data[i] == null) continue;
+
+            entries.add(new Entry(i, (float)(int) data[i].get()));
+        }
+
+
+        LineDataSet dataSet = new LineDataSet(entries, name);
+        dataSet.setColor(Color.BLUE);
+        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setDrawCircles(false);
+        dataSet.setDrawValues(false);
+
+        LineData lineData = new LineData(dataSet);
+
+        chart.setData(lineData);
+        chart.invalidate();
+
+        chart.getDescription().setEnabled(false);
+        chart.setTouchEnabled(false);
+        chart.setDragEnabled(false);
+        chart.setScaleEnabled(false);
+
+        dataSet.setValueTextColor(Color.RED);
+
+        chart.getXAxis().setTextColor(Color.WHITE);
+        chart.getAxisLeft().setTextColor(Color.WHITE);
+        chart.getAxisRight().setTextColor(Color.WHITE);
+
+        Legend legend = chart.getLegend();
+        legend.setTextColor(Color.WHITE);
+
+
+        chart.getAxisLeft().setAxisMinimum(min);
+        chart.getAxisLeft().setAxisMaximum(max);
+
+        chart.getAxisRight().setAxisMinimum(min);
+        chart.getAxisRight().setAxisMaximum(max);
+
 
         parent.addView(chart);
     }

@@ -10,7 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class AlertManager {
-    private static Context context;
+    public static Context context;
 
     public static void init(Context c){
         context = c;
@@ -53,6 +53,7 @@ public class AlertManager {
     }
 
     public static void error(Exception e) {
+        e.printStackTrace();
         ((Activity) context).runOnUiThread(new Runnable() {
             public void run() {
                 StringWriter sw = new StringWriter();

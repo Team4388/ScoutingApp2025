@@ -1,6 +1,7 @@
 package com.astatin3.scoutingapp2025.types.input;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -13,10 +14,18 @@ import android.widget.TextView;
 
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.data.stringType;
+import com.astatin3.scoutingapp2025.ui.data.sentimentAnalysis;
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class textType extends inputType {
@@ -30,6 +39,13 @@ public class textType extends inputType {
         this.default_value = default_text;
     }
     public String get_type_name(){return "Text";}
+
+
+
+
+
+
+
     public byte[] encode() throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         bb.addString(name);
@@ -43,6 +59,19 @@ public class textType extends inputType {
         name          = (String) objects.get(0).get();
         default_value =          objects.get(1).get();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public EditText text = null;
 
@@ -78,6 +107,10 @@ public class textType extends inputType {
         if(text.getVisibility() == View.GONE) return new stringType(name, stringType.nulval);
         return new stringType(name, text.getText().toString());
     }
+
+
+
+
     public void add_individual_view(LinearLayout parent, dataType data){
         if(data.isNull()) return;
         TextView tv = new TextView(parent.getContext());
@@ -90,17 +123,109 @@ public class textType extends inputType {
         tv.setTextSize(18);
         parent.addView(tv);
     }
-    public void add_compiled_view(LinearLayout parent, dataType[] data){
-//        if(data.get().equals(stringType.nulval)) return;
-        TextView tv = new TextView(parent.getContext());
-        tv.setLayoutParams(new FrameLayout.LayoutParams(
+
+
+
+
+
+
+
+
+
+
+
+
+
+    float positive_mean = 0;
+    int count = 0;
+
+    TextView positive_text;
+
+    public void add_compiled_view(LinearLayout parent, dataType[] data) {
+        positive_mean = 0;
+        count = 0;
+
+        positive_text = new TextView(parent.getContext());
+        positive_text.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
-        tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        tv.setText("<add word cloud thing here>");
-        tv.setTextSize(20);
-        parent.addView(tv);
+        positive_text.setGravity(Gravity.CENTER_HORIZONTAL);
+        positive_text.setTextSize(20);
+        parent.addView(positive_text);
+
+        for (int i = 0; i < data.length; i++){
+            if (!data[i].isNull()) {
+                sentimentAnalysis.analyse((String) data[i].get(), new sentimentAnalysis.resultCallback() {
+                    @Override
+                    public void onFinish(float sentiment) {
+                        positive_mean += sentiment;
+                        count++;
+
+                        positive_text.setText("Sentiment: " + (positive_mean / count));
+                    }
+                });
+            }
+        }
+    }
+
+
+    public void add_history_view(LinearLayout parent, dataType[] data){
+        LineChart chart = new LineChart(parent.getContext());
+        FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        layout.height = 350;
+        chart.setLayoutParams(layout);
+        chart.setBackgroundColor(0xff252025);
+
+
+        List<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < data.length; i++) {
+            if(data[i] == null) continue;
+
+            entries.add(
+                    new Entry(i,
+                            sentimentAnalysis.analyse_sync(  (String) data[i].get()  )
+                    )
+            );
+        }
+        LineDataSet dataSet = new LineDataSet(entries, "Sentiment");
+        dataSet.setColor(Color.BLUE);
+        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setDrawCircles(false);
+        dataSet.setDrawValues(false);
+        dataSet.setValueTextColor(Color.RED);
+
+
+        LineData lineData = new LineData(dataSet);
+
+        chart.setData(lineData);
+        chart.invalidate();
+
+        chart.getDescription().setEnabled(false);
+        chart.setTouchEnabled(false);
+        chart.setDragEnabled(false);
+        chart.setScaleEnabled(false);
+
+
+        chart.getXAxis().setTextColor(Color.WHITE);
+        chart.getAxisLeft().setTextColor(Color.WHITE);
+        chart.getAxisRight().setTextColor(Color.WHITE);
+
+        chart.getAxisLeft().setAxisMinimum(0.f);
+        chart.getAxisLeft().setAxisMaximum(1.f);
+
+        chart.getAxisRight().setAxisMinimum(0.f);
+        chart.getAxisRight().setAxisMaximum(1.f);
+
+        Legend legend = chart.getLegend();
+        legend.setTextColor(Color.WHITE);
+
+        chart.invalidate();
+        parent.addView(chart);
+
     }
 }
 

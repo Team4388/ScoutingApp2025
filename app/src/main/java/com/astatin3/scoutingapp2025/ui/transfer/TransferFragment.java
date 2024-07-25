@@ -56,6 +56,11 @@ public class TransferFragment extends Fragment {
 
         evcode = latestSettings.settings.get_evcode();
 
+        binding.downloadButton.setOnClickListener(v -> {
+            start_download();
+            submenu = true;
+        });
+
         binding.TBAButton.setOnClickListener(v -> {
             binding.noEventError.setVisibility(View.GONE);
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -77,17 +82,12 @@ public class TransferFragment extends Fragment {
         if(evcode.equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);
             binding.uploadButton.setVisibility(View.GONE);
-            binding.downloadButton.setVisibility(View.GONE);
+            binding.downloadButton.setVisibility(View.VISIBLE);
             return root;
         }
 
         binding.uploadButton.setOnClickListener(v -> {
             filePicker();
-            submenu = true;
-        });
-
-        binding.downloadButton.setOnClickListener(v -> {
-            start_download();
             submenu = true;
         });
 

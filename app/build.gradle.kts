@@ -1,5 +1,9 @@
+import com.android.build.api.dsl.AaptOptions
+import com.android.build.api.dsl.AndroidResources
+
 plugins {
     alias(libs.plugins.androidApplication)
+//    id("com.google.gms.google-services")
 }
 
 //allprojects {
@@ -35,6 +39,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    aaptOptions {
+        noCompress("tflite");
+    }
 }
 
 dependencies {
@@ -63,7 +70,16 @@ dependencies {
     implementation("com.github.skydoves:powerspinner:1.2.7")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-    implementation("com.github.douglasjunior:AndroidBluetoothLibrary:0.4.0")
+
+
+
+//    implementation("com.google.firebase:firebase-ml-modeldownloader:24.1.2")
+//    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+
+    implementation("org.tensorflow:tensorflow-lite-task-text:0.3.0")
+
+
+
 //    implementation("com.github.DeveloperPaul123:SimpleBluetoothLibrary:1.5.1")
 
 }

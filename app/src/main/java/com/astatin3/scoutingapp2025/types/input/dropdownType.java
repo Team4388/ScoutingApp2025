@@ -15,14 +15,19 @@ import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.data.intType;
 import com.astatin3.scoutingapp2025.types.data.stringType;
+import com.astatin3.scoutingapp2025.ui.data.sentimentAnalysis;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
@@ -46,6 +51,11 @@ public class dropdownType extends inputType {
         this.text_options = text_options;
         this.default_value = defaultSelIndex;
     }
+
+
+
+
+
     public byte[] encode() throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         bb.addString(name);
@@ -61,6 +71,10 @@ public class dropdownType extends inputType {
         default_value =            objects.get(1).get();
         text_options  = (String[]) objects.get(2).get();
     }
+
+
+
+
 
     public PowerSpinnerView dropdown = null;
 
@@ -126,6 +140,12 @@ public class dropdownType extends inputType {
         if(dropdown.getVisibility() == View.GONE) return new intType(name, intType.nulval);
         return new intType(name, dropdown.getSelectedIndex());
     }
+
+
+
+
+
+
     public void add_individual_view(LinearLayout parent, dataType data){
         if(data.isNull()) return;
         TextView tv = new TextView(parent.getContext());
@@ -139,6 +159,14 @@ public class dropdownType extends inputType {
         tv.setTextSize(18);
         parent.addView(tv);
     }
+
+
+
+
+
+
+
+
     private static int[] generateEquidistantColors(int N) {
         int[] colors = new int[N];
         float[] hsv = new float[3]; // Hue, Saturation, Value
@@ -181,6 +209,77 @@ public class dropdownType extends inputType {
         PieData pieData = new PieData(pieDataSet);
         chart.setDrawHoleEnabled(false);
         chart.setData(pieData);
+    }
+
+
+
+
+
+
+    public void add_history_view(LinearLayout parent, dataType[] data){
+        LineChart chart = new LineChart(parent.getContext());
+        FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        layout.height = 350;
+        chart.setLayoutParams(layout);
+        chart.setBackgroundColor(0xff252025);
+
+
+
+        int[] colors = generateEquidistantColors(text_options.length);
+
+        LineData lineData = new LineData();
+
+        for(int i = 0; i < text_options.length; i++){
+            List<Entry> entries = new ArrayList<>();
+            for (int a = 0; a < data.length; a++) {
+                if(data[a] == null) continue;
+
+                entries.add(
+                        new Entry(a,
+                            ((int) data[a].get()) == i ? 1.f : 0.f
+                        )
+                );
+            }
+
+            LineDataSet dataSet = new LineDataSet(entries, text_options[i]);
+            dataSet.setColor(colors[i]);
+            dataSet.setValueTextColor(Color.BLACK);
+            dataSet.setDrawCircles(false);
+            dataSet.setDrawValues(false);
+            dataSet.setValueTextColor(Color.RED);
+            lineData.addDataSet(dataSet);
+        }
+
+
+
+
+        chart.setData(lineData);
+        chart.invalidate();
+
+        chart.getDescription().setEnabled(false);
+        chart.setTouchEnabled(false);
+        chart.setDragEnabled(false);
+        chart.setScaleEnabled(false);
+
+
+        chart.getXAxis().setTextColor(Color.WHITE);
+        chart.getAxisLeft().setTextColor(Color.WHITE);
+        chart.getAxisRight().setTextColor(Color.WHITE);
+
+        chart.getAxisLeft().setAxisMinimum(0.f);
+        chart.getAxisLeft().setAxisMaximum(1.f);
+
+        chart.getAxisRight().setAxisMinimum(0.f);
+        chart.getAxisRight().setAxisMaximum(1.f);
+
+        Legend legend = chart.getLegend();
+        legend.setTextColor(Color.WHITE);
+
+        chart.invalidate();
+        parent.addView(chart);
     }
 }
 
