@@ -2,7 +2,7 @@ package com.astatin3.scoutingapp2025.ui.data;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -10,13 +10,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentDataBinding;
 import com.astatin3.scoutingapp2025.scoutingData.fields;
 import com.astatin3.scoutingapp2025.types.input.inputType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class fieldsView extends ConstraintLayout {
@@ -78,10 +76,9 @@ public class fieldsView extends ConstraintLayout {
             rowParams.setMargins(20,20,20,20);
             tr.setLayoutParams(rowParams);
             tr.setPadding(20,20,20,20);
-            tr.setBackgroundColor(background_color);
 
             TextView tv = new TextView(getContext());
-            tv.setText("v" + i + "\n eee");
+            tv.setText("v" + i);
             tv.setTextSize(20);
             tr.addView(tv);
 
@@ -92,10 +89,15 @@ public class fieldsView extends ConstraintLayout {
 
             binding.fieldsArea.addView(tr);
 
-            int fi = i;
-            tr.setOnClickListener(v -> {
-                display_fields(values[fi]);
-            });
+            if(i == values.length-1) {
+                tr.setBackgroundColor(background_color);
+                int fi = i;
+                tr.setOnClickListener(v -> {
+                    display_fields(values[fi]);
+                });
+            }else{
+                tr.setBackgroundColor(unfocused_background_color);
+            }
         }
     }
 
@@ -129,21 +131,32 @@ public class fieldsView extends ConstraintLayout {
             tv.setText(version_values[i].name);
             tv.setTextSize(20);
             tr.addView(tv);
-            binding.fieldsArea.addView(tr);
-            tr.setOnClickListener(v -> {
 
-                trHighlight(tr);
+            binding.fieldsArea.addView(tr);
+
+            tr.setOnClickListener(v -> {
+                trOnClick(version_values, tr);
             });
         }
     }
 
-    private void trHighlight(TableRow self){
-        for(int i = 0; i < binding.teamsArea.getChildCount(); i++){
-            TableRow child = (TableRow) binding.teamsArea.getChildAt(i);
-            child.setBackgroundColor(unfocused_background_color);
+    private void trOnClick(inputType[] version_values, TableRow tr){
+        int index = -1;
+        for(int i = 0; i < binding.fieldsArea.getChildCount(); i++){
+            View v = binding.fieldsArea.getChildAt(i);
+
+            if(v.equals(tr)) {
+                tr.setBackgroundColor(background_color);
+                index = i;
+            } else
+                binding.fieldsArea.getChildAt(i).setBackgroundColor(unfocused_background_color);
         }
 
-        self.setBackgroundColor(background_color);
+        onFieldSelect(version_values[binding.fieldsArea.getReorderedIndexes().get(index)]);
+    }
+
+    private void onFieldSelect(inputType field){
+        System.out.println(field.name);
 
     }
 }

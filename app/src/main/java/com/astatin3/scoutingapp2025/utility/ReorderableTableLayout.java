@@ -1,39 +1,22 @@
 package com.astatin3.scoutingapp2025.utility;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.animation.ObjectAnimator;
-import android.content.Context;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ReorderableTableLayout extends TableLayout {
     private boolean reorderingEnabled = false;
     private int draggedRowIndex = -1;
     private float lastY;
-    private List<View> originalRows;
+    private List<View> rows;
+    private List<Integer> reorderedIndices;
     private int rowHeight;
 
     public ReorderableTableLayout(Context context) {
@@ -47,7 +30,8 @@ public class ReorderableTableLayout extends TableLayout {
     }
 
     private void init() {
-        originalRows = new ArrayList<>();
+        rows = new ArrayList<>();
+        reorderedIndices = new ArrayList<>();
     }
 
     @Override
@@ -72,15 +56,31 @@ public class ReorderableTableLayout extends TableLayout {
     }
 
     @Override
+    public void addView(View child) {
+        super.addView(child);
+        reorderedIndices.add(reorderedIndices.size());
+    }
+
+    @Override
+    public void removeAllViews() {
+        super.removeAllViews();
+        reorderedIndices.clear();
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (!reorderingEnabled || draggedRowIndex == -1) {
             return super.onTouchEvent(event);
         }
 
+        float currentY = event.getY();
+        int targetIndex = getRowIndexAtY(currentY);
+        View child = getChildAt(targetIndex);
+        if(child != null)
+            getChildAt(targetIndex).callOnClick();
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
-                float currentY = event.getY();
-                int targetIndex = getRowIndexAtY(currentY);
                 if (targetIndex != -1 && targetIndex != draggedRowIndex) {
                     updateRowOrder(draggedRowIndex, targetIndex);
                     draggedRowIndex = targetIndex;
@@ -106,25 +106,27 @@ public class ReorderableTableLayout extends TableLayout {
     }
 
     private void saveOriginalOrder() {
-        originalRows.clear();
+        rows.clear();
         for (int i = 0; i < getChildCount(); i++) {
-            originalRows.add(getChildAt(i));
+            rows.add(getChildAt(i));
         }
     }
 
     private void updateRowOrder(int fromIndex, int toIndex) {
         if (fromIndex < toIndex) {
             for (int i = fromIndex; i < toIndex; i++) {
-                Collections.swap(originalRows, i, i + 1);
+                Collections.swap(rows, i, i + 1);
+                Collections.swap(reorderedIndices, i, i + 1);
             }
         } else {
             for (int i = fromIndex; i > toIndex; i--) {
-                Collections.swap(originalRows, i, i - 1);
+                Collections.swap(rows, i, i - 1);
+                Collections.swap(reorderedIndices, i, i - 1);
             }
         }
 
         removeAllViewsInLayout();
-        for (View view : originalRows) {
+        for (View view : rows) {
             addViewInLayout(view, -1, view.getLayoutParams(), true);
         }
         requestLayout();
@@ -136,10 +138,6 @@ public class ReorderableTableLayout extends TableLayout {
     }
 
     public List<Integer> getReorderedIndexes() {
-        List<Integer> reorderedIndexes = new ArrayList<>();
-        for (View view : originalRows) {
-            reorderedIndexes.add(indexOfChild(view));
-        }
-        return reorderedIndexes;
+        return reorderedIndices;
     }
 }

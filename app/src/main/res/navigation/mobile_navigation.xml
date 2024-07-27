@@ -9,27 +9,72 @@
         android:id="@+id/navigation_scouting"
         android:name="com.astatin3.scoutingapp2025.ui.scouting.scoutingFragment"
         android:label="@string/title_scouting"
-        tools:layout="@layout/fragment_scouting" >
+        tools:layout="@layout/fragment_scouting">
+        <action
+            android:id="@+id/action_navigation_scouting_to_navigation_match_scouting"
+            app:destination="@id/navigation_match_scouting" />
+        <action
+            android:id="@+id/action_navigation_scouting_to_navigation_team_selector"
+            app:destination="@id/navigation_team_selector" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_match_scouting"
+        android:name="com.astatin3.scoutingapp2025.ui.scouting.matchScoutDataEnterFragment"
+        tools:layout="@layout/fragment_match_scout_data_enter">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_team_selector"
+        android:name="com.astatin3.scoutingapp2025.ui.TeamSelectorFragment"
+        tools:layout="@layout/fragment_team_selector">
+        <action
+            android:id="@+id/action_navigation_team_selector_to_navigation_pit_scouting"
+            app:destination="@id/navigation_pit_scouting" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_pit_scouting"
+        android:name="com.astatin3.scoutingapp2025.ui.scouting.pitScoutingFragment"
+        tools:layout="@layout/fragment_pit_scouting">
+    </fragment>
+
+
+
+
+
 
     <fragment
         android:id="@+id/navigation_data"
         android:name="com.astatin3.scoutingapp2025.ui.data.dataFragment"
         android:label="@string/title_data"
-        tools:layout="@layout/fragment_data" >
+        tools:layout="@layout/fragment_data">
     </fragment>
+
+
+
+
 
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.astatin3.scoutingapp2025.ui.settings.settingsFragment"
         android:label="@string/title_settings"
-        tools:layout="@layout/fragment_settings" >
+        tools:layout="@layout/fragment_settings">
     </fragment>
+
+
+
+
 
     <fragment
         android:id="@+id/navigation_transfer"
         android:name="com.astatin3.scoutingapp2025.ui.transfer.TransferFragment"
         android:label="@string/title_transfer"
-        tools:layout="@layout/fragment_transfer" />
+        tools:layout="@layout/fragment_transfer">
+    </fragment>
+
+
+
+
 
 </navigation>
