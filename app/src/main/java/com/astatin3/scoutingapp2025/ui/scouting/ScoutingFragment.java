@@ -2,6 +2,8 @@ package com.astatin3.scoutingapp2025.ui.scouting;
 
 import static androidx.navigation.fragment.FragmentKt.findNavController;
 
+import static com.astatin3.scoutingapp2025.utility.DataManager.event;
+
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,13 +18,11 @@ import androidx.fragment.app.Fragment;
 import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentScoutingBinding;
-import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 import com.astatin3.scoutingapp2025.ui.TeamSelectorFragment;
-import com.astatin3.scoutingapp2025.ui.data.sentimentAnalysis;
-import com.astatin3.scoutingapp2025.utility.fileEditor;
+import com.astatin3.scoutingapp2025.utility.DataManager;
 
-public class scoutingFragment extends Fragment {
+public class ScoutingFragment extends Fragment {
 
     private FragmentScoutingBinding binding;
     private boolean is_main_page = true;
@@ -43,33 +43,26 @@ public class scoutingFragment extends Fragment {
             return binding.getRoot();
         }
 
-        frcEvent event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
+        DataManager.reload_event();
 
         if(event.matches.isEmpty())
             binding.matchScoutingButton.setVisibility(View.GONE);
 
         binding.matchScoutingButton.setOnClickListener(v -> {
-//            binding.buttons.setVisibility(View.GONE);
             findNavController(this).navigate(R.id.action_navigation_scouting_to_navigation_match_scouting);
-//            binding.init(binding, event);
-            is_main_page = false;
         });
 
         binding.pitScoutingButton.setOnClickListener(v -> {
-//            binding.pitScoutingView.setVisibility(View.VISIBLE);
-//            binding.buttons.setVisibility(View.GONE);
-            //            binding.pitScoutArea.setVisibility(View.VISIBLE);
-//            binding.pitScoutingView.init(binding, event);
-
+            TeamSelectorFragment.setEvent(event);
+            TeamSelectorFragment.setPits_mode(true);
             TeamSelectorFragment.setOnSelect(new TeamSelectorFragment.onTeamSelected() {
                 @Override
                 public void onSelect(TeamSelectorFragment self, frcTeam team) {
-                    findNavController(self).navigate(R.id.action_navigation_scouting_to_navigation_team_selector);
+                    PitScoutingFragment.setTeam(team);
+                    findNavController(self).navigate(R.id.action_navigation_team_selector_to_navigation_pit_scouting);
                 }
             });
             findNavController(this).navigate(R.id.action_navigation_scouting_to_navigation_team_selector);
-
-            is_main_page = false;
         });
 
         return binding.getRoot();

@@ -1,8 +1,9 @@
 package com.astatin3.scoutingapp2025.ui.data;
 
 
+import static androidx.navigation.fragment.FragmentKt.findNavController;
+
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 
 import android.view.View;
@@ -12,10 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.astatin3.scoutingapp2025.MainActivity;
 import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentDataBinding;
+import com.astatin3.scoutingapp2025.types.frcTeam;
+import com.astatin3.scoutingapp2025.ui.TeamSelectorFragment;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 
@@ -45,79 +47,36 @@ public class dataFragment extends Fragment {
             binding.fieldsButton.setVisibility(View.VISIBLE);
 
 
-            binding.matchTable.setVisibility(View.GONE);
             return root;
         }
 
         frcEvent event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
 
         binding.statusButton.setOnClickListener(v -> {
-            binding.buttons.setVisibility(View.GONE);
-            binding.statusView.setVisibility(View.VISIBLE);
-            binding.statusView.start(binding, event);
-            submenu = true;
+            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_status);
         });
 
         binding.teamsButton.setOnClickListener(v -> {
-            binding.buttons.setVisibility(View.GONE);
-            binding.teamsView.setVisibility(View.VISIBLE);
-            binding.teamsView.init(binding, event);
-            submenu = true;
+            TeamSelectorFragment.setEvent(event);
+            TeamSelectorFragment.setPits_mode(false);
+            TeamSelectorFragment.setOnSelect(new TeamSelectorFragment.onTeamSelected() {
+                @Override
+                public void onSelect(TeamSelectorFragment self, frcTeam team) {
+                    TeamsFragment.setTeam(team);
+                    findNavController(self).navigate(R.id.action_navigation_team_selector_to_navigation_data_teams);
+                }
+            });
+            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_team_selector);
         });
 
-
-
         binding.compileButton.setOnClickListener(v -> {
-//            binding.buttons.setVisibility(View.GONE);
-//            binding.teamsView.setVisibility(View.VISIBLE);
-//            binding.teamsView.init(binding, event);
-//            submenu = true;
-
+            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_compile);
         });
 
         binding.fieldsButton.setOnClickListener(v -> {
-            binding.buttons.setVisibility(View.GONE);
-            binding.fieldsView.setVisibility(View.VISIBLE);
-            binding.fieldsView.init(binding);
-            submenu = true;
+            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_fields_chooser);
         });
-
-        show_ui();
 
         return root;
-    }
-
-    public void show_ui(){
-        binding.buttons.setVisibility(View.VISIBLE);
-        binding.statusView.setVisibility(View.GONE);
-        binding.teamsView.setVisibility(View.GONE);
-        binding.fieldsView.setVisibility(View.GONE);
-        submenu = false;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if(getView() == null){
-            return;
-        }
-
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK && submenu){
-                    // handle back button's click listener
-
-                    show_ui();
-
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 }

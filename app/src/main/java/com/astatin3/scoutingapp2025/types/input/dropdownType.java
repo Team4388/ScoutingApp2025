@@ -11,11 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.data.intType;
-import com.astatin3.scoutingapp2025.types.data.stringType;
-import com.astatin3.scoutingapp2025.ui.data.sentimentAnalysis;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 import com.github.mikephil.charting.charts.LineChart;
@@ -27,7 +24,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;

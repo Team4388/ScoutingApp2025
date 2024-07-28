@@ -1,15 +1,13 @@
-package com.astatin3.scoutingapp2025.ui.data;
+package com.astatin3.scoutingapp2025.utility;
 
 import android.content.Context;
-
-import com.astatin3.scoutingapp2025.utility.AlertManager;
 
 import org.tensorflow.lite.support.label.Category;
 import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
 
 import java.util.List;
 
-public class sentimentAnalysis {
+public class SentimentAnalysis {
     private static NLClassifier textClassifier;
 
     public static void init(Context context){

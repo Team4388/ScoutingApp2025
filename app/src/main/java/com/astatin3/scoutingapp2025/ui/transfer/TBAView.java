@@ -2,8 +2,10 @@ package com.astatin3.scoutingapp2025.ui.transfer;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -12,6 +14,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.astatin3.scoutingapp2025.databinding.FragmentDataCompileBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentTransferTbaBinding;
 import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.RequestTask;
 import com.astatin3.scoutingapp2025.types.frcEvent;
@@ -33,21 +41,19 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
-public class TBAView extends ScrollView {
+public class TBAView extends Fragment {
     private final String TBAAddress = "https://www.thebluealliance.com/api/v3/";
     private final String TBAHeader = "X-TBA-Auth-Key: tjEKSZojAU2pgbs2mBt06SKyOakVhLutj3NwuxLTxPKQPLih11aCIwRIVFXKzY4e";
 
     private android.widget.TableLayout Table;
+    private FragmentTransferTbaBinding binding;
 
-    public TBAView(Context context) {
-        super(context);
-    }
+    private static final int year = 2024;
 
-    public TBAView(Context context, AttributeSet attributeSet){
-        super(context, attributeSet);
-    }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
-    public void start(FragmentTransferBinding binding, String yearStr) {
+        binding = FragmentTransferTbaBinding.inflate(inflater, container, false);
 
         Table = binding.matchTable;
 
@@ -62,8 +68,9 @@ public class TBAView extends ScrollView {
             eventTable(s);
             return null;
         });
-        rq.execute(TBAAddress + "events/"+yearStr, TBAHeader);
+        rq.execute(TBAAddress + "events/"+year, TBAHeader);
 
+        return binding.getRoot();
     }
 
     private void addTableText(TableRow tr, String textStr){
@@ -92,8 +99,8 @@ public class TBAView extends ScrollView {
             for(int i=0;i<data.length();i++){
                 TableRow tr = new TableRow(getContext());
                 TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
-                        LayoutParams.WRAP_CONTENT,
-                        LayoutParams.WRAP_CONTENT
+                        TableRow.LayoutParams.WRAP_CONTENT,
+                        TableRow.LayoutParams.WRAP_CONTENT
                 );
                 rowParams.setMargins(20,20,20,20);
                 tr.setLayoutParams(rowParams);
@@ -209,7 +216,7 @@ public class TBAView extends ScrollView {
 
             // Event code at top
             TextView tv = new TextView(getContext());
-            tv.setLayoutParams(new LayoutParams(
+            tv.setLayoutParams(new TableRow.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
@@ -219,7 +226,7 @@ public class TBAView extends ScrollView {
 
             // Event Name
             tv = new TextView(getContext());
-            tv.setLayoutParams(new LayoutParams(
+            tv.setLayoutParams(new TableRow.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
@@ -234,7 +241,7 @@ public class TBAView extends ScrollView {
             Button btn = new Button(getContext());
             btn.setText("Save");
             btn.setTextSize(18);
-            btn.setLayoutParams(new LayoutParams(
+            btn.setLayoutParams(new TableRow.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
@@ -245,7 +252,7 @@ public class TBAView extends ScrollView {
 
             if(teamData.length() == 0){
                 tv = new TextView(getContext());
-                tv.setLayoutParams(new LayoutParams(
+                tv.setLayoutParams(new TableRow.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
@@ -255,7 +262,7 @@ public class TBAView extends ScrollView {
                 Table.addView(tv);
 
                 tv = new TextView(getContext());
-                tv.setLayoutParams(new LayoutParams(
+                tv.setLayoutParams(new TableRow.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
@@ -268,7 +275,7 @@ public class TBAView extends ScrollView {
                 return;
             }else if(matchData.length() == 0){
                 tv = new TextView(getContext());
-                tv.setLayoutParams(new LayoutParams(
+                tv.setLayoutParams(new TableRow.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
@@ -278,7 +285,7 @@ public class TBAView extends ScrollView {
                 Table.addView(tv);
 
                 tv = new TextView(getContext());
-                tv.setLayoutParams(new LayoutParams(
+                tv.setLayoutParams(new TableRow.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
@@ -291,7 +298,7 @@ public class TBAView extends ScrollView {
 
 
             tv = new TextView(getContext());
-            tv.setLayoutParams(new LayoutParams(
+            tv.setLayoutParams(new TableRow.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
@@ -352,7 +359,7 @@ public class TBAView extends ScrollView {
 
 
             tv = new TextView(getContext());
-            tv.setLayoutParams(new LayoutParams(
+            tv.setLayoutParams(new TableRow.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));

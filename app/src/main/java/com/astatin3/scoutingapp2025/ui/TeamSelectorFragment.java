@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
-import com.astatin3.scoutingapp2025.databinding.FragmentMatchScoutDataEnterBinding;
 import com.astatin3.scoutingapp2025.databinding.FragmentTeamSelectorBinding;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcTeam;
@@ -27,7 +26,17 @@ public class TeamSelectorFragment extends Fragment {
     private FragmentTeamSelectorBinding binding;
 
     private String evcode;
-    private frcEvent event;
+
+    private static frcEvent event;
+    public static void setEvent(frcEvent tmpevent){
+        event = tmpevent;
+    }
+
+    private static boolean pits_mode;
+    public static void setPits_mode(boolean mode){
+        pits_mode = mode;
+    }
+
     private static onTeamSelected onSelect = new onTeamSelected() {@Override public void onSelect(TeamSelectorFragment self, frcTeam team) {}};
 
     public interface onTeamSelected {
@@ -96,7 +105,7 @@ public class TeamSelectorFragment extends Fragment {
             tr.setPadding(20,20,20,20);
             table.addView(tr);
 
-            if(fileEditor.fileExist(evcode + "-" + team.teamNumber + ".pitscoutdata")){
+            if(!pits_mode || fileEditor.fileExist(evcode + "-" + team.teamNumber + ".pitscoutdata")){
                 tr.setBackgroundColor(0x3000FF00);
             }else{
                 tr.setBackgroundColor(0x30FF0000);

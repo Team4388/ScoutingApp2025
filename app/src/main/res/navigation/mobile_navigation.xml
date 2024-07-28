@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_scouting"
-        android:name="com.astatin3.scoutingapp2025.ui.scouting.scoutingFragment"
+        android:name="com.astatin3.scoutingapp2025.ui.scouting.ScoutingFragment"
         android:label="@string/title_scouting"
         tools:layout="@layout/fragment_scouting">
         <action
@@ -20,8 +20,8 @@
 
     <fragment
         android:id="@+id/navigation_match_scouting"
-        android:name="com.astatin3.scoutingapp2025.ui.scouting.matchScoutDataEnterFragment"
-        tools:layout="@layout/fragment_match_scout_data_enter">
+        android:name="com.astatin3.scoutingapp2025.ui.scouting.MatchScoutingFragment"
+        tools:layout="@layout/fragment_match_scouting">
     </fragment>
 
     <fragment
@@ -31,13 +31,15 @@
         <action
             android:id="@+id/action_navigation_team_selector_to_navigation_pit_scouting"
             app:destination="@id/navigation_pit_scouting" />
+        <action
+            android:id="@+id/action_navigation_team_selector_to_navigation_data_teams"
+            app:destination="@id/navigation_data_teams" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_pit_scouting"
-        android:name="com.astatin3.scoutingapp2025.ui.scouting.pitScoutingFragment"
-        tools:layout="@layout/fragment_pit_scouting">
-    </fragment>
+        android:name="com.astatin3.scoutingapp2025.ui.scouting.PitScoutingFragment"
+        tools:layout="@layout/fragment_pit_scouting"/>
 
 
 
@@ -49,17 +51,51 @@
         android:name="com.astatin3.scoutingapp2025.ui.data.dataFragment"
         android:label="@string/title_data"
         tools:layout="@layout/fragment_data">
+        <action
+            android:id="@+id/action_navigation_data_to_navigation_data_status"
+            app:destination="@id/navigation_data_status" />
+        <action
+            android:id="@+id/action_navigation_data_to_navigation_team_selector"
+            app:destination="@id/navigation_team_selector" />
+        <action
+            android:id="@+id/action_navigation_data_to_navigation_data_compile"
+            app:destination="@id/navigation_data_compile" />
+        <action
+            android:id="@+id/action_navigation_data_to_navigation_data_fields_chooser"
+            app:destination="@id/navigation_data_fields_chooser" />
     </fragment>
 
-
-
-
+    <fragment
+        android:id="@+id/navigation_data_status"
+        android:name="com.astatin3.scoutingapp2025.ui.data.StatusFragment"
+        tools:layout="@layout/fragment_data_status">
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_settings"
-        android:name="com.astatin3.scoutingapp2025.ui.settings.settingsFragment"
-        android:label="@string/title_settings"
-        tools:layout="@layout/fragment_settings">
+        android:id="@+id/navigation_data_teams"
+        android:name="com.astatin3.scoutingapp2025.ui.data.TeamsFragment"
+        tools:layout="@layout/fragment_data_teams">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_data_compile"
+        android:name="com.astatin3.scoutingapp2025.ui.data.CompileFragment"
+        tools:layout="@layout/fragment_data_compile">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_data_fields_chooser"
+        android:name="com.astatin3.scoutingapp2025.ui.data.FieldsChooserFragment"
+        tools:layout="@layout/fragment_data_fields_chooser">
+        <action
+            android:id="@+id/action_navigation_data_fields_chooser_to_navigation_data_fields"
+            app:destination="@id/navigation_data_fields" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_data_fields"
+        android:name="com.astatin3.scoutingapp2025.ui.data.FieldsFragment"
+        tools:layout="@layout/fragment_data_fields">
     </fragment>
 
 
@@ -71,9 +107,83 @@
         android:name="com.astatin3.scoutingapp2025.ui.transfer.TransferFragment"
         android:label="@string/title_transfer"
         tools:layout="@layout/fragment_transfer">
+        <action
+            android:id="@+id/action_navigation_transfer_to_navigation_tba"
+            app:destination="@id/navigation_tba" />
+        <action
+            android:id="@+id/action_navigation_transfer_to_navigation_file_selector"
+            app:destination="@id/navigation_file_selector" />
+        <action
+            android:id="@+id/action_navigation_transfer_to_navigation_transfer_selector"
+            app:destination="@id/navigation_transfer_selector" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_file_selector"
+        android:name="com.astatin3.scoutingapp2025.ui.transfer.FileSelectorFragment"
+        tools:layout="@layout/fragment_transfer_file_selector">
+        <action
+            android:id="@+id/action_navigation_file_selector_to_navigation_transfer_selector"
+            app:destination="@id/navigation_transfer_selector" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_transfer_selector"
+        android:name="com.astatin3.scoutingapp2025.ui.transfer.TransferSelector"
+        tools:layout="@layout/fragment_transfer_selector">
+        <action
+            android:id="@+id/action_navigation_transfer_selector_to_navigation_code_generator"
+            app:destination="@id/navigation_code_generator" />
+        <action
+            android:id="@+id/action_navigation_transfer_selector_to_navigation_bluetooth_sender"
+            app:destination="@id/navigation_bluetooth_sender" />
+        <action
+            android:id="@+id/action_navigation_transfer_selector_to_navigation_code_scanner"
+            app:destination="@id/navigation_code_scanner" />
+        <action
+            android:id="@+id/action_navigation_transfer_selector_to_navigation_bluetooth_receiver"
+            app:destination="@id/navigation_bluetooth_receiver" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_code_generator"
+        android:name="com.astatin3.scoutingapp2025.ui.transfer.codes.CodeGeneratorView"
+        tools:layout="@layout/fragment_transfer_code_sender">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_code_scanner"
+        android:name="com.astatin3.scoutingapp2025.ui.transfer.codes.CodeScannerView"
+        tools:layout="@layout/fragment_transfer_code_receiver">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_bluetooth_sender"
+        android:name="com.astatin3.scoutingapp2025.ui.transfer.bluetooth.BluetoothSenderFragment"
+        tools:layout="@layout/fragment_transfer_bluetooth_sender">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_bluetooth_receiver"
+        android:name="com.astatin3.scoutingapp2025.ui.transfer.bluetooth.BluetoothReceiverFragment"
+        tools:layout="@layout/fragment_transfer_bluetooth_receiver">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_tba"
+        android:name="com.astatin3.scoutingapp2025.ui.transfer.TBAView"
+        tools:layout="@layout/fragment_transfer_tba">
     </fragment>
 
 
+
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.astatin3.scoutingapp2025.ui.settings.settingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings">
+    </fragment>
 
 
 

@@ -1,44 +1,34 @@
 package com.astatin3.scoutingapp2025.ui.transfer.bluetooth;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.os.Looper;
-import android.util.AttributeSet;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.astatin3.scoutingapp2025.MainActivity;
-import com.astatin3.scoutingapp2025.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.astatin3.scoutingapp2025.databinding.FragmentTransferBluetoothReceiverBinding;
 import com.astatin3.scoutingapp2025.types.file;
 import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-public class BluetoothReceiverView extends LinearLayout {
+public class BluetoothReceiverFragment extends Fragment {
     private BluetoothReceiver bluetoothReceiver;
     private Button startListeningButton;
     private Button stopListeningButton;
     private TextView statusTextView;
 
-    public BluetoothReceiverView(Context context) {
-        super(context);
-//        init(context);
-    }
 
-    public BluetoothReceiverView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-//        init(context);
-    }
 
 //    private void alert(String title, String content) {
 //        AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
@@ -51,8 +41,13 @@ public class BluetoothReceiverView extends LinearLayout {
 //
 //    }
 
-    public void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.view_bluetooth_receiver, this, true);
+    FragmentTransferBluetoothReceiverBinding binding;
+
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                         @Nullable Bundle savedInstanceState) {
+
+        binding = FragmentTransferBluetoothReceiverBinding.inflate(inflater, container, false);
+
 
 //        bluetoothReceiver = new BluetoothReceiver(context);
 
@@ -68,32 +63,28 @@ public class BluetoothReceiverView extends LinearLayout {
             }
         });
 
-        startListeningButton = findViewById(R.id.startListeningButton);
-        stopListeningButton = findViewById(R.id.stopListeningButton);
-        statusTextView = findViewById(R.id.statusTextView);
+        startListeningButton = binding.startListeningButton;
+        stopListeningButton = binding.stopListeningButton;
+        statusTextView = binding.statusTextView;
 
         if (!bluetoothReceiver.isBluetoothSupported()) {
             AlertManager.error("Bluetooth is not supported on this device");
-            return;
+            return binding.getRoot();
         }
 
         if (!bluetoothReceiver.isBluetoothEnabled()) {
             AlertManager.error("Please enable Bluetooth");
         }
 
-        startListeningButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startListening();
-            }
+        startListeningButton.setOnClickListener(v -> {
+            startListening();
         });
 
-        stopListeningButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopListening();
-            }
+        stopListeningButton.setOnClickListener(v -> {
+            stopListening();
         });
+
+        return binding.getRoot();
     }
 
     private void startListening() {
@@ -162,6 +153,7 @@ public class BluetoothReceiverView extends LinearLayout {
     }
 
 
+    @Override
     public void onDestroy() {
         if (bluetoothReceiver != null)
             try {
@@ -169,5 +161,6 @@ public class BluetoothReceiverView extends LinearLayout {
             } catch (IOException e) {
                 AlertManager.error(e);
             }
+        super.onDestroy();
     }
 }

@@ -21,7 +21,7 @@ Ridgebotics 2025 scouting app in Android
 #### Data Analysis:
 - Make a word cloud for the compiled mode of text input type
 #### Functionality:
-- Make everything use Fragments instead of views that toggle visibility
+- Fix navigation crashes.
 - Make pit and match data field builder UIs. I don't want to have to keep editing a variable
 
 
@@ -32,6 +32,7 @@ Ridgebotics 2025 scouting app in Android
 - Add "history" view type to the teams view menu.
 - Sentiment analysis of text input type
 #### Functionality:
+- Make everything use Fragments instead of views that toggle visibility
 - Make the file browser UI
 - Bluetooth data sync
 - Formalize error messages & stacktraces

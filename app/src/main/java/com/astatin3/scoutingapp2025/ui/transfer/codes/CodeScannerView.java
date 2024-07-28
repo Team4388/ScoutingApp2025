@@ -6,13 +6,18 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Surface;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
 import androidx.camera.core.AspectRatio;
 import androidx.camera.core.CameraSelector;
@@ -23,9 +28,11 @@ import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentTransferCodeReceiverBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentTransferCodeSenderBinding;
 import com.astatin3.scoutingapp2025.types.file;
 import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
@@ -35,17 +42,16 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.zip.DataFormatException;
 
 //public class scannerView extends androidx.appcompat.widget.AppCompatImageView {
-public class scannerView extends ConstraintLayout {
-    private qrOverlayView qrOverlayView;
+public class CodeScannerView extends Fragment {
+    private CodeOverlayView CodeOverlayView;
     private Handler uiHandler;
+
 
     private void alert(String title, String content) {
         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -56,22 +62,14 @@ public class scannerView extends ConstraintLayout {
         alert.create().show();
     }
 
-    public scannerView(Context context) {
-        super(context);
-    }
-
-    public scannerView(Context context, AttributeSet attributeSet){
-        super(context, attributeSet);
-    }
 
     private float scale = 0;
     private final int downscale = 1;
-    private FragmentTransferBinding binding;
     private LifecycleOwner lifecycle;
 
     private void setImage(Bitmap bmp){
         if(scale == 0) {
-            scale = ((float) getWidth() / bmp.getWidth()) * ((float) 16 / 9);
+            scale = ((float) binding.container.getWidth() / bmp.getWidth()) * ((float) 16 / 9);
             binding.scannerImage.setTranslationX(0);
             binding.scannerImage.setTranslationY(0);
         }
@@ -115,7 +113,7 @@ public class scannerView extends ConstraintLayout {
     }
     public void scanQRCode(Bitmap bitmap) {
 
-        codeScanTask async = new codeScanTask();
+        CodeScanTask async = new CodeScanTask();
         async.setImage(bitmap);
         async.onResult(data -> {
             if(data != null){
@@ -136,12 +134,23 @@ public class scannerView extends ConstraintLayout {
 
 //        return contents;
     }
+
+
+
+
+
+
     private int numColors = 3;
     private int thresholdOffset = 128;
     private int brightness = 128;
-    public void start(FragmentTransferBinding binding, LifecycleOwner lifecycle){
-        this.binding = binding;
-        this.lifecycle = lifecycle;
+
+    private FragmentTransferCodeReceiverBinding binding;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                     @Nullable Bundle savedInstanceState) {
+
+        binding = FragmentTransferCodeReceiverBinding.inflate(inflater, container, false);
+
+        this.lifecycle = getViewLifecycleOwner();
 
 
 
@@ -192,17 +201,17 @@ public class scannerView extends ConstraintLayout {
 
         recalcMap();
 
-        qrOverlayView = new qrOverlayView(getContext());
-        qrOverlayView.bringToFront();
+        CodeOverlayView = new CodeOverlayView(getContext());
+        CodeOverlayView.bringToFront();
         ConstraintLayout.LayoutParams pointsOverlayViewParams = new ConstraintLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT
+                ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT
         );
 
-        qrOverlayView.setLayoutParams(pointsOverlayViewParams);
-        this.addView(qrOverlayView);
+        CodeOverlayView.setLayoutParams(pointsOverlayViewParams);
+        binding.container.addView(CodeOverlayView);
 
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture
-                = ProcessCameraProvider.getInstance(this.getContext());
+                = ProcessCameraProvider.getInstance(getContext());
 
         cameraProviderFuture.addListener(() -> {
             try {
@@ -212,7 +221,9 @@ public class scannerView extends ConstraintLayout {
                 // No errors need to be handled for this Future.
                 // This should never be reached.
             }
-        }, ContextCompat.getMainExecutor(this.getContext()));
+        }, ContextCompat.getMainExecutor(getContext()));
+
+        return binding.getRoot();
     }
 
     void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
@@ -295,7 +306,7 @@ public class scannerView extends ConstraintLayout {
 
         barColors[prevQrIndex] = 2;
         barColors[qrIndex] = 1;
-        qrOverlayView.setBar(barColors);
+        CodeOverlayView.setBar(barColors);
 
         if(updated && qrScannedCount >= qrCount){
 

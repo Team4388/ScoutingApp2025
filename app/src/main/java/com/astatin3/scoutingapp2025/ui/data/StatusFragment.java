@@ -1,29 +1,42 @@
 package com.astatin3.scoutingapp2025.ui.data;
 
-import android.content.Context;
-import android.util.AttributeSet;
+import static com.astatin3.scoutingapp2025.utility.DataManager.event;
+
+import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-import com.astatin3.scoutingapp2025.databinding.FragmentDataBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentDataStatusBinding;
+import com.astatin3.scoutingapp2025.utility.DataManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcMatch;
 
 import java.util.Arrays;
 
-public class statusView extends ScrollView {
-    public statusView(@NonNull Context context) {
-        super(context);
-    }
-    public statusView(Context context, AttributeSet attributeSet){
-        super(context, attributeSet);
+public class StatusFragment extends Fragment {
+    FragmentDataStatusBinding binding;
+
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        binding = FragmentDataStatusBinding.inflate(inflater, container, false);
+
+        DataManager.reload_event();
+        binding.matchTable.removeAllViews();
+        binding.matchTable.setStretchAllColumns(true);
+        add_pit_scouting(event);
+        add_match_scouting(event);
+
+        return binding.getRoot();
     }
     public static int color_found = 0x7f00ff00;
     public static int color_not_found = 0x7f7f0000;
@@ -34,16 +47,10 @@ public class statusView extends ScrollView {
         text.setText(textStr);
         tr.addView(text);
     }
-    public void start(FragmentDataBinding binding, frcEvent event) {
-        binding.matchTable.removeAllViews();
-        binding.matchTable.setStretchAllColumns(true);
-        add_pit_scouting(binding, event);
-        add_match_scouting(binding, event);
-    }
 
-    public void add_pit_scouting(FragmentDataBinding binding, frcEvent event){
+    public void add_pit_scouting(frcEvent event){
         TextView tv = new TextView(getContext());
-        tv.setLayoutParams(new LayoutParams(
+        tv.setLayoutParams(new TableRow.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
@@ -88,10 +95,10 @@ public class statusView extends ScrollView {
     }
 
 
-    public void add_match_scouting(FragmentDataBinding binding, frcEvent event){
+    public void add_match_scouting(frcEvent event){
 
         TextView tv = new TextView(getContext());
-        tv.setLayoutParams(new LayoutParams(
+        tv.setLayoutParams(new TableRow.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));

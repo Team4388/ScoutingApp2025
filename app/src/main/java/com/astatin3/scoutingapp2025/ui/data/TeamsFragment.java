@@ -1,30 +1,33 @@
 package com.astatin3.scoutingapp2025.ui.data;
 
-import android.content.Context;
-import android.util.AttributeSet;
+import static com.astatin3.scoutingapp2025.utility.DataManager.evcode;
+import static com.astatin3.scoutingapp2025.utility.DataManager.match_latest_values;
+import static com.astatin3.scoutingapp2025.utility.DataManager.match_transferValues;
+import static com.astatin3.scoutingapp2025.utility.DataManager.match_values;
+import static com.astatin3.scoutingapp2025.utility.DataManager.pit_latest_values;
+import static com.astatin3.scoutingapp2025.utility.DataManager.pit_transferValues;
+import static com.astatin3.scoutingapp2025.utility.DataManager.pit_values;
+
+import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
+import com.astatin3.scoutingapp2025.databinding.FragmentDataTeamsBinding;
 import com.astatin3.scoutingapp2025.scoutingData.ScoutingDataWriter;
-import com.astatin3.scoutingapp2025.scoutingData.fields;
-import com.astatin3.scoutingapp2025.scoutingData.transfer.transferType;
 import com.astatin3.scoutingapp2025.types.data.dataType;
-import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcTeam;
-import com.astatin3.scoutingapp2025.types.input.inputType;
-import com.astatin3.scoutingapp2025.utility.AlertManager;
+import com.astatin3.scoutingapp2025.utility.DataManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.google.android.material.divider.MaterialDivider;
 import com.skydoves.powerspinner.IconSpinnerAdapter;
@@ -34,102 +37,39 @@ import com.skydoves.powerspinner.PowerSpinnerView;
 import com.skydoves.powerspinner.SpinnerGravity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class teamsView extends ConstraintLayout {
-    public teamsView(@NonNull Context context) {
-        super(context);
-    }
-    public teamsView(Context context, AttributeSet attributeSet){
-        super(context, attributeSet);
-    }
+public class TeamsFragment extends Fragment {
+    FragmentDataTeamsBinding binding;
 
-    com.astatin3.scoutingapp2025.databinding.FragmentDataBinding binding;
+    private static frcTeam team;
+    public static void setTeam(frcTeam tmpteam){
+        team = tmpteam;
+    }
 
     private static final int background_color = 0x5000ff00;
     private static final int unsaved_background_color = 0x2000ff00;
 
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
-    String evcode;
-    frcEvent event;
-
-    inputType[][] match_values;
-    inputType[] latest_match_values;
-    transferType[][] match_transferValues;
-    inputType[][] pit_values;
-    inputType[] latest_pit_values;
-    transferType[][] pit_transferValues;
-
-    public void init(com.astatin3.scoutingapp2025.databinding.FragmentDataBinding binding, frcEvent event){
-        this.binding = binding;
-        this.evcode = event.eventCode;
-        this.event = event;
-
-
-        match_values = fields.load(fields.matchFieldsFilename);
-        latest_match_values = match_values[match_values.length-1];
-        match_transferValues = transferType.get_transfer_values(match_values);
-        pit_values = fields.load(fields.pitsFieldsFilename);
-        latest_pit_values = pit_values[pit_values.length-1];
-        pit_transferValues = transferType.get_transfer_values(pit_values);
-
+        binding = FragmentDataTeamsBinding.inflate(inflater, container, false);
 
         binding.teamsArea.removeAllViews();
+
+        DataManager.reload_match_fields();
+        DataManager.reload_pit_fields();
 
         TableLayout table = new TableLayout(getContext());
         table.setStretchAllColumns(true);
         binding.teamsArea.addView(table);
 
-//        binding.searchTable.addView(table);
+        loadTeam(latestSettings.settings.get_data_view_mode());
 
-        int[] teams = new int[event.teams.size()];
-
-        for(int i = 0 ; i < event.teams.size(); i++){
-            teams[i] = event.teams.get(i).teamNumber;
-        }
-
-        Arrays.sort(teams);
-
-        for(int i = 0; i < event.teams.size(); i++){
-            frcTeam team = null;
-            for(int a = 0 ; a < event.teams.size(); a++){
-                if(event.teams.get(a).teamNumber == teams[i]){
-                    team = event.teams.get(a);
-                    break;
-                }
-            }
-
-            TableRow tr = new TableRow(getContext());
-            TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
-                    FrameLayout.LayoutParams.WRAP_CONTENT,
-                    FrameLayout.LayoutParams.WRAP_CONTENT
-            );
-            rowParams.setMargins(20,20,20,20);
-            tr.setLayoutParams(rowParams);
-            tr.setPadding(20,20,20,20);
-            table.addView(tr);
-
-            tr.setBackgroundColor(background_color);
-
-            TextView tv = new TextView(getContext());
-            tv.setText(String.valueOf(team.teamNumber));
-            tv.setTextSize(20);
-            tr.addView(tv);
-
-            tv = new TextView(getContext());
-            tv.setText(team.teamName);
-            tv.setTextSize(16);
-            tr.addView(tv);
-
-            frcTeam finalTeam = team;
-            tr.setOnClickListener(v -> {
-                loadTeam(finalTeam, latestSettings.settings.get_data_view_mode());
-            });
-        }
+        return binding.getRoot();
     }
 
-    public void loadTeam(frcTeam team, int mode) {
+    public void loadTeam(int mode) {
         binding.teamsArea.removeAllViews();
 
         LinearLayout ll = new LinearLayout(getContext());
@@ -175,7 +115,7 @@ public class teamsView extends ConstraintLayout {
                                        IconSpinnerItem newItem) {
 
                 latestSettings.settings.set_data_view_mode(newIndex);
-                loadTeam(team, newIndex);
+                loadTeam(newIndex);
             }
         });
 
@@ -284,7 +224,7 @@ public class teamsView extends ConstraintLayout {
             ll.addView(tv);
 
 
-            latest_pit_values[a].add_individual_view(ll, psda.data.array[a]);
+            pit_latest_values[a].add_individual_view(ll, psda.data.array[a]);
         }
     }
 
@@ -376,7 +316,7 @@ public class teamsView extends ConstraintLayout {
                 ll.addView(tv);
 
 
-                latest_match_values[a].add_individual_view(ll, psda.data.array[a]);
+                match_latest_values[a].add_individual_view(ll, psda.data.array[a]);
             }
         }
     }
@@ -387,7 +327,7 @@ public class teamsView extends ConstraintLayout {
 
 
     public void add_compiled_views(LinearLayout ll, String[] files){
-        dataType[][] data = new dataType[latest_match_values.length][files.length];
+        dataType[][] data = new dataType[match_latest_values.length][files.length];
         for (int i = 0; i < files.length; i++) {
 
             ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
@@ -396,7 +336,7 @@ public class teamsView extends ConstraintLayout {
             }
         }
 
-        for(int i = 0; i < latest_match_values.length; i++){
+        for(int i = 0; i < match_latest_values.length; i++){
             TextView tv = new TextView(getContext());
             tv.setLayoutParams(new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -404,11 +344,11 @@ public class teamsView extends ConstraintLayout {
             ));
             tv.setPadding(0, 20, 0, 5);
             tv.setGravity(Gravity.CENTER_HORIZONTAL);
-            tv.setText(latest_match_values[i].name);
+            tv.setText(match_latest_values[i].name);
             tv.setTextSize(30);
             ll.addView(tv);
 
-            latest_match_values[i].add_compiled_view(ll, data[i]);
+            match_latest_values[i].add_compiled_view(ll, data[i]);
         }
     }
 
@@ -417,7 +357,7 @@ public class teamsView extends ConstraintLayout {
 
 
     public void add_history_views(LinearLayout ll, String[] files){
-        dataType[][] data = new dataType[latest_match_values.length][files.length];
+        dataType[][] data = new dataType[match_latest_values.length][files.length];
         for (int i = 0; i < files.length; i++) {
 
             ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
@@ -426,7 +366,7 @@ public class teamsView extends ConstraintLayout {
             }
         }
 
-        for(int i = 0; i < latest_match_values.length; i++){
+        for(int i = 0; i < match_latest_values.length; i++){
             TextView tv = new TextView(getContext());
             tv.setLayoutParams(new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -434,11 +374,11 @@ public class teamsView extends ConstraintLayout {
             ));
             tv.setPadding(0, 20, 0, 5);
             tv.setGravity(Gravity.CENTER_HORIZONTAL);
-            tv.setText(latest_match_values[i].name);
+            tv.setText(match_latest_values[i].name);
             tv.setTextSize(30);
             ll.addView(tv);
 
-            latest_match_values[i].add_history_view(ll, data[i]);
+            match_latest_values[i].add_history_view(ll, data[i]);
         }
     }
 }

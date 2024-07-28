@@ -1,8 +1,10 @@
 package com.astatin3.scoutingapp2025.ui.scouting;
 
-import android.content.Context;
+import static com.astatin3.scoutingapp2025.utility.DataManager.pit_latest_values;
+import static com.astatin3.scoutingapp2025.utility.DataManager.pit_transferValues;
+import static com.astatin3.scoutingapp2025.utility.DataManager.pit_values;
+
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,27 +12,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentPitScoutingBinding;
-import com.astatin3.scoutingapp2025.databinding.FragmentScoutingBinding;
-import com.astatin3.scoutingapp2025.databinding.FragmentTeamSelectorBinding;
 import com.astatin3.scoutingapp2025.scoutingData.ScoutingDataWriter;
-import com.astatin3.scoutingapp2025.scoutingData.fields;
-import com.astatin3.scoutingapp2025.scoutingData.transfer.transferType;
 import com.astatin3.scoutingapp2025.types.data.dataType;
-import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 import com.astatin3.scoutingapp2025.types.input.inputType;
 import com.astatin3.scoutingapp2025.utility.AutoSaveManager;
+import com.astatin3.scoutingapp2025.utility.DataManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 
 import java.util.ArrayList;
 import java.util.function.Function;
 
-public class pitScoutingFragment extends Fragment {
+public class PitScoutingFragment extends Fragment {
 
     FragmentPitScoutingBinding binding;
 
@@ -44,6 +41,9 @@ public class pitScoutingFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         binding = FragmentPitScoutingBinding.inflate(inflater, container, false);
+
+        username = latestSettings.settings.get_username();
+        DataManager.reload_pit_fields();
 
         loadTeam();
 
@@ -59,9 +59,6 @@ public class pitScoutingFragment extends Fragment {
     String username;
 
     TextView[] titles;
-    inputType[][] values;
-    inputType[] latest_values;
-    transferType[][] transferValues;
 
     AutoSaveManager asm = new AutoSaveManager(this::save);
 
@@ -71,13 +68,13 @@ public class pitScoutingFragment extends Fragment {
         edited = false;
         set_indicator_color(saved_color);
 
-        dataType[] types = new dataType[latest_values.length];
+        dataType[] types = new dataType[pit_latest_values.length];
 
-        for(int i = 0; i < latest_values.length; i++){
-            types[i] = latest_values[i].getViewValue();
+        for(int i = 0; i < pit_latest_values.length; i++){
+            types[i] = pit_latest_values[i].getViewValue();
         }
 
-        if(ScoutingDataWriter.save(values.length-1, username, filename, types))
+        if(ScoutingDataWriter.save(pit_values.length-1, username, filename, types))
             System.out.println("Saved!");
         else
             System.out.println("Error saving");
@@ -183,12 +180,12 @@ public class pitScoutingFragment extends Fragment {
             asm.stop();
         }
 
-        titles = new TextView[latest_values.length];
+        titles = new TextView[pit_latest_values.length];
 
-        for(int i = 0 ; i < latest_values.length; i++) {
+        for(int i = 0 ; i < pit_latest_values.length; i++) {
             TextView tv = new TextView(getContext());
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            tv.setText(latest_values[i].name);
+            tv.setText(pit_latest_values[i].name);
             tv.setTextSize(24);
             tv.setPadding(8,8,8,8);
             titles[i] = tv;
@@ -204,18 +201,18 @@ public class pitScoutingFragment extends Fragment {
 
                 asm.update();
 
-                if(!latest_values[fi].isBlank){
+                if(!pit_latest_values[fi].isBlank){
                     tv.setBackgroundColor(0xffff0000);
                     tv.setTextColor(0xff000000);
-                    latest_values[fi].nullify();
+                    pit_latest_values[fi].nullify();
                 }else{
                     tv.setBackgroundColor(0x00000000);
                     tv.setTextColor(default_text_color);
-                    latest_values[fi].setViewValue(latest_values[fi].default_value);
+                    pit_latest_values[fi].setViewValue(pit_latest_values[fi].default_value);
                 }
             });
 
-            View v = latest_values[i].createView(getContext(), new Function<dataType, Integer>() {
+            View v = pit_latest_values[i].createView(getContext(), new Function<dataType, Integer>() {
                 @Override
                 public Integer apply(dataType dataType) {
 //                    edited = true;
@@ -230,8 +227,8 @@ public class pitScoutingFragment extends Fragment {
     }
 
     public void default_fields(){
-        for(int i = 0; i < latest_values.length; i++){
-            inputType input = latest_values[i];
+        for(int i = 0; i < pit_latest_values.length; i++){
+            inputType input = pit_latest_values[i];
             input.setViewValue(input.default_value);
 
             titles[i].setBackgroundColor(0x00000000);
@@ -241,14 +238,14 @@ public class pitScoutingFragment extends Fragment {
 
     public void get_fields(){
 
-        ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, values, transferValues);
+        ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, pit_values, pit_transferValues);
         dataType[] types = psdr.data.array;
 
-        for(int i = 0; i < latest_values.length; i++){
+        for(int i = 0; i < pit_latest_values.length; i++){
 //            types[i] = latest_values[i].getViewValue();
-            latest_values[i].setViewValue(types[i]);
+            pit_latest_values[i].setViewValue(types[i]);
 
-            if(latest_values[i].isBlank){
+            if(pit_latest_values[i].isBlank){
                 titles[i].setBackgroundColor(0xffff0000);
                 titles[i].setTextColor(0xff000000);
             }else{

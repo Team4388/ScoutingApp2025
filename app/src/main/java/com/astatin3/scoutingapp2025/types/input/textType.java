@@ -14,8 +14,7 @@ import android.widget.TextView;
 
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.data.stringType;
-import com.astatin3.scoutingapp2025.ui.data.sentimentAnalysis;
-import com.astatin3.scoutingapp2025.utility.AlertManager;
+import com.astatin3.scoutingapp2025.utility.SentimentAnalysis;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 import com.github.mikephil.charting.charts.LineChart;
@@ -156,7 +155,7 @@ public class textType extends inputType {
 
         for (int i = 0; i < data.length; i++){
             if (!data[i].isNull()) {
-                sentimentAnalysis.analyse((String) data[i].get(), new sentimentAnalysis.resultCallback() {
+                SentimentAnalysis.analyse((String) data[i].get(), new SentimentAnalysis.resultCallback() {
                     @Override
                     public void onFinish(float sentiment) {
                         positive_mean += sentiment;
@@ -187,7 +186,7 @@ public class textType extends inputType {
 
             entries.add(
                     new Entry(i,
-                            sentimentAnalysis.analyse_sync(  (String) data[i].get()  )
+                            SentimentAnalysis.analyse_sync(  (String) data[i].get()  )
                     )
             );
         }

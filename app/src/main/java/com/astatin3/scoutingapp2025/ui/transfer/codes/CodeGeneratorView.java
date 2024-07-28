@@ -1,18 +1,26 @@
 package com.astatin3.scoutingapp2025.ui.transfer.codes;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
+import com.astatin3.scoutingapp2025.databinding.FragmentDataCompileBinding;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentTransferCodeSenderBinding;
 import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.google.zxing.BarcodeFormat;
@@ -27,8 +35,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 
-public class generatorView extends ConstraintLayout {
-    private FragmentTransferBinding binding;
+public class CodeGeneratorView extends Fragment {
     private ImageView qrImage;
     private SeekBar qrSpeedSlider;
     private SeekBar qrSizeSlider;
@@ -53,13 +60,47 @@ public class generatorView extends ConstraintLayout {
 
     private ArrayList<Bitmap> qrBitmaps;
 
-    public generatorView(Context context) {
-        super(context);
+    private FragmentTransferCodeSenderBinding binding;
+
+    private static byte[] data;
+    public static void setData(String data){
+        setData(data.getBytes(StandardCharsets.ISO_8859_1));
+    }
+    public static void setData(byte[] tmpdata){
+        data = tmpdata;
     }
 
-    public generatorView(Context context, AttributeSet attributeSet){
-        super(context, attributeSet);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        binding = FragmentTransferCodeSenderBinding.inflate(inflater, container, false);
+
+        qrImage = binding.qrImage;
+        qrSpeedSlider = binding.qrSpeedSlider;
+        qrSizeSlider = binding.qrSizeSlider;
+        qrIndexN = binding.qrIndexN;
+        qrIndexD = binding.qrIndexD;
+
+        String compressed = new String(fileEditor.blockCompress(data), StandardCharsets.ISO_8859_1);
+
+        if(compressed.isEmpty()){
+            AlertManager.alert("Error!", "Empty data!");
+            return binding.getRoot();
+        }
+
+        minQrSize = Math.round((float)compressed.length() / maxQrCount)+1;
+
+        qrSizeSlider.setMax(maxQrSize-minQrSize);
+        qrSpeedSlider.setMax((minQrSpeed-maxQrSpeed)*2);
+
+        qrSizeSlider.setProgress(minQrSize+qrSize);
+        qrSpeedSlider.setProgress(defaultQrDelay+5);
+
+        sendData(compressed);
+
+        return binding.getRoot();
     }
+
 
     private Bitmap generateQrCode(String contents) throws WriterException {
 
@@ -103,33 +144,6 @@ public class generatorView extends ConstraintLayout {
         return bitmap;
     }
 
-    public void start(FragmentTransferBinding binding, String inputData){
-        start(binding, inputData.getBytes(StandardCharsets.ISO_8859_1));
-    }
-    public void start(FragmentTransferBinding binding, byte[] inputData){
-        qrImage = binding.qrImage;
-        qrSpeedSlider = binding.qrSpeedSlider;
-        qrSizeSlider = binding.qrSizeSlider;
-        qrIndexN = binding.qrIndexN;
-        qrIndexD = binding.qrIndexD;
-
-        String compressed =  new String(fileEditor.blockCompress(inputData), StandardCharsets.ISO_8859_1);
-
-        if(compressed.isEmpty()){
-            AlertManager.alert("Error!", "Empty data!");
-            return;
-        }
-
-        minQrSize = Math.round((float)compressed.length() / maxQrCount)+1;
-
-        qrSizeSlider.setMax(maxQrSize-minQrSize);
-        qrSpeedSlider.setMax((minQrSpeed-maxQrSpeed)*2);
-
-        qrSizeSlider.setProgress(minQrSize+qrSize);
-        qrSpeedSlider.setProgress(defaultQrDelay+5);
-
-        sendData(compressed);
-    }
 
     private void sendData(String data){
 

@@ -3,7 +3,6 @@ package com.astatin3.scoutingapp2025.ui.transfer.codes;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
-import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
@@ -21,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class codeScanTask extends AsyncTask<String, String, String>{
+public class CodeScanTask extends AsyncTask<String, String, String>{
     private Function<String, String> resultFunction = null;
     private Bitmap image;
 

@@ -1,68 +1,53 @@
 package com.astatin3.scoutingapp2025.ui.data;
 
-import android.content.Context;
-import android.util.AttributeSet;
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-import com.astatin3.scoutingapp2025.databinding.FragmentDataBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentDataFieldsBinding;
 import com.astatin3.scoutingapp2025.scoutingData.fields;
 import com.astatin3.scoutingapp2025.types.input.inputType;
 
-import java.util.List;
+public class FieldsFragment extends Fragment {
+    FragmentDataFieldsBinding binding;
 
-public class fieldsView extends ConstraintLayout {
-    public fieldsView(@NonNull Context context) {
-        super(context);
+    private static String filename;
+    public static void set_filename(String tmpfilename){
+        filename = tmpfilename;
     }
-    public fieldsView(Context context, AttributeSet attributeSet){
-        super(context, attributeSet);
+
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentDataFieldsBinding.inflate(inflater, container, false);
+
+        load_field_menu();
+
+        return binding.getRoot();
     }
-    FragmentDataBinding binding;
-    String filename;
+
     private static final int background_color = 0x5000ff00;
     private static final int unfocused_background_color = 0x2000ff00;
 
     inputType[][] values;
 
-    public void init(FragmentDataBinding binding) {
-        this.binding = binding;
-
-        binding.fieldsSelectButtons.setVisibility(VISIBLE);
-        binding.addButton.setVisibility(GONE);
-        binding.fieldsArea.setReorderingEnabled(false);
-        binding.fieldsArea.removeAllViews();
-        binding.fieldsArea.setStretchAllColumns(true);
-        binding.fieldsSelectButtons.bringToFront();
-
-//        binding.fieldsArea.setStretchAllColumns(true);
-
-        binding.matchScoutingButton.setOnClickListener(v -> {
-            binding.fieldsSelectButtons.setVisibility(GONE);
-            binding.addButton.setVisibility(VISIBLE);
-            filename = fields.matchFieldsFilename;
-            load_field_menu();
-        });
-
-        binding.pitScoutingButton.setOnClickListener(v -> {
-            binding.fieldsSelectButtons.setVisibility(GONE);
-            binding.addButton.setVisibility(VISIBLE);
-            filename = fields.pitsFieldsFilename;
-            load_field_menu();
-        });
-
-    }
     private void load_field_menu() {
+
         values = fields.load(filename);
+
         binding.fieldsArea.bringToFront();
+        binding.fieldsArea.setStretchAllColumns(true);
         binding.fieldsArea.removeAllViews();
         binding.fieldsArea.setReorderingEnabled(false);
+
         if(values == null) return;
 
         for(int i = 0; i < values.length; i++){

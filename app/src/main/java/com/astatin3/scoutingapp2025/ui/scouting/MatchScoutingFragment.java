@@ -1,5 +1,8 @@
 package com.astatin3.scoutingapp2025.ui.scouting;
 
+import static com.astatin3.scoutingapp2025.utility.DataManager.evcode;
+import static com.astatin3.scoutingapp2025.utility.DataManager.event;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,32 +14,31 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
-import com.astatin3.scoutingapp2025.databinding.FragmentMatchScoutDataEnterBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentMatchScoutingBinding;
 import com.astatin3.scoutingapp2025.scoutingData.ScoutingDataWriter;
-import com.astatin3.scoutingapp2025.scoutingData.fields;
-import com.astatin3.scoutingapp2025.scoutingData.transfer.transferType;
 import com.astatin3.scoutingapp2025.types.data.dataType;
-import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcMatch;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 import com.astatin3.scoutingapp2025.types.input.inputType;
 import com.astatin3.scoutingapp2025.utility.AutoSaveManager;
+import com.astatin3.scoutingapp2025.utility.DataManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 
 import java.util.ArrayList;
 import java.util.function.Function;
 
-public class matchScoutDataEnterFragment extends Fragment {
+public class MatchScoutingFragment extends Fragment {
 
-    private FragmentMatchScoutDataEnterBinding binding;
+    private FragmentMatchScoutingBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentMatchScoutDataEnterBinding.inflate(inflater, container, false);
+        binding = FragmentMatchScoutingBinding.inflate(inflater, container, false);
+
+        DataManager.reload_match_fields();
 
         alliance_position = latestSettings.settings.get_alliance_pos();
-        evcode = event.eventCode;
         username = latestSettings.settings.get_username();
 
         binding.eventcode.setText(evcode);
@@ -48,7 +50,7 @@ public class matchScoutDataEnterFragment extends Fragment {
         binding.teamDescription.setVisibility(View.VISIBLE);
         binding.teamName.setVisibility(View.VISIBLE);
 
-        if(values == null || values.length == 0){
+        if(DataManager.match_values == null || DataManager.match_values.length == 0){
             TextView tv = new TextView(getContext());
             tv.setText("Failed to load fields.\nTry to either download or create match scouting fields.");
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -56,12 +58,7 @@ public class matchScoutDataEnterFragment extends Fragment {
             return binding.getRoot();
         }
 
-        values = fields.load(fields.matchFieldsFilename);
-        if(values == null){
-            return binding.getRoot();
-        }
-        latest_values = values[values.length-1];
-        transferValues = transferType.get_transfer_values(values);
+
 
 
         cur_match_num = latestSettings.settings.get_match_num();
@@ -98,18 +95,13 @@ public class matchScoutDataEnterFragment extends Fragment {
     private static final int saved_color = 0x6000ff00;
 
     String alliance_position;
-    String evcode;
     int cur_match_num;
-    frcEvent event;
     String username;
     String filename;
 
     boolean edited = false;
 
     TextView[] titles;
-    inputType[][] values;
-    inputType[] latest_values;
-    transferType[][] transferValues;
 
     AutoSaveManager asm = new AutoSaveManager(this::save);
 
@@ -158,19 +150,19 @@ public class matchScoutDataEnterFragment extends Fragment {
             asm.stop();
         }
 
-        titles = new TextView[latest_values.length];
+        titles = new TextView[DataManager.match_latest_values.length];
 
-        for(int i = 0 ; i < latest_values.length; i++) {
+        for(int i = 0 ; i < DataManager.match_latest_values.length; i++) {
             final TextView tv = new TextView(getContext());
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            tv.setText(latest_values[i].name);
+            tv.setText(DataManager.match_latest_values[i].name);
             tv.setPadding(8,8,8,8);
             tv.setTextSize(24);
             titles[i] = tv;
 
             default_text_color = tv.getCurrentTextColor();
 
-            final View v = latest_values[i].createView(getContext(), new Function<dataType, Integer>() {
+            final View v = DataManager.match_latest_values[i].createView(getContext(), new Function<dataType, Integer>() {
                 @Override
                 public Integer apply(dataType dataType) {
 //                    edited = true;
@@ -189,14 +181,14 @@ public class matchScoutDataEnterFragment extends Fragment {
 
                 asm.update();
 
-                if(!latest_values[fi].isBlank){
+                if(!DataManager.match_latest_values[fi].isBlank){
                     tv.setBackgroundColor(0xffff0000);
                     tv.setTextColor(0xff000000);
-                    latest_values[fi].nullify();
+                    DataManager.match_latest_values[fi].nullify();
                 }else{
                     tv.setBackgroundColor(0x00000000);
                     tv.setTextColor(default_text_color);
-                    latest_values[fi].setViewValue(latest_values[fi].default_value);
+                    DataManager.match_latest_values[fi].setViewValue(DataManager.match_latest_values[fi].default_value);
                 }
             });
 
@@ -293,8 +285,8 @@ public class matchScoutDataEnterFragment extends Fragment {
 
 
     public void default_fields(){
-        for(int i = 0; i < latest_values.length; i++){
-            inputType input = latest_values[i];
+        for(int i = 0; i < DataManager.match_latest_values.length; i++){
+            inputType input = DataManager.match_latest_values[i];
             input.setViewValue(input.default_value);
 
             titles[i].setBackgroundColor(0x00000000);
@@ -306,14 +298,14 @@ public class matchScoutDataEnterFragment extends Fragment {
 
     public void get_fields(){
 
-        ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, values, transferValues);
+        ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, DataManager.match_values, DataManager.match_transferValues);
         dataType[] types = psdr.data.array;
 
-        for(int i = 0; i < latest_values.length; i++){
+        for(int i = 0; i < DataManager.match_latest_values.length; i++){
 //            types[i] = latest_values[i].getViewValue();
-            latest_values[i].setViewValue(types[i]);
+            DataManager.match_latest_values[i].setViewValue(types[i]);
 
-            if(latest_values[i].isBlank){
+            if(DataManager.match_latest_values[i].isBlank){
                 titles[i].setBackgroundColor(0xffff0000);
                 titles[i].setTextColor(0xff000000);
             }else{
@@ -327,13 +319,13 @@ public class matchScoutDataEnterFragment extends Fragment {
 
     public void save_fields(){
 
-        dataType[] types = new dataType[latest_values.length];
+        dataType[] types = new dataType[DataManager.match_latest_values.length];
 
-        for(int i = 0; i < latest_values.length; i++){
-            types[i] = latest_values[i].getViewValue();
+        for(int i = 0; i < DataManager.match_latest_values.length; i++){
+            types[i] = DataManager.match_latest_values[i].getViewValue();
         }
 
-        if(ScoutingDataWriter.save(values.length-1, username, filename, types))
+        if(ScoutingDataWriter.save(DataManager.match_values.length-1, username, filename, types))
             System.out.println("Saved!");
         else
             System.out.println("Error saving");

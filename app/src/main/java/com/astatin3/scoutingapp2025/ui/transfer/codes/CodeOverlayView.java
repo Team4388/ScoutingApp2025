@@ -13,24 +13,24 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-public class qrOverlayView extends View {
+public class CodeOverlayView extends View {
 
         PointF[] points;
         int[] barColors;
         private Paint paint;
         private final int barHeight = 50;
 
-        public qrOverlayView(Context context) {
+        public CodeOverlayView(Context context) {
             super(context);
             init();
         }
 
-        public qrOverlayView(Context context, AttributeSet attrs) {
+        public CodeOverlayView(Context context, AttributeSet attrs) {
             super(context, attrs);
             init();
         }
 
-        public qrOverlayView(Context context, AttributeSet attrs, int defStyleAttr) {
+        public CodeOverlayView(Context context, AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
             init();
         }
