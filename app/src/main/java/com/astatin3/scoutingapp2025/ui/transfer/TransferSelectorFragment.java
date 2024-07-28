@@ -11,19 +11,19 @@ import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferSelectorBinding;
 
-public class TransferSelector extends Fragment {
+public class TransferSelectorFragment extends Fragment {
 
     // Declaring three blank funcs in one line lol
-    private static onSelect onselect  = new onSelect() {@Override public void onSelectCodes(TransferSelector self) {}@Override public void onSelectBluetooth(TransferSelector self) {} @Override public void onSelectWifi(TransferSelector self) {}};
+    private static onSelect onselect  = new onSelect() {@Override public void onSelectCodes(TransferSelectorFragment self) {}@Override public void onSelectBluetooth(TransferSelectorFragment self) {} @Override public void onSelectWifi(TransferSelectorFragment self) {}};
 
     public static void setOnSelect(onSelect tmp) {
         onselect = tmp;
     }
 
     public interface onSelect {
-        void onSelectCodes(TransferSelector self);
-        void onSelectBluetooth(TransferSelector self);
-        void onSelectWifi(TransferSelector self);
+        void onSelectCodes(TransferSelectorFragment self);
+        void onSelectBluetooth(TransferSelectorFragment self);
+        void onSelectWifi(TransferSelectorFragment self);
     }
 
     FragmentTransferSelectorBinding binding;

@@ -4,33 +4,19 @@ import static androidx.navigation.fragment.FragmentKt.findNavController;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
-import com.astatin3.scoutingapp2025.types.file;
 import com.astatin3.scoutingapp2025.ui.transfer.bluetooth.BluetoothSenderFragment;
 import com.astatin3.scoutingapp2025.ui.transfer.codes.CodeGeneratorView;
-import com.astatin3.scoutingapp2025.ui.transfer.codes.CodeOverlayView;
-import com.astatin3.scoutingapp2025.utility.ByteBuilder;
-import com.astatin3.scoutingapp2025.utility.fileEditor;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class TransferFragment extends Fragment {
     private FragmentTransferBinding binding;
@@ -102,17 +88,17 @@ public class TransferFragment extends Fragment {
         FileSelectorFragment.setOnSelect(data -> {
             CodeGeneratorView.setData(data);
             BluetoothSenderFragment.set_data(data);
-            TransferSelector.setOnSelect(new TransferSelector.onSelect() {
+            TransferSelectorFragment.setOnSelect(new TransferSelectorFragment.onSelect() {
                 @Override
-                public void onSelectCodes(TransferSelector self) {
+                public void onSelectCodes(TransferSelectorFragment self) {
                     findNavController(self).navigate(R.id.action_navigation_transfer_selector_to_navigation_code_generator);
                 }
                 @Override
-                public void onSelectBluetooth(TransferSelector self) {
+                public void onSelectBluetooth(TransferSelectorFragment self) {
                     findNavController(self).navigate(R.id.action_navigation_transfer_selector_to_navigation_bluetooth_sender);
                 }
                 @Override
-                public void onSelectWifi(TransferSelector self) {}
+                public void onSelectWifi(TransferSelectorFragment self) {}
             });
             findNavController(this).navigate(R.id.action_navigation_file_selector_to_navigation_transfer_selector);
         });
@@ -123,19 +109,19 @@ public class TransferFragment extends Fragment {
 
 
     private void start_download(){
-        TransferSelector.setOnSelect(new TransferSelector.onSelect() {
+        TransferSelectorFragment.setOnSelect(new TransferSelectorFragment.onSelect() {
             @Override
-            public void onSelectCodes(TransferSelector self) {
+            public void onSelectCodes(TransferSelectorFragment self) {
                 findNavController(self).navigate(R.id.action_navigation_transfer_selector_to_navigation_code_scanner);
             }
 
             @Override
-            public void onSelectBluetooth(TransferSelector self) {
+            public void onSelectBluetooth(TransferSelectorFragment self) {
                 findNavController(self).navigate(R.id.action_navigation_transfer_selector_to_navigation_bluetooth_receiver);
             }
 
             @Override
-            public void onSelectWifi(TransferSelector self) {}
+            public void onSelectWifi(TransferSelectorFragment self) {}
         });
         findNavController(this).navigate(R.id.action_navigation_transfer_to_navigation_transfer_selector);
     }

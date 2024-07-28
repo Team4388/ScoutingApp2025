@@ -1,15 +1,11 @@
 package com.astatin3.scoutingapp2025.ui.transfer;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -18,17 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.astatin3.scoutingapp2025.databinding.FragmentDataCompileBinding;
 import com.astatin3.scoutingapp2025.databinding.FragmentTransferTbaBinding;
 import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.RequestTask;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcMatch;
 import com.astatin3.scoutingapp2025.types.frcTeam;
-import com.astatin3.scoutingapp2025.databinding.FragmentTransferBinding;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.utility.JSONUtil;
-import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +34,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
-public class TBAView extends Fragment {
+public class TBAFragment extends Fragment {
     private final String TBAAddress = "https://www.thebluealliance.com/api/v3/";
     private final String TBAHeader = "X-TBA-Auth-Key: tjEKSZojAU2pgbs2mBt06SKyOakVhLutj3NwuxLTxPKQPLih11aCIwRIVFXKzY4e";
 

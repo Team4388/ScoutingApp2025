@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.databinding.FragmentDataCompileBinding;
-import com.astatin3.scoutingapp2025.databinding.FragmentPitScoutingBinding;
 
 public class CompileFragment extends Fragment {
     FragmentDataCompileBinding binding;

@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
-import com.astatin3.scoutingapp2025.databinding.FragmentPitScoutingBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentScoutingPitBinding;
 import com.astatin3.scoutingapp2025.scoutingData.ScoutingDataWriter;
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.frcTeam;
@@ -29,7 +29,7 @@ import java.util.function.Function;
 
 public class PitScoutingFragment extends Fragment {
 
-    FragmentPitScoutingBinding binding;
+    FragmentScoutingPitBinding binding;
 
     private static frcTeam team;
     public static void setTeam(frcTeam tmpteam){
@@ -40,7 +40,7 @@ public class PitScoutingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        binding = FragmentPitScoutingBinding.inflate(inflater, container, false);
+        binding = FragmentScoutingPitBinding.inflate(inflater, container, false);
 
         username = latestSettings.settings.get_username();
         DataManager.reload_pit_fields();

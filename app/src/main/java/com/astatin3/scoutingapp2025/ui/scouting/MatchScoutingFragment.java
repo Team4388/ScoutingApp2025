@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.astatin3.scoutingapp2025.SettingsVersionStack.latestSettings;
-import com.astatin3.scoutingapp2025.databinding.FragmentMatchScoutingBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentScoutingMatchBinding;
 import com.astatin3.scoutingapp2025.scoutingData.ScoutingDataWriter;
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.frcMatch;
@@ -29,12 +29,12 @@ import java.util.function.Function;
 
 public class MatchScoutingFragment extends Fragment {
 
-    private FragmentMatchScoutingBinding binding;
+    private FragmentScoutingMatchBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentMatchScoutingBinding.inflate(inflater, container, false);
+        binding = FragmentScoutingMatchBinding.inflate(inflater, container, false);
 
         DataManager.reload_match_fields();
 
