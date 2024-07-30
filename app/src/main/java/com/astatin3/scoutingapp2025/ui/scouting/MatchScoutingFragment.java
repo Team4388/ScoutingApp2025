@@ -178,8 +178,8 @@ public class MatchScoutingFragment extends Fragment {
 //                boolean blank = !latest_values[fi].getViewValue().isNull();
 
 //                System.out.println(blank);
-
-                asm.update();
+                if(asm.isRunning)
+                    update_asm();
 
                 if(!DataManager.match_latest_values[fi].isBlank){
                     tv.setBackgroundColor(0xffff0000);

@@ -2,9 +2,11 @@ package com.astatin3.scoutingapp2025.scoutingData;
 
 import com.astatin3.scoutingapp2025.types.input.dropdownType;
 import com.astatin3.scoutingapp2025.types.input.inputType;
+import com.astatin3.scoutingapp2025.types.input.tallyType;
 import com.astatin3.scoutingapp2025.types.input.textType;
 import com.astatin3.scoutingapp2025.types.input.sliderType;
 import com.astatin3.scoutingapp2025.types.input.textType;
+import com.astatin3.scoutingapp2025.ui.scouting.TallyCounterView;
 import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
@@ -31,7 +33,12 @@ public class fields {
             new sliderType("Test", 128, 64, 256),
             new dropdownType("test-dropdown", new String[]{"Test1", "test2", "Three"}, 1),
             new textType("notes", "<no-notes>"),
-        }
+        },{
+            new tallyType("Test Tally", 0),
+            new sliderType("Test2", 30, 25, 50),
+            new dropdownType("test-dropdown", new String[]{"Test1", "test2", "Three"}, 1),
+            new textType("notes", "<no-notes>"),
+    }
     };
 
     public static final inputType[][] default_pit_fields = new inputType[][] {
@@ -111,11 +118,13 @@ public class fields {
                 case inputType.notesType:
                     t = new textType();
                     break;
+                case inputType.tallyType:
+                    t = new tallyType();
+                    break;
             }
 
             t.decode((byte[]) obj.get());
-            output[i] = t
-            ;
+            output[i] = t;
         }
 
         return output;

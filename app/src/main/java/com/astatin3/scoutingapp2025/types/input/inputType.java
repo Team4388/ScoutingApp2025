@@ -17,11 +17,13 @@ public abstract class inputType {
     public static final int slider_type_id = 255;
     public static final int dropdownType = 254;
     public static final int notesType = 253;
+    public static final int tallyType = 252;
     public enum inputTypes {
         //        USERNAME,
         SLIDER,
         DROPDOWN,
-        NOTES_INPUT
+        NOTES_INPUT,
+        TALLY
     }
     public String name;
     public Object default_value;
