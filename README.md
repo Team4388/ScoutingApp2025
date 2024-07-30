@@ -14,7 +14,6 @@ Ridgebotics 2025 scouting app in Android
 - Improve the code scanning progress indicator. It has a rounding error, I think.
 - Add more types of data fields.
 - Make server software to allow for easy sync over wifi
-- Test the scouting app
 
 ## In Progress:
 #### Scouting:
@@ -22,6 +21,7 @@ Ridgebotics 2025 scouting app in Android
 - Make a word cloud for the compiled mode of text input type
 #### Functionality:
 - Make pit and match data field builder UIs. I don't want to have to keep editing a variable
+- Test the scouting app
 
 
 ## Done:

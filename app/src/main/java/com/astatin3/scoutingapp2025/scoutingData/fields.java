@@ -22,23 +22,19 @@ public class fields {
 
     public static final inputType[][] default_match_fields = new inputType[][] {
         {
-            new sliderType("How good is robot", 5, 1, 10),
-            new textType("notes", "<no-notes>"),
-        },{
-            new sliderType("How good is robot", 5, 1, 10),
-            new sliderType("Test", 128, 64, 256),
-            new textType("notes", "<no-notes>"),
-        },{
-            new sliderType("How good is robot", 5, 5, 10),
-            new sliderType("Test", 128, 64, 256),
-            new dropdownType("test-dropdown", new String[]{"Test1", "test2", "Three"}, 1),
-            new textType("notes", "<no-notes>"),
-        },{
-            new tallyType("Test Tally", 0),
-            new sliderType("Test2", 30, 25, 50),
-            new dropdownType("test-dropdown", new String[]{"Test1", "test2", "Three"}, 1),
-            new textType("notes", "<no-notes>"),
-    }
+            new tallyType("Auto Notes", 0),
+            new sliderType("Auto Performance", 5, 1, 10),
+            new textType("Auto Comments", "None"),
+            new tallyType("Teleop Notes", 0),
+            new sliderType("Teleop Performance", 5, 1, 10),
+            new textType("Teleop Comments", "None"),
+            new sliderType("Overall Driving Performance", 5, 1, 10),
+            new textType("Overall Driving Comments", "None"),
+            new sliderType("Score area (AMP <-> Speaker)", 5, 1, 10),
+            new dropdownType("End Condition", new String[]{"Nothing", "Attempted Climb", "Successful Climbed", "Climbed with multiple robots", "Climbed with trapz"}, 1),
+            new dropdownType("Robot Condition", new String[]{"Everything was working", "Something seemed to be broken", "Something was broken", "Missing robot (Joe Johnson)"}, 1),
+            new textType("Other Comments", "None")
+        }
     };
 
     public static final inputType[][] default_pit_fields = new inputType[][] {
