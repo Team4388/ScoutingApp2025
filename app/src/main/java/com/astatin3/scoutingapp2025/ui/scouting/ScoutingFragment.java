@@ -53,7 +53,6 @@ public class ScoutingFragment extends Fragment {
         });
 
         binding.pitScoutingButton.setOnClickListener(v -> {
-            TeamSelectorFragment.setEvent(event);
             TeamSelectorFragment.setPits_mode(true);
             TeamSelectorFragment.setOnSelect(new TeamSelectorFragment.onTeamSelected() {
                 @Override
@@ -63,6 +62,10 @@ public class ScoutingFragment extends Fragment {
                 }
             });
             findNavController(this).navigate(R.id.action_navigation_scouting_to_navigation_team_selector);
+        });
+
+        binding.statusButton.setOnClickListener(v -> {
+            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_status);
         });
 
         return binding.getRoot();

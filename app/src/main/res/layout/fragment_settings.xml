@@ -97,7 +97,6 @@
                     app:spinner_divider_color="@color/teal_200"
                     app:spinner_divider_show="true"
                     app:spinner_divider_size="0.4dp"
-                    app:spinner_item_height="46dp"
                     app:spinner_popup_background="@color/black_2"
                     app:spinner_popup_elevation="14dp" />
 
@@ -133,7 +132,6 @@
                     app:spinner_divider_color="@color/teal_200"
                     app:spinner_divider_show="true"
                     app:spinner_divider_size="0.4dp"
-                    app:spinner_item_height="46dp"
                     app:spinner_popup_background="@color/black_2"
                     app:spinner_popup_elevation="14dp" />
 

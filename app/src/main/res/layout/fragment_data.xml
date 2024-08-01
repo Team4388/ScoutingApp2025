@@ -28,49 +28,48 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/status_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="status"
-            android:textSize="34sp"
-            app:layout_constraintBottom_toTopOf="@+id/teamsButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.307" />
-
-        <Button
-            android:id="@+id/teamsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="teams"
-            android:textSize="34sp"
-            app:layout_constraintBottom_toTopOf="@id/compileButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/status_button" />
-
-        <Button
-            android:id="@+id/compileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Compile"
-            android:textSize="34sp"
-            app:layout_constraintBottom_toTopOf="@+id/fieldsButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/teamsButton" />
-
-        <Button
             android:id="@+id/fieldsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fields"
             android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/teamsButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/teamsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Teams"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@id/compareButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fieldsButton" />
+
+        <Button
+            android:id="@+id/compareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Compare"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/reportButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/teamsButton" />
+
+        <Button
+            android:id="@+id/reportButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Report"
+            android:textSize="34sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/compileButton"
+            app:layout_constraintTop_toBottomOf="@+id/compareButton"
             app:layout_constraintVertical_bias="0.689" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,11 +3,11 @@ Ridgebotics 2025 scouting app in Android
 
 ## TODO:
 #### Scouting:
-- Make the "Compile" menu
-- The compile menu should be a shortcut to view all the team's stats from the upcoming match, from the teams view
+- Make the "Compare" menu, cross comparing team's stats.
+- Make the "Report" menu, A tool that lets users select data to display from the the teams and compare menus.
 - Make practice mode
 #### Data Analysis:
-- Add CSV exporting
+- Add CSV exporting of match scouting data.
 - Statbotics intigration
 - AI overview of scouting data for a team???
 #### Functionality:
@@ -18,7 +18,6 @@ Ridgebotics 2025 scouting app in Android
 ## In Progress:
 #### Scouting:
 #### Data Analysis:
-- Make a word cloud for the compiled mode of text input type
 #### Functionality:
 - Make pit and match data field builder UIs. I don't want to have to keep editing a variable
 - Test the scouting app

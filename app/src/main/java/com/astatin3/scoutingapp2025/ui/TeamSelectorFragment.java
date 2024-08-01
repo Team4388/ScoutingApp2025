@@ -1,5 +1,8 @@
 package com.astatin3.scoutingapp2025.ui;
 
+import static com.astatin3.scoutingapp2025.utility.DataManager.evcode;
+import static com.astatin3.scoutingapp2025.utility.DataManager.event;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,19 +21,13 @@ import com.astatin3.scoutingapp2025.databinding.FragmentTeamSelectorBinding;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 import com.astatin3.scoutingapp2025.utility.AlertManager;
+import com.astatin3.scoutingapp2025.utility.DataManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 
 import java.util.Arrays;
 
 public class TeamSelectorFragment extends Fragment {
     private FragmentTeamSelectorBinding binding;
-
-    private String evcode;
-
-    private static frcEvent event;
-    public static void setEvent(frcEvent tmpevent){
-        event = tmpevent;
-    }
 
     private static boolean pits_mode;
     public static void setPits_mode(boolean mode){
@@ -52,7 +49,7 @@ public class TeamSelectorFragment extends Fragment {
         binding = FragmentTeamSelectorBinding.inflate(inflater, container, false);
 
 //        event = fileEditor.g
-        evcode = latestSettings.settings.get_evcode();
+        DataManager.reload_event();
 
         if(evcode == null || evcode.equals("unset")){
             AlertManager.error("You somehow have not loaded an event!");

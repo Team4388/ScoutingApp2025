@@ -1,5 +1,6 @@
 package com.astatin3.scoutingapp2025.ui.scouting;
 
+import static com.astatin3.scoutingapp2025.utility.DataManager.evcode;
 import static com.astatin3.scoutingapp2025.utility.DataManager.pit_latest_values;
 import static com.astatin3.scoutingapp2025.utility.DataManager.pit_transferValues;
 import static com.astatin3.scoutingapp2025.utility.DataManager.pit_values;
@@ -54,7 +55,6 @@ public class PitScoutingFragment extends Fragment {
 
     boolean edited = false;
 
-    String evcode;
     String filename;
     String username;
 

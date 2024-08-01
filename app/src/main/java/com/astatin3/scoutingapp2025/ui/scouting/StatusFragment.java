@@ -1,4 +1,4 @@
-package com.astatin3.scoutingapp2025.ui.data;
+package com.astatin3.scoutingapp2025.ui.scouting;
 
 import static com.astatin3.scoutingapp2025.utility.DataManager.event;
 
@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.astatin3.scoutingapp2025.databinding.FragmentDataStatusBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentScoutingStatusBinding;
 import com.astatin3.scoutingapp2025.utility.DataManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.types.frcEvent;
@@ -23,12 +23,12 @@ import com.astatin3.scoutingapp2025.types.frcMatch;
 import java.util.Arrays;
 
 public class StatusFragment extends Fragment {
-    FragmentDataStatusBinding binding;
+    FragmentScoutingStatusBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        binding = FragmentDataStatusBinding.inflate(inflater, container, false);
+        binding = FragmentScoutingStatusBinding.inflate(inflater, container, false);
 
         DataManager.reload_event();
         binding.matchTable.removeAllViews();

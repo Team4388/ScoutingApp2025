@@ -82,18 +82,21 @@ public class dropdownType extends inputType {
             iconSpinnerItems.add(new IconSpinnerItem(text_options[i]));
         }
         IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(dropdown);
+
+        dropdown.setGravity(Gravity.CENTER);
+
         dropdown.setSpinnerAdapter(iconSpinnerAdapter);
         dropdown.setItems(iconSpinnerItems);
 
         dropdown.selectItemByIndex((int) default_value);
 
-        dropdown.setPadding(10,10,10,10);
+        dropdown.setPadding(10,20,10,20);
         dropdown.setBackgroundColor(0xf0000000);
         dropdown.setTextColor(0xff00ff00);
-        dropdown.setTextSize(15);
+        dropdown.setTextSize(14.5f);
         dropdown.setArrowGravity(SpinnerGravity.END);
         dropdown.setArrowPadding(8);
-        dropdown.setSpinnerItemHeight(46);
+//        dropdown.setSpinnerItemHeight(46);
         dropdown.setSpinnerPopupElevation(14);
 
 

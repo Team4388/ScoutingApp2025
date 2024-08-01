@@ -96,13 +96,13 @@ public class TeamsFragment extends Fragment {
 
         dropdown.selectItemByIndex(0);
 
-        dropdown.setPadding(15,15,15,15);
+        dropdown.setPadding(10,20,10,20);
         dropdown.setBackgroundColor(0xf0000000);
         dropdown.setTextColor(0xff00ff00);
         dropdown.setTextSize(15);
         dropdown.setArrowGravity(SpinnerGravity.END);
         dropdown.setArrowPadding(8);
-        dropdown.setSpinnerItemHeight(46);
+//        dropdown.setSpinnerItemHeight(46);
         dropdown.setSpinnerPopupElevation(14);
 
 

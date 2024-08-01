@@ -41,9 +41,9 @@ public class dataFragment extends Fragment {
             binding.noEventError.setVisibility(View.VISIBLE);
 
             binding.buttons.setVisibility(View.VISIBLE);
-            binding.statusButton.setVisibility(View.GONE);
             binding.teamsButton.setVisibility(View.GONE);
-            binding.compileButton.setVisibility(View.GONE);
+            binding.compareButton.setVisibility(View.GONE);
+            binding.reportButton.setVisibility(View.GONE);
             binding.fieldsButton.setVisibility(View.VISIBLE);
 
 
@@ -52,12 +52,7 @@ public class dataFragment extends Fragment {
 
         frcEvent event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
 
-        binding.statusButton.setOnClickListener(v -> {
-            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_status);
-        });
-
         binding.teamsButton.setOnClickListener(v -> {
-            TeamSelectorFragment.setEvent(event);
             TeamSelectorFragment.setPits_mode(false);
             TeamSelectorFragment.setOnSelect(new TeamSelectorFragment.onTeamSelected() {
                 @Override
@@ -69,7 +64,7 @@ public class dataFragment extends Fragment {
             findNavController(this).navigate(R.id.action_navigation_data_to_navigation_team_selector);
         });
 
-        binding.compileButton.setOnClickListener(v -> {
+        binding.reportButton.setOnClickListener(v -> {
             findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_compile);
         });
 

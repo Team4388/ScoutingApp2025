@@ -9,15 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.astatin3.scoutingapp2025.databinding.FragmentDataCompileBinding;
+import com.astatin3.scoutingapp2025.databinding.FragmentDataReportBinding;
 
-public class CompileFragment extends Fragment {
-    FragmentDataCompileBinding binding;
+public class ReportFragment extends Fragment {
+    FragmentDataReportBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        binding = FragmentDataCompileBinding.inflate(inflater, container, false);
+        binding = FragmentDataReportBinding.inflate(inflater, container, false);
 
         return binding.getRoot();
     }
