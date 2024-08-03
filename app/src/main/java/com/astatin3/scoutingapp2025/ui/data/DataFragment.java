@@ -21,7 +21,7 @@ import com.astatin3.scoutingapp2025.ui.TeamSelectorFragment;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
 import com.astatin3.scoutingapp2025.types.frcEvent;
 
-public class dataFragment extends Fragment {
+public class DataFragment extends Fragment {
 
     private FragmentDataBinding binding;
 
@@ -64,8 +64,12 @@ public class dataFragment extends Fragment {
             findNavController(this).navigate(R.id.action_navigation_data_to_navigation_team_selector);
         });
 
+        binding.compareButton.setOnClickListener(v -> {
+            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_compare);
+        });
+
         binding.reportButton.setOnClickListener(v -> {
-            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_compile);
+            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_report);
         });
 
         binding.fieldsButton.setOnClickListener(v -> {

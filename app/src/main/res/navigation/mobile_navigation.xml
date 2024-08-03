@@ -24,6 +24,9 @@
             app:exitAnim="@anim/exit_anim"
             app:popEnterAnim="@anim/enter_anim"
             app:popExitAnim="@anim/pop_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_scouting_to_navigation_scouting_status"
+            app:destination="@id/navigation_scouting_status" />
     </fragment>
 
     <fragment
@@ -64,7 +67,7 @@
 
     <fragment
         android:id="@+id/navigation_data"
-        android:name="com.astatin3.scoutingapp2025.ui.data.dataFragment"
+        android:name="com.astatin3.scoutingapp2025.ui.data.DataFragment"
         android:label="@string/title_data"
         tools:layout="@layout/fragment_data">
         <action
@@ -75,8 +78,8 @@
             app:popEnterAnim="@anim/enter_anim"
             app:popExitAnim="@anim/pop_exit_anim" />
         <action
-            android:id="@+id/action_navigation_data_to_navigation_data_compile"
-            app:destination="@id/navigation_data_compile"
+            android:id="@+id/action_navigation_data_to_navigation_data_report"
+            app:destination="@id/navigation_data_report"
             app:enterAnim="@anim/enter_anim"
             app:exitAnim="@anim/exit_anim"
             app:popEnterAnim="@anim/enter_anim"
@@ -88,10 +91,17 @@
             app:exitAnim="@anim/exit_anim"
             app:popEnterAnim="@anim/enter_anim"
             app:popExitAnim="@anim/pop_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_data_to_navigation_data_compare"
+            app:destination="@id/navigation_data_compare"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_data_status"
+        android:id="@+id/navigation_scouting_status"
         android:name="com.astatin3.scoutingapp2025.ui.scouting.StatusFragment"
         tools:layout="@layout/fragment_scouting_status">
     </fragment>
@@ -103,7 +113,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_data_compile"
+        android:id="@+id/navigation_data_compare"
+        android:name="com.astatin3.scoutingapp2025.ui.data.CompareFragment"
+        tools:layout="@layout/fragment_data_report">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_data_report"
         android:name="com.astatin3.scoutingapp2025.ui.data.ReportFragment"
         tools:layout="@layout/fragment_data_report">
     </fragment>

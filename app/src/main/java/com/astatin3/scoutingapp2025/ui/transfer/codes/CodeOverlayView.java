@@ -60,7 +60,7 @@ public class CodeOverlayView extends View {
                 }
             }
             if(barColors != null){
-                final int width = getWidth()/barColors.length;
+                final double width = getWidth()/barColors.length;
 
                 final int top = 0;
                 final int bottom = barHeight;
@@ -81,8 +81,8 @@ public class CodeOverlayView extends View {
                     p.setColor(c);
 
                     canvas.drawRect(new Rect(
-                            (i*width), top,
-                            ((i+1)*width), bottom
+                            (int)(i*width), top,
+                            (int)((i+1)*width), bottom
                     ), p);
                 }
             }

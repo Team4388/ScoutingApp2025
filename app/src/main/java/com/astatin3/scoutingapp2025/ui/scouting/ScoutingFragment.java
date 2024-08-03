@@ -65,7 +65,7 @@ public class ScoutingFragment extends Fragment {
         });
 
         binding.statusButton.setOnClickListener(v -> {
-            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_status);
+            findNavController(this).navigate(R.id.action_navigation_scouting_to_navigation_scouting_status);
         });
 
         return binding.getRoot();
