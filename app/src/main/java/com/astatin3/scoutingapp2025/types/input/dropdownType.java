@@ -68,10 +68,6 @@ public class dropdownType extends inputType {
         text_options  = (String[]) objects.get(2).get();
     }
 
-
-
-
-
     public PowerSpinnerView dropdown = null;
 
     public View createView(Context context, Function<dataType, Integer> onUpdate){
@@ -98,6 +94,8 @@ public class dropdownType extends inputType {
         dropdown.setArrowPadding(8);
 //        dropdown.setSpinnerItemHeight(46);
         dropdown.setSpinnerPopupElevation(14);
+
+
 
 
         dropdown.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<IconSpinnerItem>() {

@@ -112,7 +112,8 @@ public class ReorderableTableLayout extends TableLayout {
         }
     }
 
-    private void updateRowOrder(int fromIndex, int toIndex) {
+    public void updateRowOrder(int fromIndex, int toIndex) {
+        saveOriginalOrder();
         if (fromIndex < toIndex) {
             for (int i = fromIndex; i < toIndex; i++) {
                 Collections.swap(rows, i, i + 1);

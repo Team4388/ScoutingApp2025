@@ -29,6 +29,12 @@ public class FieldsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentDataFieldsBinding.inflate(inflater, container, false);
 
+        binding.saveButton.setVisibility(View.GONE);
+        binding.editButton.setVisibility(View.GONE);
+        binding.upButton.setVisibility(View.GONE);
+        binding.addButton.setVisibility(View.GONE);
+        binding.downButton.setVisibility(View.GONE);
+
         load_field_menu();
 
         return binding.getRoot();
@@ -88,12 +94,13 @@ public class FieldsFragment extends Fragment {
 
     private void display_fields(inputType[] version_values) {
         binding.fieldsArea.removeAllViews();
-        binding.fieldsArea.setReorderingEnabled(true);
+        binding.fieldsArea.setReorderingEnabled(false);
 
-        TextView e = null;
-        binding.addButton.setOnClickListener(view -> {
-            e.setText("123");
-        });
+        binding.saveButton.setVisibility(View.GONE);
+        binding.editButton.setVisibility(View.GONE);
+        binding.upButton.setVisibility(View.VISIBLE);
+        binding.addButton.setVisibility(View.VISIBLE);
+        binding.downButton.setVisibility(View.VISIBLE);
 
         for(int i = 0; i < version_values.length; i++){
             TableRow tr = new TableRow(getContext());
@@ -120,24 +127,48 @@ public class FieldsFragment extends Fragment {
             binding.fieldsArea.addView(tr);
 
             tr.setOnClickListener(v -> {
+                binding.editButton.setVisibility(View.VISIBLE);
                 trOnClick(version_values, tr);
             });
         }
+        selindex = -1;
+
+        binding.upButton.setOnClickListener(v -> {
+            if(selindex != 0) {
+                binding.saveButton.setVisibility(View.VISIBLE);
+                binding.fieldsArea.updateRowOrder(selindex, selindex - 1);
+                selindex -= 1;
+            }
+        });
+
+        binding.downButton.setOnClickListener(v -> {
+            if(selindex != version_values.length-1) {
+                binding.saveButton.setVisibility(View.VISIBLE);
+                binding.fieldsArea.updateRowOrder(selindex, selindex + 1);
+                selindex += 1;
+            }
+        });
+
+        binding.saveButton.setOnClickListener(v -> {
+            binding.saveButton.setVisibility(View.GONE);
+        });
     }
 
+    private int selindex = -1;
+
     private void trOnClick(inputType[] version_values, TableRow tr){
-        int index = -1;
+        selindex = -1;
         for(int i = 0; i < binding.fieldsArea.getChildCount(); i++){
             View v = binding.fieldsArea.getChildAt(i);
 
             if(v.equals(tr)) {
                 tr.setBackgroundColor(background_color);
-                index = i;
+                selindex = i;
             } else
                 binding.fieldsArea.getChildAt(i).setBackgroundColor(unfocused_background_color);
         }
 
-        onFieldSelect(version_values[binding.fieldsArea.getReorderedIndexes().get(index)]);
+        onFieldSelect(version_values[binding.fieldsArea.getReorderedIndexes().get(selindex)]);
     }
 
     private void onFieldSelect(inputType field){
