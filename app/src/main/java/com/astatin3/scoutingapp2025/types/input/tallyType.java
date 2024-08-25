@@ -9,28 +9,16 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.data.intType;
 import com.astatin3.scoutingapp2025.ui.scouting.TallyCounterView;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.google.android.material.slider.Slider;
-import com.skydoves.powerspinner.IconSpinnerAdapter;
-import com.skydoves.powerspinner.IconSpinnerItem;
-import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
-import com.skydoves.powerspinner.PowerSpinnerView;
-import com.skydoves.powerspinner.SpinnerGravity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +29,11 @@ public class tallyType extends inputType {
     public inputTypes getInputType(){return inputTypes.TALLY;}
     public dataType.valueTypes getValueType(){return dataType.valueTypes.NUM;}
     public Object get_fallback_value(){return 0;}
-    public tallyType(){};
+    public tallyType(){}
     public String get_type_name(){return "Dropdown";}
     public tallyType(String name, int default_value){
         super(name);
-        this.default_value = default_value+1;
+        this.default_value = default_value;
     }
 
 
@@ -74,15 +62,14 @@ public class tallyType extends inputType {
 
     public View createView(Context context, Function<dataType, Integer> onUpdate){
         tally = new TallyCounterView(context);
-        tally.setOnCountChangedListener(n -> {
-            onUpdate.apply(getViewValue());
-        });
+        tally.setOnCountChangedListener(n -> onUpdate.apply(getViewValue()));
 
         setViewValue(default_value);
 
         return tally;
 
-    };
+    }
+
     public void setViewValue(Object value) {
         if(tally == null) return;
         System.out.println(value);
@@ -93,7 +80,7 @@ public class tallyType extends inputType {
 
         isBlank = false;
         tally.setVisibility(View.VISIBLE);
-        tally.setValue((int)value-1);
+        tally.setValue((int)value);
     }
     public void nullify(){
         isBlank = true;
@@ -102,7 +89,7 @@ public class tallyType extends inputType {
     public dataType getViewValue(){
         if(tally == null) return null;
         if(tally.getVisibility() == View.GONE) return new intType(name, 0);
-        return new intType(name, tally.getValue()+1);
+        return new intType(name, tally.getValue());
     }
 
 
@@ -119,7 +106,7 @@ public class tallyType extends inputType {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        tv.setText(String.valueOf((int) data.get()-1));
+        tv.setText(String.valueOf((int) data.get()));
         tv.setTextSize(24);
         parent.addView(tv);
     }
@@ -142,7 +129,7 @@ public class tallyType extends inputType {
     private static float calculateStandardDeviation(int[] data, float mean) {
         float sum = 0;
         for (int value : data) {
-            sum += Math.pow((float) value - mean, 2);
+            sum += (float) Math.pow((float) value - mean, 2);
         }
         return (float) Math.sqrt(sum / (data.length - 1));
     }
@@ -150,27 +137,26 @@ public class tallyType extends inputType {
     private static List<Entry> generateNormalDistribution(float mean, float stdDev, int count, int scale) {
         List<Entry> entries = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            float x = i;
             float y = (float) ((1 / (stdDev * Math.sqrt(2 * Math.PI)))
-                    * Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2)));
-            entries.add(new Entry(x, y*scale)); // Scale y for visibility
+                    * Math.exp(-0.5 * Math.pow(((float) i - mean) / stdDev, 2)));
+            entries.add(new Entry((float) i, y*scale)); // Scale y for visibility
         }
         return entries;
     }
 
     private static int findMin(dataType[] data){
-        int min = (int)data[0].get()-1;
+        int min = (int)data[0].get();
         for(int i = 1; i < data.length; i++)
-            if((int)data[i].get()-1 < min)
-                min = (int)data[i].get()-1;
+            if((int)data[i].get() < min)
+                min = (int)data[i].get();
         return min;
     }
 
     private static int findMax(dataType[] data){
-        int max = (int)data[0].get()-1;
+        int max = (int)data[0].get();
         for(int i = 1; i < data.length; i++)
-            if((int)data[i].get()-1 > max)
-                max = (int)data[i].get()-1;
+            if((int)data[i].get() > max)
+                max = (int)data[i].get();
         return max;
     }
 
@@ -190,14 +176,14 @@ public class tallyType extends inputType {
         int[] values = new int[max-min+1];
 
         for (int i = 0; i < data.length; i++)
-            if((int) data[i].get() != intType.nulval)
-                values[(int) data[i].get()-min-1]++;
+            if(intType.isNull((int) data[i].get()))
+                values[(int) data[i].get()-min]++;
 
 
         ArrayList<Integer> mean_temp = new ArrayList<>();
         for (int i = 0; i < data.length; i++)
             if((int)data[i].get() != 0)
-                mean_temp.add((int) data[i].get()-1);
+                mean_temp.add((int) data[i].get());
 
         int[] mean_vals = mean_temp.stream().mapToInt(Integer::intValue).toArray();
 
@@ -270,7 +256,7 @@ public class tallyType extends inputType {
         for (int i = 0; i < data.length; i++){
             if(data[i] == null) continue;
 
-            entries.add(new Entry(i, (float)(int) data[i].get()-1));
+            entries.add(new Entry(i, (float)(int) data[i].get()));
         }
 
 

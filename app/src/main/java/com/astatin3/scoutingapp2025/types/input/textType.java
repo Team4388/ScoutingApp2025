@@ -89,7 +89,7 @@ public class textType extends inputType {
     };
     public void setViewValue(Object value) {
         if(text == null) return;
-        if(value.equals(stringType.nulval)){
+        if(stringType.isNull((String) value)){
             nullify();
             return;
         }
@@ -103,7 +103,7 @@ public class textType extends inputType {
     }
     public dataType getViewValue(){
         if(text == null) return null;
-        if(text.getVisibility() == View.GONE) return new stringType(name, stringType.nulval);
+        if(text.getVisibility() == View.GONE) return new stringType(name, stringType.nullval);
         return new stringType(name, text.getText().toString());
     }
 

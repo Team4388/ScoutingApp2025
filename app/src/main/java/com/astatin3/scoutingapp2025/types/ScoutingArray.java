@@ -61,7 +61,7 @@ public class ScoutingArray {
 
     private dataType get_data_type_by_name(String name){
         for(dataType dt : array){
-            if(dt.name.equals(name)){
+            if(dt.getName().equals(name)){
                 return dt;
             }
         }

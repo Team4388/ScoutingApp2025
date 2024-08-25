@@ -212,7 +212,7 @@ public class TeamsFragment extends Fragment {
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
             tv.setGravity(Gravity.CENTER_HORIZONTAL);
-            tv.setText(psda.data.array[a].name);
+            tv.setText(psda.data.array[a].getName());
             tv.setTextSize(25);
 
             if(psda.data.array[a].isNull()){
@@ -305,7 +305,7 @@ public class TeamsFragment extends Fragment {
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                tv.setText(psda.data.array[a].name);
+                tv.setText(psda.data.array[a].getName());
                 tv.setTextSize(25);
 
                 if (psda.data.array[a].isNull()) {

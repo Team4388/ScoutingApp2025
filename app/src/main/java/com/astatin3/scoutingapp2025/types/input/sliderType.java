@@ -83,7 +83,7 @@ public class sliderType extends inputType {
     }
     public void setViewValue(Object value) {
         if(slider == null) return;
-        if(value.equals(intType.nulval)){
+        if(intType.isNull((int) value)){
             nullify();
             return;
         }
@@ -96,7 +96,7 @@ public class sliderType extends inputType {
     }
     public dataType getViewValue(){
         if(slider == null) return null;
-        if(slider.getVisibility() == View.GONE) return new intType(name, intType.nulval);
+        if(slider.getVisibility() == View.GONE) return intType.newNull(name);
         return new intType(name, min + (int) (slider.getValue() * (max-min)));
     }
     public void nullify(){
@@ -170,7 +170,7 @@ public class sliderType extends inputType {
         int[] values = new int[max-min+1];
 
         for (int i = 0; i < data.length; i++)
-            if((int) data[i].get() != intType.nulval)
+            if(intType.isNull((int) data[i].get()))
                 values[(int) data[i].get()-min]++;
 
 

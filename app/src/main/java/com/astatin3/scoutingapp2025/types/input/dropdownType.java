@@ -118,7 +118,7 @@ public class dropdownType extends inputType {
     };
     public void setViewValue(Object value) {
         if(dropdown == null) return;
-        if(value.equals(intType.nulval)){
+        if(intType.isNull((int) value)){
             nullify();
             return;
         }
@@ -134,7 +134,7 @@ public class dropdownType extends inputType {
     }
     public dataType getViewValue(){
         if(dropdown == null) return null;
-        if(dropdown.getVisibility() == View.GONE) return new intType(name, intType.nulval);
+        if(dropdown.getVisibility() == View.GONE) return new intType(name, intType.nullval);
         return new intType(name, dropdown.getSelectedIndex());
     }
 
