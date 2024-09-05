@@ -31,7 +31,7 @@ public class fields {
             new sliderType("Overall Driving Performance", 5, 1, 10),
             new textType("Overall Driving Comments", "None"),
             new sliderType("Score area (AMP <-> Speaker)", 5, 1, 10),
-            new dropdownType("End Condition", new String[]{"Nothing", "Attempted Climb", "Successful Climbed", "Climbed with multiple robots", "Climbed with trapz"}, 1),
+            new dropdownType("End Condition", new String[]{"Nothing", "Attempted Climb", "Successful Climbed", "Climbed with multiple robots", "Climbed with trap"}, 1),
             new dropdownType("Robot Condition", new String[]{"Everything was working", "Something seemed to be broken", "Something was broken", "Missing robot (Joe Johnson)"}, 1),
             new textType("Other Comments", "None")
         }

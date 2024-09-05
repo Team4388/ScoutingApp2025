@@ -115,7 +115,7 @@ public class dropdownType extends inputType {
 //            });
         return dropdown;
 
-    };
+    }
     public void setViewValue(Object value) {
         if(dropdown == null) return;
         if(intType.isNull((int) value)){

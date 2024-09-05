@@ -25,10 +25,10 @@ public class ScoutingDataWriter {
             for(int i = 0; i < data.length; i++){
                 switch (data[i].getValueType()){
                     case NUM:
-                        bb.addInt((int) data[i].get());
+                        bb.addInt((int) data[i].forceGetValue());
                         break;
                     case STRING:
-                        bb.addString((String) data[i].get());
+                        bb.addString((String) data[i].forceGetValue());
                         break;
                 }
             }
@@ -62,12 +62,12 @@ public class ScoutingDataWriter {
             for(int i = 0; i < values[version].length; i++){
                 switch (objects.get(i+2).getType()){
                     case 1:
-                        dataTypes[i] = new intType(values[version][i].name, (int) objects.get(i+2).get());
+                        dataTypes[i] = intType.newNull(values[version][i].name);
+                        dataTypes[i].forceSetValue(objects.get(i+2).get());
                         break;
                     case 2:
-                        String name = values[version][i].name;
-                        String value = (String) objects.get(i+2).get();
-                        dataTypes[i] = new stringType(name, value);
+                        dataTypes[i] = stringType.newNull(values[version][i].name);
+                        dataTypes[i].forceSetValue(objects.get(i+2).get());
                         break;
                 }
             }

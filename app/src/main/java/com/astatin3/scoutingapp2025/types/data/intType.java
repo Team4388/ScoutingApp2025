@@ -16,11 +16,11 @@ public class intType extends dataType {
 //    }
 
     public Object get(){
-        return (int) forceGetValue()+2;
+        return (int) forceGetValue()-2;
     }
 
     public void set(Object value){
-        forceSetValue((int) value - 2);
+        forceSetValue((int) value + 2);
     }
 
     public intType(String name, int value) {

@@ -33,7 +33,7 @@ public class tallyType extends inputType {
     public String get_type_name(){return "Dropdown";}
     public tallyType(String name, int default_value){
         super(name);
-        this.default_value = default_value;
+        this.default_value = default_value+2;
     }
 
 
@@ -73,14 +73,14 @@ public class tallyType extends inputType {
     public void setViewValue(Object value) {
         if(tally == null) return;
         System.out.println(value);
-        if(((int)value) == 0){
+        if((int)value == intType.nullval || (int)value == intType.unselectedval){
             nullify();
             return;
         }
 
         isBlank = false;
         tally.setVisibility(View.VISIBLE);
-        tally.setValue((int)value);
+        tally.setValue((int) value-2);
     }
     public void nullify(){
         isBlank = true;

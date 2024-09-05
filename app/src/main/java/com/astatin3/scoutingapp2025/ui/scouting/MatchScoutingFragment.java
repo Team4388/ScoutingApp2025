@@ -303,7 +303,7 @@ public class MatchScoutingFragment extends Fragment {
 
         for(int i = 0; i < DataManager.match_latest_values.length; i++){
 //            types[i] = latest_values[i].getViewValue();
-            DataManager.match_latest_values[i].setViewValue(types[i]);
+            DataManager.match_latest_values[i].setViewValue(types[i].get());
 
             if(DataManager.match_latest_values[i].isBlank){
                 titles[i].setBackgroundColor(0xffff0000);

@@ -25,7 +25,7 @@ public class stringType extends dataType{
 
     public stringType(String name, String value) {
         super(name);
-        forceSetValue(value+2);
+        forceSetValue(value);
     }
 
     public static stringType newNull(String name){
