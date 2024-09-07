@@ -19,7 +19,6 @@ public abstract class inputType {
     public static final int notesType = 253;
     public static final int tallyType = 252;
     public enum inputTypes {
-        //        USERNAME,
         SLIDER,
         DROPDOWN,
         NOTES_INPUT,

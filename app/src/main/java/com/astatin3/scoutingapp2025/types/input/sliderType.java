@@ -79,8 +79,8 @@ public class sliderType extends inputType {
             }
         });
         return slider;
-
     }
+
     public void setViewValue(Object value) {
         if(slider == null) return;
         if(intType.isNull((int) value)){

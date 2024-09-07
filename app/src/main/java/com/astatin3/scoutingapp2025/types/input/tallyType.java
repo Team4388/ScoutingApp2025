@@ -33,7 +33,7 @@ public class tallyType extends inputType {
     public String get_type_name(){return "Dropdown";}
     public tallyType(String name, int default_value){
         super(name);
-        this.default_value = default_value+2;
+        this.default_value = default_value;
     }
 
 

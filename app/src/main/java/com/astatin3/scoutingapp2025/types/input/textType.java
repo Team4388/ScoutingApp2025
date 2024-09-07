@@ -1,5 +1,7 @@
 package com.astatin3.scoutingapp2025.types.input;
 
+import static com.astatin3.scoutingapp2025.types.data.intType.offset;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class textType extends inputType {
+
     public int get_byte_id() {return notesType;}
     public inputTypes getInputType(){return inputTypes.NOTES_INPUT;}
     public dataType.valueTypes getValueType(){return dataType.valueTypes.STRING;}

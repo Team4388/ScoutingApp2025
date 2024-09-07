@@ -61,13 +61,15 @@ public class ScoutingDataWriter {
 
             for(int i = 0; i < values[version].length; i++){
                 switch (objects.get(i+2).getType()){
-                    case 1:
+                    case 1: // Int
                         dataTypes[i] = intType.newNull(values[version][i].name);
                         dataTypes[i].forceSetValue(objects.get(i+2).get());
+                        System.out.println("Loaded INT: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
                         break;
-                    case 2:
+                    case 2: // String
                         dataTypes[i] = stringType.newNull(values[version][i].name);
                         dataTypes[i].forceSetValue(objects.get(i+2).get());
+                        System.out.println("Loaded STR: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
                         break;
                 }
             }

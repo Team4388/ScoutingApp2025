@@ -3,6 +3,7 @@ package com.astatin3.scoutingapp2025.types.data;
 public class intType extends dataType {
     public static final int nullval = 0;
     public static final int unselectedval = 1;
+    public static final int offset = 2;
 
     public valueTypes getValueType() {
         return valueTypes.NUM;
@@ -25,7 +26,7 @@ public class intType extends dataType {
 
     public intType(String name, int value) {
         super(name);
-        forceSetValue(value+2);
+        set(value);
     }
 
     public static intType newNull(String name){
