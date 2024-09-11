@@ -70,10 +70,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/matchnum"
             app:layout_constraintStart_toEndOf="@+id/back_button"
-            app:layout_constraintTop_toBottomOf="@id/eventcode" />
+            app:layout_constraintTop_toBottomOf="@id/username" />
 
         <TextView
-            android:id="@+id/eventcode"
+            android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Temp"

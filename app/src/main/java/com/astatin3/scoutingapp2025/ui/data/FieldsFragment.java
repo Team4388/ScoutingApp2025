@@ -1,7 +1,9 @@
 package com.astatin3.scoutingapp2025.ui.data;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -25,15 +27,22 @@ public class FieldsFragment extends Fragment {
         filename = tmpfilename;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentDataFieldsBinding.inflate(inflater, container, false);
+
+        binding.revertVersionButton.setVisibility(View.VISIBLE);
+        binding.valueEditScrollview.setOnTouchListener((v, event) -> true);
+
 
         binding.saveButton.setVisibility(View.GONE);
         binding.editButton.setVisibility(View.GONE);
         binding.upButton.setVisibility(View.GONE);
         binding.addButton.setVisibility(View.GONE);
         binding.downButton.setVisibility(View.GONE);
+
+        binding.valueEditContainer.setVisibility(View.GONE);
 
         load_field_menu();
 
@@ -96,11 +105,15 @@ public class FieldsFragment extends Fragment {
         binding.fieldsArea.removeAllViews();
         binding.fieldsArea.setReorderingEnabled(false);
 
+        binding.revertVersionButton.setVisibility(View.GONE);
+
         binding.saveButton.setVisibility(View.GONE);
         binding.editButton.setVisibility(View.GONE);
         binding.upButton.setVisibility(View.VISIBLE);
         binding.addButton.setVisibility(View.VISIBLE);
         binding.downButton.setVisibility(View.VISIBLE);
+
+        binding.valueEditContainer.setVisibility(View.GONE);
 
         for(int i = 0; i < version_values.length; i++){
             TableRow tr = new TableRow(getContext());
@@ -173,6 +186,13 @@ public class FieldsFragment extends Fragment {
 
     private void onFieldSelect(inputType field){
         System.out.println(field.name);
+
+        binding.editButton.setOnClickListener(v -> {
+            binding.valueEditContainer.setVisibility(View.VISIBLE);
+            TextView tv = new TextView(getContext());
+            tv.setText("Test!");
+            binding.ValueEditTable.addView(tv);
+        });
 
     }
 }

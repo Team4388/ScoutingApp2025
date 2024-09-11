@@ -3,8 +3,10 @@ package com.astatin3.scoutingapp2025.ui.scouting;
 import static com.astatin3.scoutingapp2025.utility.DataManager.evcode;
 import static com.astatin3.scoutingapp2025.utility.DataManager.event;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.frcMatch;
 import com.astatin3.scoutingapp2025.types.frcTeam;
 import com.astatin3.scoutingapp2025.types.input.inputType;
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.AutoSaveManager;
 import com.astatin3.scoutingapp2025.utility.DataManager;
 import com.astatin3.scoutingapp2025.utility.fileEditor;
@@ -31,6 +34,7 @@ public class MatchScoutingFragment extends Fragment {
 
     private FragmentScoutingMatchBinding binding;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -41,7 +45,7 @@ public class MatchScoutingFragment extends Fragment {
         alliance_position = latestSettings.settings.get_alliance_pos();
         username = latestSettings.settings.get_username();
 
-        binding.eventcode.setText(evcode);
+        binding.username.setText(username);
         binding.alliancePosText.setText(alliance_position);
 
         binding.teamDescription.setVisibility(View.GONE);
@@ -72,6 +76,22 @@ public class MatchScoutingFragment extends Fragment {
             update_scouting_data();
         });
 
+
+        boolean fileIndicatorTapped = false;
+        binding.fileIndicator.setOnClickListener(v -> {
+//            if(e.getAction() != MotionEvent.ACTION_MOVE) return true;
+//            System.out.println(e.getAxisValue(0));
+            if(edited) save();
+
+            alliance_position = incrementMatchPos(alliance_position);
+            latestSettings.settings.set_alliance_pos(alliance_position);
+            binding.alliancePosText.setText(alliance_position);
+
+            update_match_num();
+            update_scouting_data();
+//            return true;
+        });
+
         binding.backButton.setOnClickListener(v -> {
             if(edited) save();
             latestSettings.settings.set_match_num(cur_match_num-1);
@@ -90,6 +110,23 @@ public class MatchScoutingFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private static String incrementMatchPos(String input){
+        switch(input){ // There's probably a better solution than this.
+            case "red-1":
+                return "red-2";
+            case "red-2":
+                return "red-3";
+            case "red-3":
+                return "blue-1";
+            case "blue-1":
+                return "blue-2";
+            case "blue-2":
+                return "blue-3";
+            case "blue-3":
+                return "red-1";
+        }
+        return "red-1";
+    }
 
     private static final int unsaved_color = 0x60ff0000;
     private static final int saved_color = 0x6000ff00;
@@ -113,7 +150,7 @@ public class MatchScoutingFragment extends Fragment {
         System.out.println("Saved!");
         edited = false;
         set_indicator_color(saved_color);
-//        fileEditor.createFile(filename);
+        AlertManager.toast("Saved " + filename);
         save_fields();
     }
 
