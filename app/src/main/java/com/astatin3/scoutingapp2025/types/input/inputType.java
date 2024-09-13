@@ -35,11 +35,26 @@ public abstract class inputType {
         this.name = name;
     }
 
+//    public enum parameterType {
+//        NUMBER,
+//        STRING,
+//        STRINGARRAY
+//    }
+
+//    public static parameterType[] parameterTypeByInputType(inputTypes t){
+//        switch (t){
+//            case SLIDER:
+//                return new parameterType[]{parameterType.NUMBER, };
+//        }
+//    }
+
     public abstract String get_type_name();
 
     public abstract byte[] encode() throws ByteBuilder.buildingException;
     public abstract void decode(byte[] bytes) throws BuiltByteParser.byteParsingExeption;
 
+//    public abstract dataType[] getConfig();
+//    public abstract void setConfig(dataType[] config);
 
     public abstract View createView(Context context, Function<dataType, Integer> onUpdate);
     public boolean isBlank = false;

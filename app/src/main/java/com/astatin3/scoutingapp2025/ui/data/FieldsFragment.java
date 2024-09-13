@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.astatin3.scoutingapp2025.databinding.FragmentDataFieldsBinding;
 import com.astatin3.scoutingapp2025.scoutingData.fields;
 import com.astatin3.scoutingapp2025.types.input.inputType;
+import com.astatin3.scoutingapp2025.utility.DataManager;
 
 public class FieldsFragment extends Fragment {
     FragmentDataFieldsBinding binding;
@@ -185,13 +186,29 @@ public class FieldsFragment extends Fragment {
     }
 
     private void onFieldSelect(inputType field){
-        System.out.println(field.name);
+        //System.out.println(field.name);
 
         binding.editButton.setOnClickListener(v -> {
+            binding.addButton.setVisibility(View.GONE);
+            binding.upButton.setVisibility(View.GONE);
+            binding.downButton.setVisibility(View.GONE);
+
+            binding.ValueEditTable.removeAllViews();
             binding.valueEditContainer.setVisibility(View.VISIBLE);
             TextView tv = new TextView(getContext());
-            tv.setText("Test!");
+
+            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            tv.setText(field.name);
+            tv.setPadding(8,8,8,8);
+            tv.setTextSize(24);
+
             binding.ValueEditTable.addView(tv);
+
+            FieldEditorHelper fe = new FieldEditorHelper(
+                getContext(),
+                field,
+                binding.ValueEditTable
+            );
         });
 
     }

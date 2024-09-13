@@ -6,21 +6,22 @@ Ridgebotics 2025 scouting app in Android
 - Make the "Report" menu, A tool that lets users select data to display from the the teams and compare menus.
 - Make practice mode
 #### Data Analysis:
+- Add CSV exporting of match scouting data.
 - Statbotics intigration
 - AI overview of scouting data for a team???
 #### Functionality:
 - Make the system for blank and unselected fields better.
 - Add more types of data fields.
 - Make server software to allow for easy sync over wifi
+- Test the scouting app
 
 ## In Progress:
 #### Scouting:
+- Fix scouting offset bug
 #### Data Analysis:
-- Add CSV exporting of match scouting data.
 - Make the "Compare" menu, cross comparing team's stats.
 #### Functionality:
 - Make pit and match data field builder UIs. I don't want to have to keep editing a variable
-- Test the scouting app
 
 
 ## Done:

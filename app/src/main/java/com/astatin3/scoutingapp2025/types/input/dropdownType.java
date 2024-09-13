@@ -49,9 +49,6 @@ public class dropdownType extends inputType {
     }
 
 
-
-
-
     public byte[] encode() throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         bb.addString(name);

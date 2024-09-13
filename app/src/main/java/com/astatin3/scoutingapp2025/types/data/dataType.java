@@ -6,7 +6,6 @@ public abstract class dataType {
         STRING
     }
 
-
     private Object value;
     private final String name;
 

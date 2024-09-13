@@ -25,6 +25,13 @@ public class ByteBuilder {
         public abstract byte[] build();
     }
 
+    public static String blankStrNull(String str){
+        if(str.isEmpty() || str.isEmpty()){
+            return "null";
+        }
+        else return str;
+    }
+
     private class boolType extends byteType {
         public boolean val;
         public byte getType(){return bool_id;}
@@ -87,6 +94,7 @@ public class ByteBuilder {
         }
     }
     public ByteBuilder addString(String str) throws buildingException {
+        str = blankStrNull(str);
         if(str.length() > 65536){throw new buildingException("String too long (greater than 65536)");}
 
         stringType stringType = new stringType();

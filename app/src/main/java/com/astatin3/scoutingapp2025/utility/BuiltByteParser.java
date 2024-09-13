@@ -17,6 +17,12 @@ public class BuiltByteParser {
         }
     }
 
+    public static String unBlankStrNull(String str){
+        if(str.equals("null")){
+            return "";
+        }
+        else return str;
+    }
 
     public abstract class parsedObject {
         public abstract Integer getType();
@@ -100,7 +106,7 @@ public class BuiltByteParser {
                     break;
                 case 2:
                     stringObject so = new stringObject();
-                    so.str = new String(block, StandardCharsets.UTF_8);
+                    so.str = unBlankStrNull(new String(block, StandardCharsets.UTF_8));
                     objects.add(so);
                     break;
                 case 3:
