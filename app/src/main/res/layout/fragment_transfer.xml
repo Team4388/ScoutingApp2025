@@ -25,8 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone">
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/uploadButton"
@@ -38,6 +37,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/CSVButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CSV"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/downloadButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/uploadButton" />
 
         <Button
             android:id="@+id/downloadButton"

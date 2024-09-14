@@ -10,7 +10,8 @@ public class DataManager {
     public static String evcode;
     public static frcEvent event;
     public static void reload_event(){
-        evcode = getevcode();        event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
+        evcode = getevcode();
+        event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
     }
 
     public static String getevcode() {

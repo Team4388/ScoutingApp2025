@@ -64,12 +64,12 @@ public class ScoutingDataWriter {
                     case 1: // Int
                         dataTypes[i] = intType.newNull(values[version][i].name);
                         dataTypes[i].forceSetValue(objects.get(i+2).get());
-                        System.out.println("Loaded INT: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
+                        //System.out.println("Loaded INT: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
                         break;
                     case 2: // String
                         dataTypes[i] = stringType.newNull(values[version][i].name);
                         dataTypes[i].forceSetValue(objects.get(i+2).get());
-                        System.out.println("Loaded STR: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
+                        //System.out.println("Loaded STR: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
                         break;
                 }
             }

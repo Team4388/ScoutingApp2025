@@ -3,6 +3,7 @@ package com.astatin3.scoutingapp2025.ui.transfer;
 import static androidx.navigation.fragment.FragmentKt.findNavController;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,14 +22,12 @@ import com.astatin3.scoutingapp2025.ui.transfer.codes.CodeGeneratorView;
 public class TransferFragment extends Fragment {
     private FragmentTransferBinding binding;
 
-    private boolean submenu = false;
-
-    private enum TransferTypes {
-        CAMERA,
-        BLUETOOTH,
-        LOCAL_WIFI,
-        SCOUTING_SERVER
-    }
+//    private enum TransferTypes {
+//        CAMERA,
+//        BLUETOOTH,
+//        LOCAL_WIFI,
+//        SCOUTING_SERVER
+//    }
 
     String evcode;
 
@@ -68,12 +67,41 @@ public class TransferFragment extends Fragment {
         if(evcode.equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);
             binding.uploadButton.setVisibility(View.GONE);
+            binding.CSVButton.setVisibility(View.GONE);
             binding.downloadButton.setVisibility(View.VISIBLE);
             return binding.getRoot();
         }
 
         binding.uploadButton.setOnClickListener(v -> {
             start_upload();
+        });
+
+        binding.CSVButton.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Chose data");
+
+            builder.setNegativeButton("Pit data", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    CSVExport.exportPits(getContext());
+                }
+            });
+
+            builder.setPositiveButton("Match data", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    CSVExport.exportMatches(getContext());
+                }
+            });
+
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
         });
 
         if(!latestSettings.settings.get_wifi_mode())
