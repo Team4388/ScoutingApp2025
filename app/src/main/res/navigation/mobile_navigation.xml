@@ -141,6 +141,9 @@
         android:id="@+id/navigation_data_fields"
         android:name="com.astatin3.scoutingapp2025.ui.data.FieldsFragment"
         tools:layout="@layout/fragment_data_fields">
+        <action
+            android:id="@+id/action_navigation_data_fields_to_navigation_data_fields_chooser"
+            app:destination="@id/navigation_data_fields_chooser" />
     </fragment>
 
 

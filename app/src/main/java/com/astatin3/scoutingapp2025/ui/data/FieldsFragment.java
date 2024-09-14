@@ -1,11 +1,17 @@
 package com.astatin3.scoutingapp2025.ui.data;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -14,11 +20,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import com.astatin3.scoutingapp2025.R;
 import com.astatin3.scoutingapp2025.databinding.FragmentDataFieldsBinding;
 import com.astatin3.scoutingapp2025.scoutingData.fields;
+import com.astatin3.scoutingapp2025.types.input.dropdownType;
 import com.astatin3.scoutingapp2025.types.input.inputType;
+import com.astatin3.scoutingapp2025.types.input.sliderType;
+import com.astatin3.scoutingapp2025.types.input.tallyType;
+import com.astatin3.scoutingapp2025.types.input.textType;
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.DataManager;
+import com.skydoves.powerspinner.IconSpinnerAdapter;
+import com.skydoves.powerspinner.IconSpinnerItem;
+import com.skydoves.powerspinner.PowerSpinnerView;
+import com.skydoves.powerspinner.SpinnerGravity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FieldsFragment extends Fragment {
     FragmentDataFieldsBinding binding;
@@ -38,6 +59,7 @@ public class FieldsFragment extends Fragment {
 
 
         binding.saveButton.setVisibility(View.GONE);
+        binding.cancelEditButton.setVisibility(View.GONE);
         binding.editButton.setVisibility(View.GONE);
         binding.upButton.setVisibility(View.GONE);
         binding.addButton.setVisibility(View.GONE);
@@ -117,35 +139,24 @@ public class FieldsFragment extends Fragment {
         binding.valueEditContainer.setVisibility(View.GONE);
 
         for(int i = 0; i < version_values.length; i++){
-            TableRow tr = new TableRow(getContext());
-            TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
-                    FrameLayout.LayoutParams.WRAP_CONTENT,
-                    FrameLayout.LayoutParams.WRAP_CONTENT
-            );
-
-            rowParams.setMargins(20,20,20,20);
-            tr.setLayoutParams(rowParams);
-            tr.setPadding(20,20,20,20);
-            tr.setBackgroundColor(unfocused_background_color);
-
-            TextView tv = new TextView(getContext());
-            tv.setText(version_values[i].get_type_name());
-            tv.setTextSize(12);
-            tr.addView(tv);
-
-            tv = new TextView(getContext());
-            tv.setText(version_values[i].name);
-            tv.setTextSize(20);
-            tr.addView(tv);
-
-            binding.fieldsArea.addView(tr);
-
-            tr.setOnClickListener(v -> {
-                binding.editButton.setVisibility(View.VISIBLE);
-                trOnClick(version_values, tr);
-            });
+            addRow(version_values[i]);
         }
         selindex = -1;
+
+
+        binding.addButton.setOnClickListener(this::addField);
+        binding.saveButton.setOnClickListener(this::buttonfunc);
+    }
+
+    private void addRow(inputType field){
+        TableRow tr = getTableRow(field);
+
+        binding.fieldsArea.addView(tr);
+
+        tr.setOnClickListener(v -> {
+            binding.editButton.setVisibility(View.VISIBLE);
+            trOnClick(values[values.length-1], tr);
+        });
 
         binding.upButton.setOnClickListener(v -> {
             if(selindex != 0) {
@@ -156,16 +167,41 @@ public class FieldsFragment extends Fragment {
         });
 
         binding.downButton.setOnClickListener(v -> {
-            if(selindex != version_values.length-1) {
+            if(selindex != values[values.length-1].length-1) {
                 binding.saveButton.setVisibility(View.VISIBLE);
                 binding.fieldsArea.updateRowOrder(selindex, selindex + 1);
                 selindex += 1;
             }
         });
 
-        binding.saveButton.setOnClickListener(v -> {
-            binding.saveButton.setVisibility(View.GONE);
+    }
+
+    private void buttonfunc(View v){
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle("Warning!");
+        alert.setMessage("Changing or removing some values will result in lost data!\nBut this will create a new field version, and you can revert at any time.");
+        alert.setPositiveButton("OK", null);
+        alert.setNegativeButton("Cancel", null);
+        alert.setCancelable(true);
+        alert.setOnDismissListener(b -> {
+            inputType[][] currentValues = fields.load(filename);
+            assert currentValues != null;
+            inputType[][] newValues = new inputType[currentValues.length+1][];
+            System.arraycopy(currentValues, 0, newValues, 0, currentValues.length);
+
+            newValues[newValues.length-1] = new inputType[values[values.length-1].length];
+
+            for(int i = 0; i < values[values.length-1].length; i++){
+                newValues[newValues.length-1][i] = values[values.length-1][binding.fieldsArea.getReorderedIndexes().get(i)];
+            }
+//            newValues[newValues.length-1] = values[values.length-1];
+
+            boolean saved = fields.save(filename, newValues);
+            AlertManager.alert("Saved", String.valueOf(saved));
+
+            Navigation.findNavController((Activity) getContext(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_navigation_data_fields_to_navigation_data_fields_chooser);
         });
+        alert.create().show();
     }
 
     private int selindex = -1;
@@ -189,6 +225,7 @@ public class FieldsFragment extends Fragment {
         //System.out.println(field.name);
 
         binding.editButton.setOnClickListener(v -> {
+            binding.editButton.setVisibility(View.GONE);
             binding.addButton.setVisibility(View.GONE);
             binding.upButton.setVisibility(View.GONE);
             binding.downButton.setVisibility(View.GONE);
@@ -204,12 +241,240 @@ public class FieldsFragment extends Fragment {
 
             binding.ValueEditTable.addView(tv);
 
-            FieldEditorHelper fe = new FieldEditorHelper(
+            final FieldEditorHelper fe = new FieldEditorHelper(
                 getContext(),
                 field,
                 binding.ValueEditTable
             );
+
+            binding.saveButton.setVisibility(View.VISIBLE);
+            binding.saveButton.setOnClickListener(a -> {
+                System.out.println(fe.save());
+                binding.editButton.setVisibility(View.VISIBLE);
+                binding.addButton.setVisibility(View.VISIBLE);
+                binding.upButton.setVisibility(View.VISIBLE);
+                binding.downButton.setVisibility(View.VISIBLE);
+                binding.ValueEditTable.removeAllViews();
+                binding.valueEditContainer.setVisibility(View.GONE);
+                binding.cancelEditButton.setVisibility(View.GONE);
+                binding.saveButton.setOnClickListener(this::buttonfunc);
+            });
+
+            binding.cancelEditButton.setVisibility(View.VISIBLE);
+            binding.cancelEditButton.setOnClickListener(a -> {
+                binding.editButton.setVisibility(View.VISIBLE);
+                binding.addButton.setVisibility(View.VISIBLE);
+                binding.upButton.setVisibility(View.VISIBLE);
+                binding.downButton.setVisibility(View.VISIBLE);
+                binding.ValueEditTable.removeAllViews();
+                binding.valueEditContainer.setVisibility(View.GONE);
+                binding.cancelEditButton.setVisibility(View.GONE);
+                binding.saveButton.setOnClickListener(this::buttonfunc);
+            });
+
         });
 
+    }
+
+
+
+
+
+
+
+    private void addField(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Title");
+
+        final EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        builder.setView(input);
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String title = input.getText().toString();
+                if(title.isEmpty() || title.isBlank()) {
+                    AlertManager.error("Title cannot be blank!");
+                    return;
+                }
+                addField_Part_2(title);
+            }
+        });
+
+        builder.show();
+    }
+
+    private void addField_Part_2(String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Title");
+
+        final PowerSpinnerView dropdown = new PowerSpinnerView(getContext());
+
+        List<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
+
+        iconSpinnerItems.add(new IconSpinnerItem("Slider"));
+        iconSpinnerItems.add(new IconSpinnerItem("Text"));
+        iconSpinnerItems.add(new IconSpinnerItem("Dropdown"));
+        iconSpinnerItems.add(new IconSpinnerItem("Tally"));
+
+        IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(dropdown);
+
+        dropdown.setGravity(Gravity.CENTER);
+
+        dropdown.setSpinnerAdapter(iconSpinnerAdapter);
+        dropdown.setItems(iconSpinnerItems);
+
+        dropdown.selectItemByIndex(0);
+
+        dropdown.setPadding(10,20,10,20);
+        dropdown.setBackgroundColor(0xf0000000);
+        dropdown.setTextColor(0xff00ff00);
+        dropdown.setTextSize(14.5f);
+        dropdown.setArrowGravity(SpinnerGravity.END);
+        dropdown.setArrowPadding(8);
+//        dropdown.setSpinnerItemHeight(46);
+        dropdown.setSpinnerPopupElevation(14);
+
+        builder.setView(dropdown);
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                addField_Part_3(title, dropdown.getSelectedIndex());
+            }
+        });
+
+        builder.show();
+    }
+
+    private void addField_Part_3(String title, int typeIndex) {
+        switch (typeIndex){
+            case 0:
+                sliderType slider = new sliderType();
+                slider.name = title;
+                FieldEditorHelper.setSliderParams(slider, FieldEditorHelper.defaultSliderParams);
+                addField_Part_4(slider);
+                break;
+            case 1:
+                textType text = new textType();
+                text.name = title;
+                FieldEditorHelper.setTextParams(text, FieldEditorHelper.defaultTextParams);
+                addField_Part_4(text);
+                break;
+            case 2:
+                dropdownType dropdown = new dropdownType();
+                dropdown.name = title;
+                FieldEditorHelper.setDropdownParams(dropdown, FieldEditorHelper.defaultDropdownParams);
+                addField_Part_4(dropdown);
+                break;
+            case 3:
+                tallyType tally = new tallyType();
+                tally.name = title;
+                FieldEditorHelper.setTallyParams(tally, FieldEditorHelper.defaultTallyParams);
+                addField_Part_4(tally);
+                break;
+
+        }
+
+    }
+    private void addField_Part_4(inputType field) {
+        binding.editButton.setVisibility(View.GONE);
+        binding.addButton.setVisibility(View.GONE);
+        binding.upButton.setVisibility(View.GONE);
+        binding.downButton.setVisibility(View.GONE);
+
+        binding.ValueEditTable.removeAllViews();
+        binding.valueEditContainer.setVisibility(View.VISIBLE);
+        TextView tv = new TextView(getContext());
+
+        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        tv.setText(field.name);
+        tv.setPadding(8,8,8,8);
+        tv.setTextSize(24);
+
+        binding.ValueEditTable.addView(tv);
+
+        final FieldEditorHelper fe = new FieldEditorHelper(
+                getContext(),
+                field,
+                binding.ValueEditTable
+        );
+
+        binding.saveButton.setVisibility(View.VISIBLE);
+        binding.saveButton.setOnClickListener(a -> {
+            inputType[] newValues = new inputType[values[values.length-1].length+1];
+            System.arraycopy(values[values.length-1], 0, newValues, 0, values[values.length-1].length);
+            newValues[newValues.length-1] = field;
+            values[values.length-1] = newValues;
+
+            AlertManager.alert("Test", String.valueOf(binding.fieldsArea.getReorderedIndexes()));
+
+            //TableRow tr = getTableRow(field);
+            //binding.fieldsArea.addView(tr);
+            addRow(field);
+
+            System.out.println(fe.save());
+            binding.editButton.setVisibility(View.VISIBLE);
+            binding.addButton.setVisibility(View.VISIBLE);
+            binding.upButton.setVisibility(View.VISIBLE);
+            binding.downButton.setVisibility(View.VISIBLE);
+            binding.ValueEditTable.removeAllViews();
+            binding.valueEditContainer.setVisibility(View.GONE);
+            binding.cancelEditButton.setVisibility(View.GONE);
+            binding.saveButton.setOnClickListener(this::buttonfunc);
+        });
+
+        binding.cancelEditButton.setVisibility(View.VISIBLE);
+        binding.cancelEditButton.setOnClickListener(a -> {
+            binding.editButton.setVisibility(View.VISIBLE);
+            binding.addButton.setVisibility(View.VISIBLE);
+            binding.upButton.setVisibility(View.VISIBLE);
+            binding.downButton.setVisibility(View.VISIBLE);
+            binding.ValueEditTable.removeAllViews();
+            binding.valueEditContainer.setVisibility(View.GONE);
+            binding.cancelEditButton.setVisibility(View.GONE);
+            binding.saveButton.setOnClickListener(this::buttonfunc);
+        });
+
+    }
+
+    private @NonNull TableRow getTableRow(inputType field) {
+        TableRow tr = new TableRow(getContext());
+        TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        rowParams.setMargins(20,20,20,20);
+        tr.setLayoutParams(rowParams);
+        tr.setPadding(20,20,20,20);
+        tr.setBackgroundColor(unfocused_background_color);
+
+        TextView tv = new TextView(getContext());
+        tv.setText(field.get_type_name());
+        tv.setTextSize(12);
+        tr.addView(tv);
+
+        tv = new TextView(getContext());
+        tv.setText(field.name);
+        tv.setTextSize(20);
+        tr.addView(tv);
+        return tr;
     }
 }

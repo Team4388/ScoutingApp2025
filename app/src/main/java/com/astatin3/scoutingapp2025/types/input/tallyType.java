@@ -30,7 +30,7 @@ public class tallyType extends inputType {
     public dataType.valueTypes getValueType(){return dataType.valueTypes.NUM;}
     public Object get_fallback_value(){return 0;}
     public tallyType(){}
-    public String get_type_name(){return "Dropdown";}
+    public String get_type_name(){return "Tally";}
     public tallyType(String name, int default_value){
         super(name);
         this.default_value = default_value;

@@ -88,8 +88,7 @@ public class textType extends inputType {
         });
 
         return text;
-
-    };
+    }
     public void setViewValue(Object value) {
         if(text == null) return;
         if(stringType.isNull((String) value)){

@@ -53,6 +53,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/cancel_edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <Button
         android:id="@+id/revert_version_button"
@@ -81,7 +90,8 @@
             <com.astatin3.scoutingapp2025.utility.ReorderableTableLayout
                 android:id="@+id/fieldsArea"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="60dp">
 
             </com.astatin3.scoutingapp2025.utility.ReorderableTableLayout>
         </ScrollView>
