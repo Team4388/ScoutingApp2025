@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -31,7 +30,6 @@ import com.astatin3.scoutingapp2025.types.input.sliderType;
 import com.astatin3.scoutingapp2025.types.input.tallyType;
 import com.astatin3.scoutingapp2025.types.input.textType;
 import com.astatin3.scoutingapp2025.utility.AlertManager;
-import com.astatin3.scoutingapp2025.utility.DataManager;
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
 import com.skydoves.powerspinner.PowerSpinnerView;
@@ -64,6 +62,7 @@ public class FieldsFragment extends Fragment {
         binding.upButton.setVisibility(View.GONE);
         binding.addButton.setVisibility(View.GONE);
         binding.downButton.setVisibility(View.GONE);
+        binding.deleteButton.setVisibility(View.GONE);
 
         binding.valueEditContainer.setVisibility(View.GONE);
 
@@ -250,34 +249,91 @@ public class FieldsFragment extends Fragment {
             binding.saveButton.setVisibility(View.VISIBLE);
             binding.saveButton.setOnClickListener(a -> {
                 System.out.println(fe.save());
-                binding.editButton.setVisibility(View.VISIBLE);
-                binding.addButton.setVisibility(View.VISIBLE);
-                binding.upButton.setVisibility(View.VISIBLE);
-                binding.downButton.setVisibility(View.VISIBLE);
-                binding.ValueEditTable.removeAllViews();
-                binding.valueEditContainer.setVisibility(View.GONE);
-                binding.cancelEditButton.setVisibility(View.GONE);
-                binding.saveButton.setOnClickListener(this::buttonfunc);
+                defaultVisibility();
             });
 
             binding.cancelEditButton.setVisibility(View.VISIBLE);
             binding.cancelEditButton.setOnClickListener(a -> {
-                binding.editButton.setVisibility(View.VISIBLE);
-                binding.addButton.setVisibility(View.VISIBLE);
-                binding.upButton.setVisibility(View.VISIBLE);
-                binding.downButton.setVisibility(View.VISIBLE);
-                binding.ValueEditTable.removeAllViews();
-                binding.valueEditContainer.setVisibility(View.GONE);
-                binding.cancelEditButton.setVisibility(View.GONE);
-                binding.saveButton.setOnClickListener(this::buttonfunc);
+                defaultVisibility();
             });
 
+            binding.deleteButton.setVisibility(View.VISIBLE);
+            binding.deleteButton.setOnClickListener(a -> {
+                deleteField(field);
+            });
         });
 
     }
 
+    private void deleteField(inputType field){
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle("Warning!");
+        alert.setMessage("Removing a value will result in data being deleted in subsequent field versions!");
+        alert.setNegativeButton("Cancel", null);
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                defaultVisibility();
+
+                int oldindex = -1;
+                for(int i = 0; i < values[values.length - 1].length; i++){
+                    if(values[values.length - 1][i].equals(field)){
+                        oldindex = i;
+                        break;
+                    }
+                }
+
+                if(oldindex != -1) {
+                    System.out.println(Arrays.toString(values[values.length - 1]));
+                    binding.fieldsArea.removeViewAt(selindex);
+                    binding.fieldsArea.removeElement(oldindex);
+                    values[values.length - 1] = removeElement(values[values.length - 1], oldindex);
+                    selindex = -1;
+                    AlertManager.toast("Removed!");
+                    binding.editButton.setVisibility(View.GONE);
+                    System.out.println(Arrays.toString(values[values.length - 1]));
+                    //System.out.println(values[values.length-1].length);
+                }
+
+            }
+        });
+        alert.setCancelable(true);
+        alert.create().show();
+    }
+
+    public inputType[] removeElement(inputType[] src, int i) {
+        inputType[] newArray = new inputType[src.length - 1];
+        if (i > 0){
+            System.arraycopy(src, 0, newArray, 0, i);
+        }
+
+        if (newArray.length > i){
+            System.arraycopy(src, i + 1, newArray, i, newArray.length - i);
+        }
+
+        return newArray;
+    }
 
 
+
+
+
+
+
+
+
+
+    private void defaultVisibility() {
+        binding.editButton.setVisibility(View.VISIBLE);
+        binding.addButton.setVisibility(View.VISIBLE);
+        binding.upButton.setVisibility(View.VISIBLE);
+        binding.downButton.setVisibility(View.VISIBLE);
+        binding.ValueEditTable.removeAllViews();
+        binding.valueEditContainer.setVisibility(View.GONE);
+        binding.cancelEditButton.setVisibility(View.GONE);
+        binding.deleteButton.setVisibility(View.GONE);
+        binding.saveButton.setOnClickListener(this::buttonfunc);
+    }
 
 
 
@@ -430,26 +486,12 @@ public class FieldsFragment extends Fragment {
             addRow(field);
 
             System.out.println(fe.save());
-            binding.editButton.setVisibility(View.VISIBLE);
-            binding.addButton.setVisibility(View.VISIBLE);
-            binding.upButton.setVisibility(View.VISIBLE);
-            binding.downButton.setVisibility(View.VISIBLE);
-            binding.ValueEditTable.removeAllViews();
-            binding.valueEditContainer.setVisibility(View.GONE);
-            binding.cancelEditButton.setVisibility(View.GONE);
-            binding.saveButton.setOnClickListener(this::buttonfunc);
+            defaultVisibility();
         });
 
         binding.cancelEditButton.setVisibility(View.VISIBLE);
         binding.cancelEditButton.setOnClickListener(a -> {
-            binding.editButton.setVisibility(View.VISIBLE);
-            binding.addButton.setVisibility(View.VISIBLE);
-            binding.upButton.setVisibility(View.VISIBLE);
-            binding.downButton.setVisibility(View.VISIBLE);
-            binding.ValueEditTable.removeAllViews();
-            binding.valueEditContainer.setVisibility(View.GONE);
-            binding.cancelEditButton.setVisibility(View.GONE);
-            binding.saveButton.setOnClickListener(this::buttonfunc);
+            defaultVisibility();
         });
 
     }

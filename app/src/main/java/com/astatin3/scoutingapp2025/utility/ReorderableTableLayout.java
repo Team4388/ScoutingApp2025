@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -140,5 +141,18 @@ public class ReorderableTableLayout extends TableLayout {
 
     public List<Integer> getReorderedIndexes() {
         return reorderedIndices;
+    }
+
+    public void removeElement(int unshuffledindex){
+        System.out.println(Arrays.toString(new List[]{reorderedIndices}));
+
+        reorderedIndices.remove(unshuffledindex);
+
+        for (int i = 0; i < reorderedIndices.size(); i++) {
+            if(reorderedIndices.get(i) > unshuffledindex)
+                reorderedIndices.set(i, reorderedIndices.get(i) - 1);
+        }
+
+        System.out.println(Arrays.toString(new List[]{reorderedIndices}));
     }
 }
