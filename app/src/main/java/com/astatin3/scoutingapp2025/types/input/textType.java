@@ -1,7 +1,5 @@
 package com.astatin3.scoutingapp2025.types.input;
 
-import static com.astatin3.scoutingapp2025.types.data.intType.offset;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;

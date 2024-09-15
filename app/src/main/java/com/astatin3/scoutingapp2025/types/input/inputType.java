@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.astatin3.scoutingapp2025.types.data.dataType;
+import com.astatin3.scoutingapp2025.ui.data.FieldEditorHelper;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 
@@ -35,19 +36,6 @@ public abstract class inputType {
         this.name = name;
     }
 
-//    public enum parameterType {
-//        NUMBER,
-//        STRING,
-//        STRINGARRAY
-//    }
-
-//    public static parameterType[] parameterTypeByInputType(inputTypes t){
-//        switch (t){
-//            case SLIDER:
-//                return new parameterType[]{parameterType.NUMBER, };
-//        }
-//    }
-
     public abstract String get_type_name();
 
     public abstract byte[] encode() throws ByteBuilder.buildingException;
@@ -62,6 +50,48 @@ public abstract class inputType {
     public void setViewValue(dataType type){setViewValue(type.get());}
     public abstract void setViewValue(Object value);
     public abstract dataType getViewValue();
+
+
+
+//    private enum parameterTypeEnum {
+//        paramNumber,
+//        paramString,
+//        paramStringArray
+//    }
+//
+//    public static class parameterType {
+//        public String name;
+//        public parameterTypeEnum id;
+//    }
+//
+//    public static class paramNumber extends parameterType {
+//        public int val;
+//        public paramNumber(String name, int val){
+//            this.name = name + " (Number)";
+//            this.val = val;
+//            this.id = parameterTypeEnum.paramNumber;
+//        }
+//    }
+//
+//    public static class paramString extends parameterType {
+//        public String val;
+//        public paramString(String name, String val){
+//            this.name = name + " (String)";
+//            this.val = val;
+//            this.id = parameterTypeEnum.paramString;
+//        }
+//    }
+//
+//    public static class paramStringArray extends parameterType {
+//        public String[] val;
+//        public paramStringArray(String name, String[] val){
+//            this.name = name + " (String array)";
+//            this.val = val;
+//            this.id = parameterTypeEnum.paramStringArray;
+//        }
+//    }
+
+//    public abstract parameterType[] getDefaultParameters();
 
 
     public abstract void add_individual_view(LinearLayout parent, dataType data);

@@ -8,18 +8,19 @@ Ridgebotics 2025 scouting app in Android
 #### Data Analysis:
 - Statbotics intigration
 - AI overview of scouting data for a team???
+- Make the "Compare" menu, cross comparing team's stats.
 #### Functionality:
-- When a field is created, make updated scouting data return null values, not the default value
 - Make the system for blank and unselected fields better.
 - Add more types of data fields.
 - Make server software to allow for easy sync over wifi
 - Test the scouting app
+- Deploy to F-Droid
 
 ## In Progress:
 #### Scouting:
+- When a field is created, make updated scouting data return null values, not the default value
 - Fix scouting offset bug
 #### Data Analysis:
-- Make the "Compare" menu, cross comparing team's stats.
 #### Functionality:
 
 

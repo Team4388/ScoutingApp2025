@@ -82,9 +82,9 @@ public class ScoutingArray {
         inputType it = get_input_type_by_name(version+1, tv.name);
         switch (it.getValueType()){
             case NUM:
-                return new intType(it.name, (int) it.default_value);
+                return intType.newNull(it.name);
             case STRING:
-                return new stringType(it.name, (String) it.default_value);
+                return stringType.newNull(it.name);
         }
         return null;
     }

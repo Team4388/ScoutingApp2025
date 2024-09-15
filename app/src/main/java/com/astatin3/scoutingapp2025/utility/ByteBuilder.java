@@ -27,7 +27,7 @@ public class ByteBuilder {
 
     public static String blankStrNull(String str){
         if(str.isEmpty() || str.isEmpty()){
-            return "null";
+            return "ƒ";
         }
         else return str;
     }

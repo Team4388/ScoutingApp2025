@@ -18,7 +18,7 @@ public class BuiltByteParser {
     }
 
     public static String unBlankStrNull(String str){
-        if(str.equals("null")){
+        if(str.equals("ƒ")){
             return "";
         }
         else return str;

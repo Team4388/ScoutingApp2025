@@ -1,9 +1,8 @@
 package com.astatin3.scoutingapp2025.types.data;
 
 public class intType extends dataType {
-    public static final int nullval = 0;
-    public static final int unselectedval = 1;
-    public static final int offset = 2;
+    public static final int nullval = 255;
+//    public static final int unselectedval = 1;
 
     public valueTypes getValueType() {
         return valueTypes.NUM;
@@ -17,11 +16,11 @@ public class intType extends dataType {
 //    }
 
     public Object get(){
-        return (int) forceGetValue()-2;
+        return (int) forceGetValue();
     }
 
     public void set(Object value){
-        forceSetValue((int) value + 2);
+        forceSetValue((int) value);
     }
 
     public intType(String name, int value) {
@@ -35,11 +34,11 @@ public class intType extends dataType {
         return a;
     }
 
-    public static intType newUnselected(String name){
-        final intType a = new intType(name, 0);
-        a.forceSetValue(unselectedval);
-        return a;
-    }
+//    public static intType newUnselected(String name){
+//        final intType a = new intType(name, 0);
+//        a.forceSetValue(unselectedval);
+//        return a;
+//    }
 
     public static boolean isNull(int obj){
         return obj == nullval;
@@ -48,10 +47,10 @@ public class intType extends dataType {
         return isNull((int) forceGetValue());
     }
 
-    public static boolean isUnselected(int obj){
-        return obj == unselectedval;
-    }
-    public boolean isUnselected() {
-        return isUnselected((int) forceGetValue());
-    }
+//    public static boolean isUnselected(int obj){
+//        return obj == unselectedval;
+//    }
+//    public boolean isUnselected() {
+//        return isUnselected((int) forceGetValue());
+//    }
 }

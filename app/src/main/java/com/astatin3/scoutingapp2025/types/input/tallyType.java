@@ -73,14 +73,14 @@ public class tallyType extends inputType {
     public void setViewValue(Object value) {
         if(tally == null) return;
         System.out.println(value);
-        if((int)value == intType.nullval || (int)value == intType.unselectedval){
+        if(intType.isNull((int)value)){
             nullify();
             return;
         }
 
         isBlank = false;
         tally.setVisibility(View.VISIBLE);
-        tally.setValue((int) value-2);
+        tally.setValue((int) value);
     }
     public void nullify(){
         isBlank = true;
@@ -88,7 +88,7 @@ public class tallyType extends inputType {
     }
     public dataType getViewValue(){
         if(tally == null) return null;
-        if(tally.getVisibility() == View.GONE) return new intType(name, 0);
+        if(tally.getVisibility() == View.GONE) return intType.newNull(name);
         return new intType(name, tally.getValue());
     }
 

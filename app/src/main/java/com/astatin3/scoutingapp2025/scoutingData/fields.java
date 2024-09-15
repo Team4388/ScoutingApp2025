@@ -23,28 +23,28 @@ public class fields {
     public static final inputType[][] default_match_fields = new inputType[][] {
         {
             new tallyType("Auto Notes", 0),
-            new sliderType("Auto Performance", 5, 1, 10),
-            new textType("Auto Comments", "None"),
+            new sliderType("Auto Performance", 5, 0, 10),
+            new textType("Auto Comments", ""),
             new tallyType("Teleop Notes", 0),
-            new sliderType("Teleop Performance", 5, 1, 10),
-            new textType("Teleop Comments", "None"),
-            new sliderType("Overall Driving Performance", 5, 1, 10),
-            new textType("Overall Driving Comments", "None"),
-            new sliderType("Score area (AMP <-> Speaker)", 5, 1, 10),
-            new dropdownType("End Condition", new String[]{"Nothing", "Attempted Climb", "Successful Climbed", "Climbed with multiple robots", "Climbed with trap"}, 1),
-            new dropdownType("Robot Condition", new String[]{"Everything was working", "Something seemed to be broken", "Something was broken", "Missing robot (Joe Johnson)"}, 1),
-            new textType("Other Comments", "None")
+            new sliderType("Teleop Performance", 5, 0, 10),
+            new textType("Teleop Comments", ""),
+            new sliderType("Overall Driving Performance", 5, 0, 10),
+            new textType("Overall Driving Comments", ""),
+            new sliderType("Score area (AMP <-> Speaker)", 5, 0, 10),
+            new dropdownType("End Condition", new String[]{"Nothing", "Attempted Climb", "Successful Climbed", "Climbed with multiple robots", "Climbed with trap"}, 0),
+            new dropdownType("Robot Condition", new String[]{"Everything was working", "Something seemed to be broken", "Something was broken", "Missing robot (Joe Johnson)"}, 0),
+            new textType("Other Comments", "")
         }
     };
 
     public static final inputType[][] default_pit_fields = new inputType[][] {
         {
             new sliderType("How good is robot", 5, 0, 10),
-            new textType("notes", "<no-notes>"),
+            new textType("notes", ""),
         },{
             new sliderType("How good is robot", 5, 0, 10),
             new sliderType("Test", 1, 0, 10),
-            new textType("notes", "<no-notes>"),
+            new textType("notes", ""),
         }
     };
 
@@ -88,11 +88,9 @@ public class fields {
 
 
             return values;
-//            return true;
         } catch (Exception e) {
             AlertManager.error(e);
             return null;
-//            return false;
         }
     }
 

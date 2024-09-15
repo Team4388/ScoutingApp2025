@@ -21,7 +21,7 @@ public abstract class dataType {
 //    public abstract Object getUnselectedValue();
 
     public abstract boolean isNull();
-    public abstract boolean isUnselected();
+//    public abstract boolean isUnselected();
 
     public String getName() {return name;}
 

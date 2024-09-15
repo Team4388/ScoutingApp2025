@@ -26,9 +26,11 @@ public class ScoutingDataWriter {
                 switch (data[i].getValueType()){
                     case NUM:
                         bb.addInt((int) data[i].forceGetValue());
+                        System.out.println("Saved INT: " + data[i].getName() + ", ("+ data[i].get() +")");
                         break;
                     case STRING:
                         bb.addString((String) data[i].forceGetValue());
+                        System.out.println("Saved STR: " + data[i].getName() + ", ("+ data[i].get() +")");
                         break;
                 }
             }
@@ -64,12 +66,12 @@ public class ScoutingDataWriter {
                     case 1: // Int
                         dataTypes[i] = intType.newNull(values[version][i].name);
                         dataTypes[i].forceSetValue(objects.get(i+2).get());
-                        //System.out.println("Loaded INT: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
+                        System.out.println("Loaded INT: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
                         break;
                     case 2: // String
                         dataTypes[i] = stringType.newNull(values[version][i].name);
                         dataTypes[i].forceSetValue(objects.get(i+2).get());
-                        //System.out.println("Loaded STR: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
+                        System.out.println("Loaded STR: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
                         break;
                 }
             }

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.astatin3.scoutingapp2025.types.data.dataType;
 import com.astatin3.scoutingapp2025.types.data.intType;
 import com.astatin3.scoutingapp2025.types.data.stringType;
+import com.astatin3.scoutingapp2025.utility.AlertManager;
 import com.astatin3.scoutingapp2025.utility.BuiltByteParser;
 import com.astatin3.scoutingapp2025.utility.ByteBuilder;
 import com.github.mikephil.charting.charts.LineChart;
@@ -91,8 +92,17 @@ public class sliderType extends inputType {
         float step_size = (float) 1/(max-min);
         int round_position = Math.round(slider_position / step_size);
         isBlank = false;
+
+        float slidervalue = round_position*step_size;
+        if(slidervalue > 1 || slidervalue < 0) {
+            AlertManager.error("Error loading slider " + name);
+            slider.setValue(0);
+        }else{
+            slider.setValue(slidervalue);
+        }
+
+
         slider.setVisibility(View.VISIBLE);
-        slider.setValue(round_position*step_size);
     }
     public dataType getViewValue(){
         if(slider == null) return null;
@@ -116,9 +126,15 @@ public class sliderType extends inputType {
         float slider_position = (float) ((int) data.get()-min) / (max-min);
         float step_size = (float) 1/(max-min);
         int round_position = Math.round(slider_position / step_size);
-        slider.setValue(round_position*step_size);
+        float value = round_position*step_size;
+        if(value > 1 || value < 0) {
+            AlertManager.error("Error loading slider " + name);
+            slider.setValue(0);
+        }else{
+            slider.setValue(value);
+            slider.setStepSize((float) 1 / (max-min));
+        }
 
-        slider.setStepSize((float) 1 / (max-min));
         slider.setEnabled(false);
         parent.addView(slider);
     }
