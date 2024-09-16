@@ -13,11 +13,11 @@ plugins {
 //}
 
 android {
-    namespace = "com.astatin3.scoutingapp2025"
+    namespace = "com.ridgebotics.ridgescout"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.astatin3.scoutingapp2025"
+        applicationId = "com.ridgebotics.ridgescout"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

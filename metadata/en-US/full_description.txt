@@ -1,0 +1,3 @@
+Work in progress!
+
+This is a scouting app for First Robotics Compitition matches, that includes many features.

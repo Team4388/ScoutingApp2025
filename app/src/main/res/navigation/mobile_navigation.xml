@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_scouting"
-        android:name="com.astatin3.scoutingapp2025.ui.scouting.ScoutingFragment"
+        android:name="com.ridgebotics.ridgescout.ui.scouting.ScoutingFragment"
         android:label="@string/title_scouting"
         tools:layout="@layout/fragment_scouting">
         <action
@@ -31,13 +31,13 @@
 
     <fragment
         android:id="@+id/navigation_match_scouting"
-        android:name="com.astatin3.scoutingapp2025.ui.scouting.MatchScoutingFragment"
+        android:name="com.ridgebotics.ridgescout.ui.scouting.MatchScoutingFragment"
         tools:layout="@layout/fragment_scouting_match">
     </fragment>
 
     <fragment
         android:id="@+id/navigation_team_selector"
-        android:name="com.astatin3.scoutingapp2025.ui.TeamSelectorFragment"
+        android:name="com.ridgebotics.ridgescout.ui.TeamSelectorFragment"
         tools:layout="@layout/fragment_team_selector">
         <action
             android:id="@+id/action_navigation_team_selector_to_navigation_pit_scouting"
@@ -57,7 +57,7 @@
 
     <fragment
         android:id="@+id/navigation_pit_scouting"
-        android:name="com.astatin3.scoutingapp2025.ui.scouting.PitScoutingFragment"
+        android:name="com.ridgebotics.ridgescout.ui.scouting.PitScoutingFragment"
         tools:layout="@layout/fragment_scouting_pit"/>
 
 
@@ -67,7 +67,7 @@
 
     <fragment
         android:id="@+id/navigation_data"
-        android:name="com.astatin3.scoutingapp2025.ui.data.DataFragment"
+        android:name="com.ridgebotics.ridgescout.ui.data.DataFragment"
         android:label="@string/title_data"
         tools:layout="@layout/fragment_data">
         <action
@@ -102,31 +102,31 @@
 
     <fragment
         android:id="@+id/navigation_scouting_status"
-        android:name="com.astatin3.scoutingapp2025.ui.scouting.StatusFragment"
+        android:name="com.ridgebotics.ridgescout.ui.scouting.StatusFragment"
         tools:layout="@layout/fragment_scouting_status">
     </fragment>
 
     <fragment
         android:id="@+id/navigation_data_teams"
-        android:name="com.astatin3.scoutingapp2025.ui.data.TeamsFragment"
+        android:name="com.ridgebotics.ridgescout.ui.data.TeamsFragment"
         tools:layout="@layout/fragment_data_teams">
     </fragment>
 
     <fragment
         android:id="@+id/navigation_data_compare"
-        android:name="com.astatin3.scoutingapp2025.ui.data.CompareFragment"
+        android:name="com.ridgebotics.ridgescout.ui.data.CompareFragment"
         tools:layout="@layout/fragment_data_report">
     </fragment>
 
     <fragment
         android:id="@+id/navigation_data_report"
-        android:name="com.astatin3.scoutingapp2025.ui.data.ReportFragment"
+        android:name="com.ridgebotics.ridgescout.ui.data.ReportFragment"
         tools:layout="@layout/fragment_data_report">
     </fragment>
 
     <fragment
         android:id="@+id/navigation_data_fields_chooser"
-        android:name="com.astatin3.scoutingapp2025.ui.data.FieldsChooserFragment"
+        android:name="com.ridgebotics.ridgescout.ui.data.FieldsChooserFragment"
         tools:layout="@layout/fragment_data_fields_chooser">
         <action
             android:id="@+id/action_navigation_data_fields_chooser_to_navigation_data_fields"
@@ -139,7 +139,7 @@
 
     <fragment
         android:id="@+id/navigation_data_fields"
-        android:name="com.astatin3.scoutingapp2025.ui.data.FieldsFragment"
+        android:name="com.ridgebotics.ridgescout.ui.data.FieldsFragment"
         tools:layout="@layout/fragment_data_fields">
         <action
             android:id="@+id/action_navigation_data_fields_to_navigation_data_fields_chooser"
@@ -152,7 +152,7 @@
 
     <fragment
         android:id="@+id/navigation_transfer"
-        android:name="com.astatin3.scoutingapp2025.ui.transfer.TransferFragment"
+        android:name="com.ridgebotics.ridgescout.ui.transfer.TransferFragment"
         android:label="@string/title_transfer"
         tools:layout="@layout/fragment_transfer">
         <action
@@ -180,7 +180,7 @@
 
     <fragment
         android:id="@+id/navigation_file_selector"
-        android:name="com.astatin3.scoutingapp2025.ui.transfer.FileSelectorFragment"
+        android:name="com.ridgebotics.ridgescout.ui.transfer.FileSelectorFragment"
         tools:layout="@layout/fragment_transfer_file_selector">
         <action
             android:id="@+id/action_navigation_file_selector_to_navigation_transfer_selector"
@@ -193,7 +193,7 @@
 
     <fragment
         android:id="@+id/navigation_transfer_selector"
-        android:name="com.astatin3.scoutingapp2025.ui.transfer.TransferSelectorFragment"
+        android:name="com.ridgebotics.ridgescout.ui.transfer.TransferSelectorFragment"
         tools:layout="@layout/fragment_transfer_selector">
         <action
             android:id="@+id/action_navigation_transfer_selector_to_navigation_code_generator"
@@ -227,31 +227,31 @@
 
     <fragment
         android:id="@+id/navigation_code_generator"
-        android:name="com.astatin3.scoutingapp2025.ui.transfer.codes.CodeGeneratorView"
+        android:name="com.ridgebotics.ridgescout.ui.transfer.codes.CodeGeneratorView"
         tools:layout="@layout/fragment_transfer_code_sender">
     </fragment>
 
     <fragment
         android:id="@+id/navigation_code_scanner"
-        android:name="com.astatin3.scoutingapp2025.ui.transfer.codes.CodeScannerView"
+        android:name="com.ridgebotics.ridgescout.ui.transfer.codes.CodeScannerView"
         tools:layout="@layout/fragment_transfer_code_receiver">
     </fragment>
 
     <fragment
         android:id="@+id/navigation_bluetooth_sender"
-        android:name="com.astatin3.scoutingapp2025.ui.transfer.bluetooth.BluetoothSenderFragment"
+        android:name="com.ridgebotics.ridgescout.ui.transfer.bluetooth.BluetoothSenderFragment"
         tools:layout="@layout/fragment_transfer_bluetooth_sender">
     </fragment>
 
     <fragment
         android:id="@+id/navigation_bluetooth_receiver"
-        android:name="com.astatin3.scoutingapp2025.ui.transfer.bluetooth.BluetoothReceiverFragment"
+        android:name="com.ridgebotics.ridgescout.ui.transfer.bluetooth.BluetoothReceiverFragment"
         tools:layout="@layout/fragment_transfer_bluetooth_receiver">
     </fragment>
 
     <fragment
         android:id="@+id/navigation_tba"
-        android:name="com.astatin3.scoutingapp2025.ui.transfer.TBAFragment"
+        android:name="com.ridgebotics.ridgescout.ui.transfer.TBAFragment"
         tools:layout="@layout/fragment_transfer_tba">
     </fragment>
 
@@ -260,7 +260,7 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.astatin3.scoutingapp2025.ui.settings.settingsFragment"
+        android:name="com.ridgebotics.ridgescout.ui.settings.settingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings">
     </fragment>
