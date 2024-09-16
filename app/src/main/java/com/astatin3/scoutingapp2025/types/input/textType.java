@@ -183,6 +183,7 @@ public class textType extends inputType {
         List<Entry> entries = new ArrayList<>();
         for (int i = 0; i < data.length; i++) {
             if(data[i] == null) continue;
+            if(data[i].isNull()) continue;
 
             entries.add(
                     new Entry(i,

@@ -229,7 +229,7 @@ public class dropdownType extends inputType {
         for(int i = 0; i < text_options.length; i++){
             List<Entry> entries = new ArrayList<>();
             for (int a = 0; a < data.length; a++) {
-                if(data[a] == null) continue;
+                if(data[a].isNull()) continue;
 
                 entries.add(
                         new Entry(a,

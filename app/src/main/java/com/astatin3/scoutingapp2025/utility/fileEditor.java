@@ -228,7 +228,10 @@ public final class fileEditor {
     }
 
     public static byte[] readFile(String path){
-        File file = new File(baseDir + path);
+        return readFileExact(baseDir + path);
+    }
+    public static byte[] readFileExact(String path){
+        File file = new File(path);
         int size = (int) file.length();
         byte[] bytes = new byte[size];
         try {

@@ -34,12 +34,14 @@ public class TransferFragment extends Fragment {
     private static final int background_color = 0x5000ff00;
     private static final int unselected_background_color = 0x2000ff00;
 
+//    private Bundle b;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+//        b = savedInstanceState;
 
         binding = FragmentTransferBinding.inflate(inflater, container, false);
 
@@ -114,19 +116,21 @@ public class TransferFragment extends Fragment {
 
     private void start_upload() {
         FileSelectorFragment.setOnSelect(data -> {
-            CodeGeneratorView.setData(data);
-            BluetoothSenderFragment.set_data(data);
             TransferSelectorFragment.setOnSelect(new TransferSelectorFragment.onSelect() {
                 @Override
                 public void onSelectCodes(TransferSelectorFragment self) {
+                    CodeGeneratorView.setData(data);
                     findNavController(self).navigate(R.id.action_navigation_transfer_selector_to_navigation_code_generator);
                 }
                 @Override
                 public void onSelectBluetooth(TransferSelectorFragment self) {
+                    BluetoothSenderFragment.set_data(data);
                     findNavController(self).navigate(R.id.action_navigation_transfer_selector_to_navigation_bluetooth_sender);
                 }
                 @Override
-                public void onSelectWifi(TransferSelectorFragment self) {}
+                public void onSelectFileBundle(TransferSelectorFragment self) {
+                    FileBundle.send(data, getContext());
+                }
             });
             findNavController(this).navigate(R.id.action_navigation_file_selector_to_navigation_transfer_selector);
         });
@@ -137,6 +141,7 @@ public class TransferFragment extends Fragment {
 
 
     private void start_download(){
+
         TransferSelectorFragment.setOnSelect(new TransferSelectorFragment.onSelect() {
             @Override
             public void onSelectCodes(TransferSelectorFragment self) {
@@ -149,7 +154,9 @@ public class TransferFragment extends Fragment {
             }
 
             @Override
-            public void onSelectWifi(TransferSelectorFragment self) {}
+            public void onSelectFileBundle(TransferSelectorFragment self) {
+                FileBundle.receive(getActivity());
+            }
         });
         findNavController(this).navigate(R.id.action_navigation_transfer_to_navigation_transfer_selector);
     }

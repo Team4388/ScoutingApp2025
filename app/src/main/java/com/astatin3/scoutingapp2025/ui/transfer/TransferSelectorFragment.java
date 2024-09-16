@@ -14,7 +14,7 @@ import com.astatin3.scoutingapp2025.databinding.FragmentTransferSelectorBinding;
 public class TransferSelectorFragment extends Fragment {
 
     // Declaring three blank funcs in one line lol
-    private static onSelect onselect  = new onSelect() {@Override public void onSelectCodes(TransferSelectorFragment self) {}@Override public void onSelectBluetooth(TransferSelectorFragment self) {} @Override public void onSelectWifi(TransferSelectorFragment self) {}};
+    private static onSelect onselect  = new onSelect() {@Override public void onSelectCodes(TransferSelectorFragment self) {}@Override public void onSelectBluetooth(TransferSelectorFragment self) {} @Override public void onSelectFileBundle(TransferSelectorFragment self) {}};
 
     public static void setOnSelect(onSelect tmp) {
         onselect = tmp;
@@ -23,7 +23,7 @@ public class TransferSelectorFragment extends Fragment {
     public interface onSelect {
         void onSelectCodes(TransferSelectorFragment self);
         void onSelectBluetooth(TransferSelectorFragment self);
-        void onSelectWifi(TransferSelectorFragment self);
+        void onSelectFileBundle(TransferSelectorFragment self);
     }
 
     FragmentTransferSelectorBinding binding;
@@ -38,8 +38,8 @@ public class TransferSelectorFragment extends Fragment {
             onselect.onSelectBluetooth(this);
         });
 
-        binding.wifiButton.setOnClickListener(view -> {
-            onselect.onSelectWifi(this);
+        binding.fileBundleButton.setOnClickListener(view -> {
+            onselect.onSelectFileBundle(this);
         });
 
         return binding.getRoot();

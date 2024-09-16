@@ -98,7 +98,7 @@ public class tallyType extends inputType {
 
 
     public void add_individual_view(LinearLayout parent, dataType data){
-        if((int)data.get() == 0) return;
+        if(data.isNull()) return;
 
         TextView tv = new TextView(parent.getContext());
         tv.setLayoutParams(new FrameLayout.LayoutParams(
@@ -176,7 +176,7 @@ public class tallyType extends inputType {
         int[] values = new int[max-min+1];
 
         for (int i = 0; i < data.length; i++)
-            if(intType.isNull((int) data[i].get()))
+            if(data[i] != null && data[i].isNull())
                 values[(int) data[i].get()-min]++;
 
 
@@ -255,6 +255,7 @@ public class tallyType extends inputType {
         List<Entry> entries = new ArrayList<>();
         for (int i = 0; i < data.length; i++){
             if(data[i] == null) continue;
+            if(data[i].isNull()) continue;
 
             entries.add(new Entry(i, (float)(int) data[i].get()));
         }

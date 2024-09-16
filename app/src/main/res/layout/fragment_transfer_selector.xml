@@ -21,16 +21,16 @@
         android:layout_height="wrap_content"
         android:text="Bluetooth"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/wifiButton"
+        app:layout_constraintBottom_toTopOf="@+id/fileBundleButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/codes_button" />
 
     <Button
-        android:id="@+id/wifiButton"
+        android:id="@+id/fileBundleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TODO"
+        android:text="File Bundle"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

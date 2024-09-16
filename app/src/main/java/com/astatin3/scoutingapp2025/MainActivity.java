@@ -1,5 +1,6 @@
 package com.astatin3.scoutingapp2025;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -136,4 +137,26 @@ public class MainActivity extends AppCompatActivity {
     private void clearBackStack() {
         navController.popBackStack(navController.getGraph().getStartDestinationId(), false);
     }
+
+
+
+
+    public interface activityResultRelay {
+        void onActivityResult(int requestCode, int resultCode, Intent data);
+    }
+
+    public static activityResultRelay resultRelay = null;
+    public static void setResultRelay(activityResultRelay tmpresultRelay){
+        resultRelay = tmpresultRelay;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//        AlertManager.error(String.valueOf(requestCode));
+        if (resultRelay != null) {
+            resultRelay.onActivityResult(resultCode, requestCode, data);
+        }
+    }
+
 }
