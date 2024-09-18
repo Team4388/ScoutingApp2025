@@ -21,6 +21,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ScoutingApp2025"
+rootProject.name = "RidgeScout"
 include(":app")
 
