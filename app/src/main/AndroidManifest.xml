@@ -42,6 +42,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.GET_CONTENT" />
                 <category android:name="android.intent.category.OPEN_FILE" />
+            </intent-filter>
+            <intent-filter>
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
