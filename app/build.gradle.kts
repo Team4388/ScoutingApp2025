@@ -78,7 +78,7 @@ dependencies {
 
     implementation("org.tensorflow:tensorflow-lite-task-text:0.3.0")
 
-    implementation("io.github.ollama4j:ollama4j:1.0.79")
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
 
 
 
