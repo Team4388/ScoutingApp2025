@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ridgebotics.ridgescout.databinding.FragmentSettingsBinding;
 import com.ridgebotics.ridgescout.utility.fileEditor;
-import com.ridgebotics.ridgescout.SettingsVersionStack.latestSettings;
+import com.ridgebotics.ridgescout.utility.settingsManager;
 
 import com.skydoves.powerspinner.IconSpinnerAdapter;
 import com.skydoves.powerspinner.IconSpinnerItem;
@@ -48,11 +48,11 @@ public class settingsFragment extends Fragment {
         View root = binding.getRoot();
 
         EditText username = binding.username;
-        username.setText(latestSettings.settings.get_username());
+        username.setText(settingsManager.getUsername());
         username.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                latestSettings.settings.set_username(username.getText().toString());
+                settingsManager.setUsername(username.getText().toString());
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -65,7 +65,7 @@ public class settingsFragment extends Fragment {
 
         List<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
 
-        String target_event_name = latestSettings.settings.get_evcode();
+        String target_event_name = settingsManager.getEVCode();
         int target_index = -1;
 
         ArrayList<String> evlist = fileEditor.getEventList();
@@ -89,7 +89,7 @@ public class settingsFragment extends Fragment {
             @Override
             public void onItemSelected(int oldIndex, @Nullable IconSpinnerItem oldItem, int newIndex,
                                        IconSpinnerItem newItem) {
-                latestSettings.settings.set_evcode(newItem.getText().toString());
+                settingsManager.setEVCode(newItem.getText().toString());
             }
         });
 
@@ -106,7 +106,7 @@ public class settingsFragment extends Fragment {
 
         List<IconSpinnerItem> alliance_pos_iconSpinnerItems = new ArrayList<>();
 
-        String target_alliance_pos = latestSettings.settings.get_alliance_pos();
+        String target_alliance_pos = settingsManager.getAllyPos();
         int alliance_pos_target_index = -1;
 
         String[] alliance_pos_list = new String[]{"red-1", "red-2", "red-3",
@@ -132,7 +132,7 @@ public class settingsFragment extends Fragment {
             @Override
             public void onItemSelected(int oldIndex, @Nullable IconSpinnerItem oldItem, int newIndex,
                                        IconSpinnerItem newItem) {
-                latestSettings.settings.set_alliance_pos(newItem.getText().toString());
+                settingsManager.setAllyPos(newItem.getText().toString());
             }
         });
 
@@ -159,11 +159,11 @@ public class settingsFragment extends Fragment {
 
 
         EditText team_num = binding.teamNumber;
-        team_num.setText(String.valueOf(latestSettings.settings.get_team_num()));
+        team_num.setText(String.valueOf(settingsManager.getTeamNum()));
         team_num.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                latestSettings.settings.set_team_num(team_num.getText().toString());
+                settingsManager.setTeamNum(Integer.parseInt(team_num.getText().toString()));
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -178,12 +178,12 @@ public class settingsFragment extends Fragment {
         wifi_mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                latestSettings.settings.set_wifi_mode(isChecked);
+                settingsManager.setWifiMode(isChecked);
             }
 
         });
 
-        wifi_mode.setChecked(latestSettings.settings.get_wifi_mode());
+        wifi_mode.setChecked(settingsManager.getWifiMode());
 
 
 
@@ -200,13 +200,13 @@ public class settingsFragment extends Fragment {
                 alert.setCancelable(true);
 
                 alert.setPositiveButton("Ok", (dialog, which) -> {
-                    latestSettings.settings.defaultSettings();
-                    username.setText(latestSettings.settings.get_username());
+//                    settingsManager.settings.defaultSettings();
+                    username.setText(settingsManager.getUsername());
                     spinnerView.clearSelectedItem();
 //                    practice_mode.setChecked(latestSettings.settings.get_practice_mode());
-                    wifi_mode.setChecked(latestSettings.settings.get_wifi_mode());
+                    wifi_mode.setChecked(settingsManager.getWifiMode());
                     alliance_pos_spinnerView.selectItemByIndex(0);
-                    team_num.setText(String.valueOf(latestSettings.settings.get_team_num()));
+                    team_num.setText(String.valueOf(settingsManager.getTeamNum()));
                 });
 
                 alert.setNegativeButton("Cancel", null);

@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ridgebotics.ridgescout.R;
-import com.ridgebotics.ridgescout.SettingsVersionStack.latestSettings;
+import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentTransferBinding;
 import com.ridgebotics.ridgescout.ui.transfer.bluetooth.BluetoothSenderFragment;
 import com.ridgebotics.ridgescout.ui.transfer.codes.CodeGeneratorView;
@@ -45,7 +45,7 @@ public class TransferFragment extends Fragment {
 
         binding = FragmentTransferBinding.inflate(inflater, container, false);
 
-        evcode = latestSettings.settings.get_evcode();
+        evcode = settingsManager.getEVCode();
 
         binding.downloadButton.setOnClickListener(v -> {
             start_download();
@@ -106,7 +106,7 @@ public class TransferFragment extends Fragment {
             builder.show();
         });
 
-        if(!latestSettings.settings.get_wifi_mode())
+        if(!settingsManager.getWifiMode())
             binding.TBAButton.setEnabled(false);
 
         return binding.getRoot();

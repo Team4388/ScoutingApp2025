@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ridgebotics.ridgescout.R;
-import com.ridgebotics.ridgescout.SettingsVersionStack.latestSettings;
+import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentDataBinding;
 import com.ridgebotics.ridgescout.types.frcTeam;
 import com.ridgebotics.ridgescout.ui.TeamSelectorFragment;
@@ -33,7 +33,7 @@ public class DataFragment extends Fragment {
         binding = FragmentDataBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        String evcode = latestSettings.settings.get_evcode();
+        String evcode = settingsManager.getEVCode();
 
         binding.fieldsButton.setOnClickListener(v -> {
             findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_fields_chooser);

@@ -5,8 +5,6 @@ import android.content.Context;
 import com.ridgebotics.ridgescout.types.frcEvent;
 import com.ridgebotics.ridgescout.types.frcTeam;
 
-import com.ridgebotics.ridgescout.SettingsVersionStack.latestSettings;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -268,8 +266,8 @@ public final class fileEditor {
     public static boolean setEvent(frcEvent event){
         final String filename = (event.eventCode + ".eventdata");
 
-        if(latestSettings.settings.get_evcode().equals("unset")){
-            latestSettings.settings.set_evcode(event.eventCode);
+        if(settingsManager.getEVCode().equals("unset")){
+            settingsManager.setEVCode(event.eventCode);
         }
 
         return writeFile(filename, event.encode());

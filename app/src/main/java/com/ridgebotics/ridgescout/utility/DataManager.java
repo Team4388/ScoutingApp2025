@@ -1,6 +1,5 @@
 package com.ridgebotics.ridgescout.utility;
 
-import com.ridgebotics.ridgescout.SettingsVersionStack.latestSettings;
 import com.ridgebotics.ridgescout.scoutingData.fields;
 import com.ridgebotics.ridgescout.scoutingData.transfer.transferType;
 import com.ridgebotics.ridgescout.types.frcEvent;
@@ -15,7 +14,7 @@ public class DataManager {
     }
 
     public static String getevcode() {
-        return latestSettings.settings.get_evcode();
+        return settingsManager.getEVCode();
     }
 
     public static inputType[][] match_values;

@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.ridgebotics.ridgescout.SettingsVersionStack.latestSettings;
+import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentScoutingPitBinding;
 import com.ridgebotics.ridgescout.scoutingData.ScoutingDataWriter;
 import com.ridgebotics.ridgescout.types.data.dataType;
@@ -43,7 +43,7 @@ public class PitScoutingFragment extends Fragment {
 
         binding = FragmentScoutingPitBinding.inflate(inflater, container, false);
 
-        username = latestSettings.settings.get_username();
+        username = settingsManager.getUsername();
         DataManager.reload_pit_fields();
 
         loadTeam();

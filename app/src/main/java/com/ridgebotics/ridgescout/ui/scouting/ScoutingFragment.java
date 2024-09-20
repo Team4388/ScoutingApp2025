@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ridgebotics.ridgescout.R;
-import com.ridgebotics.ridgescout.SettingsVersionStack.latestSettings;
+import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentScoutingBinding;
 import com.ridgebotics.ridgescout.types.frcTeam;
 import com.ridgebotics.ridgescout.ui.TeamSelectorFragment;
@@ -34,7 +34,7 @@ public class ScoutingFragment extends Fragment {
 
         binding.buttons.setVisibility(View.VISIBLE);
 
-        String evcode = latestSettings.settings.get_evcode();
+        String evcode = settingsManager.getEVCode();
 
         if(evcode.equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);

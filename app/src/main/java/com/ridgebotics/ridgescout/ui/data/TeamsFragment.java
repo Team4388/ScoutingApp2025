@@ -22,7 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.ridgebotics.ridgescout.SettingsVersionStack.latestSettings;
+import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentDataTeamsBinding;
 import com.ridgebotics.ridgescout.scoutingData.ScoutingDataWriter;
 import com.ridgebotics.ridgescout.types.data.dataType;
@@ -64,7 +64,7 @@ public class TeamsFragment extends Fragment {
         table.setStretchAllColumns(true);
         binding.teamsArea.addView(table);
 
-        loadTeam(latestSettings.settings.get_data_view_mode());
+        loadTeam(settingsManager.getDataMode());
 
         return binding.getRoot();
     }
@@ -114,7 +114,7 @@ public class TeamsFragment extends Fragment {
             public void onItemSelected(int oldIndex, @Nullable IconSpinnerItem oldItem, int newIndex,
                                        IconSpinnerItem newItem) {
 
-                latestSettings.settings.set_data_view_mode(newIndex);
+                settingsManager.setDataMode(newIndex);
                 loadTeam(newIndex);
             }
         });

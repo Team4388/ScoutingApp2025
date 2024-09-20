@@ -3,16 +3,12 @@ package com.ridgebotics.ridgescout.utility.ollama;
 import androidx.annotation.NonNull;
 
 import com.ridgebotics.ridgescout.utility.AlertManager;
-import com.ridgebotics.ridgescout.utility.ollama.types.ChatMessage;
-import com.ridgebotics.ridgescout.utility.ollama.types.ChatRequest;
-import com.ridgebotics.ridgescout.utility.ollama.types.ChatResponse;
-import com.ridgebotics.ridgescout.utility.ollama.types.Messages;
+//import com.ridgebotics.ridgescout.utility.ollama.types.Messages;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,7 +19,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.OkHttpClient;
 
-public class OllamaTest {
+public class OllamaClient {
     private static final String MODEL_KEY = "llama3";
     private static final String OLLAMA_URL_KEY = "http://199.204.135.71:11434";
 
@@ -48,8 +44,6 @@ public class OllamaTest {
     }
 
     public static void run(String prompt, ollamaListener listener){
-        final Messages llamaMessages = new Messages();
-        llamaMessages.messages.add(new Messages.Message("user", "Test!"));
 //        ChatRequest chatRequest = new ChatRequest(MODEL_KEY, llamaMessages.messages,true);
 
         RequestBody body = RequestBody.create(promptToJson(prompt), MediaType.parse("application/json"));

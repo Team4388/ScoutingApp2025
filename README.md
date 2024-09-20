@@ -3,11 +3,9 @@ Ridgebotics 2025 scouting app in Android
 
 ## TODO:
 #### Scouting:
-- Make the "Report" menu, A tool that lets users select data to display from the the teams and compare menus.
 - Make practice mode??
 #### Data Analysis:
 - Statbotics intigration???
-- AI overview of scouting data for a team???
 - Make the "Compare" menu, cross comparing team's stats.
 #### Functionality:
 - Add more types of data fields.
@@ -16,9 +14,12 @@ Ridgebotics 2025 scouting app in Android
 ## In Progress:
 #### Scouting:
 #### Data Analysis:
+- AI overview of scouting data for a team???
+- Make the "Report" menu, A tool that lets users select data to display from the the teams and compare menus.
 #### Functionality:
 - Make server software to allow for easy sync over wifi - FTP
 - Deploy to F-Droid
+- 
 
 ## Done:
 #### Scouting:

@@ -1,10 +1,14 @@
 package com.ridgebotics.ridgescout.types;
 
+import static com.ridgebotics.ridgescout.utility.DataManager.event;
+
 import androidx.annotation.NonNull;
 import com.ridgebotics.ridgescout.utility.AlertManager;
 import com.ridgebotics.ridgescout.utility.BuiltByteParser;
 import com.ridgebotics.ridgescout.utility.ByteBuilder;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class frcEvent {
 
@@ -75,5 +79,38 @@ public class frcEvent {
             " numMatches: " +
             matches.size()
         );
+    }
+
+    // A func that will return every match a team is in.
+    public frcMatch[] getTeamMatches(int teamNum){
+        List<frcMatch> teamMatches = new ArrayList<>();
+        for(int i = 0; i < matches.size(); i++){
+            frcMatch match = matches.get(i);
+            boolean isTeamMatch = false;
+            isTeamMatch = IntStream.of(match.redAlliance).anyMatch(x -> x == teamNum);
+            isTeamMatch = isTeamMatch || IntStream.of(match.blueAlliance).anyMatch(x -> x == teamNum);
+            if(isTeamMatch)
+                teamMatches.add(match);
+        }
+        return teamMatches.toArray(new frcMatch[0]);
+    }
+
+    // A func that will return the most recent match a team is in. (Not up until the current match)
+    public int getMostRecentTeamMatch(int teamNum, int curMatch){
+        frcMatch[] teamMatches = getTeamMatches(teamNum);
+        int maxMatch = - 1;
+
+        for(int i = 0; i < teamMatches.length; i++) {
+            if (teamMatches[i].matchIndex < curMatch &&
+                    teamMatches[i].matchIndex > maxMatch) {
+                maxMatch = teamMatches[i].matchIndex;
+            }
+
+        }
+
+        if(maxMatch == -1)
+            return curMatch;
+        else
+            return maxMatch;
     }
 }

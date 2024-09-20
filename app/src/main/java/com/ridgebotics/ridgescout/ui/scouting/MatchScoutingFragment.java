@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.ridgebotics.ridgescout.SettingsVersionStack.latestSettings;
+import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentScoutingMatchBinding;
 import com.ridgebotics.ridgescout.scoutingData.ScoutingDataWriter;
 import com.ridgebotics.ridgescout.types.data.dataType;
@@ -41,8 +41,8 @@ public class MatchScoutingFragment extends Fragment {
 
         DataManager.reload_match_fields();
 
-        alliance_position = latestSettings.settings.get_alliance_pos();
-        username = latestSettings.settings.get_username();
+        alliance_position = settingsManager.getAllyPos();
+        username = settingsManager.getUsername();
 
         binding.username.setText(username);
         binding.alliancePosText.setText(alliance_position);
@@ -64,12 +64,12 @@ public class MatchScoutingFragment extends Fragment {
 
 
 
-        cur_match_num = latestSettings.settings.get_match_num();
+        cur_match_num = settingsManager.getMatchNum();
         update_match_num();
 
         binding.nextButton.setOnClickListener(v -> {
             if(edited) save();
-            latestSettings.settings.set_match_num(cur_match_num+1);
+            settingsManager.setMatchNum(cur_match_num+1);
             cur_match_num += 1;
             update_match_num();
             update_scouting_data();
@@ -83,7 +83,7 @@ public class MatchScoutingFragment extends Fragment {
             if(edited) save();
 
             alliance_position = incrementMatchPos(alliance_position);
-            latestSettings.settings.set_alliance_pos(alliance_position);
+            settingsManager.setAllyPos(alliance_position);
             binding.alliancePosText.setText(alliance_position);
 
             update_match_num();
@@ -93,7 +93,7 @@ public class MatchScoutingFragment extends Fragment {
 
         binding.backButton.setOnClickListener(v -> {
             if(edited) save();
-            latestSettings.settings.set_match_num(cur_match_num-1);
+            settingsManager.setMatchNum(cur_match_num-1);
             cur_match_num -= 1;
             update_match_num();
             update_scouting_data();

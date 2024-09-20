@@ -1,5 +1,6 @@
 package com.ridgebotics.ridgescout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -20,7 +21,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.ridgebotics.ridgescout.databinding.ActivityMainBinding;
 
-import com.ridgebotics.ridgescout.SettingsVersionStack.latestSettings;
+import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.Objects;
@@ -38,7 +39,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        latestSettings.update();
+
+        settingsManager.prefs = this.getSharedPreferences(
+                "com.ridgebotics.ridgescout", Context.MODE_PRIVATE);
+
+//        latestSettings.test();
+
+//        latestSettings.update();
 
         if(!fileEditor.fileExist(fields.matchFieldsFilename)){
             fields.save(fields.matchFieldsFilename, fields.default_match_fields);
