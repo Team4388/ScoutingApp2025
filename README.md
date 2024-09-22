@@ -10,6 +10,7 @@ Ridgebotics 2025 scouting app in Android
 #### Functionality:
 - Add more types of data fields.
 - Test the scouting app
+- Write docs
 
 ## In Progress:
 #### Scouting:
@@ -19,7 +20,6 @@ Ridgebotics 2025 scouting app in Android
 #### Functionality:
 - Make server software to allow for easy sync over wifi - FTP
 - Deploy to F-Droid
-- 
 
 ## Done:
 #### Scouting:

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.ridgebotics.ridgescout.databinding.ActivityMainBinding;
 import com.ridgebotics.ridgescout.scoutingData.fields;
 import com.ridgebotics.ridgescout.utility.SentimentAnalysis;
 import com.ridgebotics.ridgescout.utility.AlertManager;
@@ -19,7 +20,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.ridgebotics.ridgescout.databinding.ActivityMainBinding;
 
 import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.google.android.material.navigation.NavigationBarView;
@@ -42,10 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
         settingsManager.prefs = this.getSharedPreferences(
                 "com.ridgebotics.ridgescout", Context.MODE_PRIVATE);
-
-//        latestSettings.test();
-
-//        latestSettings.update();
 
         if(!fileEditor.fileExist(fields.matchFieldsFilename)){
             fields.save(fields.matchFieldsFilename, fields.default_match_fields);
@@ -73,30 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         navView = findViewById(R.id.nav_view);
-//        appBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.navigation_scouting,
-//                R.id.navigation_match_scouting,
-//                R.id.navigation_team_selector,
-//                R.id.navigation_pit_scouting,
-//
-//                R.id.navigation_data,
-//                R.id.navigation_data_status,
-//                R.id.navigation_data_teams,
-//                R.id.navigation_data_compile,
-//                R.id.navigation_data_fields_chooser,
-//                R.id.navigation_data_fields,
-//
-//                R.id.navigation_transfer,
-//                R.id.navigation_file_selector,
-//                R.id.navigation_transfer_selector,
-//                R.id.navigation_code_generator,
-//                R.id.navigation_code_scanner,
-//                R.id.navigation_bluetooth_sender,
-//                R.id.navigation_bluetooth_receiver,
-//                R.id.navigation_tba,
-//
-//                R.id.navigation_settings)
-//                .build();
 
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_scouting,

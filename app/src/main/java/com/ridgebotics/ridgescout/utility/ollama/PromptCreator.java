@@ -7,6 +7,8 @@ import static com.ridgebotics.ridgescout.utility.DataManager.pit_latest_values;
 
 import com.ridgebotics.ridgescout.scoutingData.ScoutingDataWriter;
 import com.ridgebotics.ridgescout.types.data.dataType;
+import com.ridgebotics.ridgescout.types.data.intType;
+import com.ridgebotics.ridgescout.types.data.stringType;
 import com.ridgebotics.ridgescout.types.frcMatch;
 import com.ridgebotics.ridgescout.types.input.dropdownType;
 import com.ridgebotics.ridgescout.types.input.inputType;
@@ -19,7 +21,7 @@ public class PromptCreator {
         String summary = field.name + ": ";
         switch (field.getInputType()){
             case DROPDOWN:
-                summary += "A the index of a dropdown with the possible options: [" +String.join(", ", ((dropdownType) field).text_options) + "]";
+                summary += "The index of a dropdown with the possible options: [" +String.join(", ", ((dropdownType) field).text_options) + "]";
                 break;
             case SLIDER:
                 sliderType slider = (sliderType) field;
@@ -36,17 +38,14 @@ public class PromptCreator {
     }
 
     public static String genMatchPrompt(int matchIndex){
-        String prompt = "Below is a list of data collected from an FRC match. Generate a qualitative and concise summary of the teams listed in the data collected.\n\n";
+        String prompt = "Below is a list of data collected from an FRC match. Generate a qualitative and concise summary of the teams listed, using both numerical and textual data collected in the summary. Additionally, rank the teams in order of their performance.\n\n";
 
         frcMatch curmatch = event.matches.get(matchIndex);
 
-        prompt += "## Pit scouting\n";
-        prompt += "This is a list of the different fields that are present in the pit scouting data:\n";
+        prompt += "## Pit scouting\n";        prompt += "This is a list of the different fields that are present in the pit scouting data:\n";
 
-
-        prompt += "1) Team number\n";
         for(int i = 0; i < pit_latest_values.length; i++){
-            prompt += (i+2) + ") " + fieldSummary(pit_latest_values[i]) + "\n";
+            prompt += (i+1) + ") " + fieldSummary(pit_latest_values[i]) + "\n";
         }
         prompt += ("\nData:\n");
 
@@ -57,28 +56,37 @@ public class PromptCreator {
             else
                 teamNum = curmatch.blueAlliance[a-3];
 
-            prompt += teamNum + ",";
+            prompt += "\nTeam " + teamNum + " pit scout data:\n";
 
             String filename = evcode+"-"+teamNum+".pitscoutdata";
-            if(!fileEditor.fileExist(filename)){
-                prompt += ("null,".repeat(pit_latest_values.length));
-            }else{
-                ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, DataManager.pit_values, DataManager.pit_transferValues);
-                dataType[] types = psdr.data.array;
-                for(int i = 0; i < types.length; i++) {
-                    prompt += (types[i].get() + ",");
+
+            if (!fileEditor.fileExist(filename)) continue;
+
+            ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, DataManager.pit_values, DataManager.pit_transferValues);
+            dataType[] types = psdr.data.array;
+            for(int i = 0; i < types.length; i++) {
+                boolean isNull = true;
+                switch (types[i].getValueType()){
+                    case NUM:
+                        isNull = intType.isNull((int) types[i].get());
+                        break;
+                    case STRING:
+                        isNull = stringType.isNull((String) types[i].get());
+                        break;
+                }
+                if(isNull){
+                    prompt += match_latest_values[i].name + ": null\n";
+                }else{
+                    prompt += match_latest_values[i].name + ": " + types[i].get() + "\n";
                 }
             }
-            prompt += "\n";
         }
-
 
         prompt += "\n## Match scouting\n";
         prompt += "This is a list of the different fields that are present in the match scouting data:\n";
 
-        prompt += "1) Match number\n";
         for(int i = 0; i < match_latest_values.length; i++){
-            prompt += (i+2) + ") " + fieldSummary(match_latest_values[i]) + "\n";
+            prompt += (i+1) + ") " + fieldSummary(match_latest_values[i]) + "\n";
         }
 
         prompt += ("\nData:\n");
@@ -90,7 +98,7 @@ public class PromptCreator {
             else
                 teamNum = curmatch.blueAlliance[a-3];
 
-            prompt += "Team " + teamNum + " Match scout data:\n";
+            prompt += "\nTeam " + teamNum + " Match scout data for match " + curmatch.matchIndex +":\n";
 
             frcMatch[] matchNums = event.getTeamMatches(teamNum);
 
@@ -112,9 +120,7 @@ public class PromptCreator {
                         alliancePos = c-2;
                         break;
                     }
-
                 }
-
 
                 String filename = evcode + "-" + match.matchIndex + "-" + alliance + "-" + alliancePos + "-" + teamNum + ".matchscoutdata";
 
@@ -122,12 +128,23 @@ public class PromptCreator {
 
                 ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, DataManager.match_values, DataManager.match_transferValues);
                 dataType[] types = psdr.data.array;
-                prompt += match.matchIndex + ",";
                 for (int i = 0; i < types.length; i++) {
-                    prompt += (types[i].get() + ",");
+                    boolean isNull = true;
+                    switch (types[i].getValueType()){
+                        case NUM:
+                            isNull = intType.isNull((int) types[i].get());
+                            break;
+                        case STRING:
+                            isNull = stringType.isNull((String) types[i].get());
+                            break;
+                    }
+                    if(isNull){
+                        prompt += match_latest_values[i].name + ": null\n";
+                    }else{
+                        prompt += match_latest_values[i].name + ": " + types[i].get() + "\n";
+                    }
                 }
                 prompt += "\n";
-
             }
         }
         return prompt;

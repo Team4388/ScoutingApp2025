@@ -71,7 +71,7 @@ public class DataFragment extends Fragment {
         });
 
         binding.reportButton.setOnClickListener(v -> {
-            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_report);
+            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_report_selector);
         });
 
         return root;

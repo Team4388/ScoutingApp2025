@@ -26,7 +26,11 @@
             app:popExitAnim="@anim/pop_exit_anim" />
         <action
             android:id="@+id/action_navigation_scouting_to_navigation_scouting_status"
-            app:destination="@id/navigation_scouting_status" />
+            app:destination="@id/navigation_scouting_status"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"/>
     </fragment>
 
     <fragment
@@ -78,13 +82,6 @@
             app:popEnterAnim="@anim/enter_anim"
             app:popExitAnim="@anim/pop_exit_anim" />
         <action
-            android:id="@+id/action_navigation_data_to_navigation_data_report"
-            app:destination="@id/navigation_data_report"
-            app:enterAnim="@anim/enter_anim"
-            app:exitAnim="@anim/exit_anim"
-            app:popEnterAnim="@anim/enter_anim"
-            app:popExitAnim="@anim/pop_exit_anim" />
-        <action
             android:id="@+id/action_navigation_data_to_navigation_data_fields_chooser"
             app:destination="@id/navigation_data_fields_chooser"
             app:enterAnim="@anim/enter_anim"
@@ -92,12 +89,19 @@
             app:popEnterAnim="@anim/enter_anim"
             app:popExitAnim="@anim/pop_exit_anim" />
         <action
+            android:id="@+id/action_navigation_data_to_navigation_data_report_selector"
+            app:destination="@id/navigation_data_report_selector"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"/>
+        <action
             android:id="@+id/action_navigation_data_to_navigation_data_compare"
             app:destination="@id/navigation_data_compare"
             app:enterAnim="@anim/enter_anim"
             app:exitAnim="@anim/exit_anim"
             app:popEnterAnim="@anim/enter_anim"
-            app:popExitAnim="@anim/pop_exit_anim" />
+            app:popExitAnim="@anim/pop_exit_anim"/>
     </fragment>
 
     <fragment
@@ -143,7 +147,27 @@
         tools:layout="@layout/fragment_data_fields">
         <action
             android:id="@+id/action_navigation_data_fields_to_navigation_data_fields_chooser"
-            app:destination="@id/navigation_data_fields_chooser" />
+            app:destination="@id/navigation_data_fields_chooser"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_data_report_selector"
+        android:name="com.ridgebotics.ridgescout.ui.data.ReportSelectorFragment"
+        tools:layout="@layout/fragment_data_report_selector">
+        <action
+            android:id="@+id/action_navigation_data_report_selector_to_navigation_data_report"
+            app:destination="@id/navigation_data_report"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"/>
+        <action
+            android:id="@+id/action_navigation_data_report_selector_to_navigation_data"
+            app:destination="@id/navigation_data" />
     </fragment>
 
 

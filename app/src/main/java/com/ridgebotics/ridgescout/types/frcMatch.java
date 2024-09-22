@@ -60,4 +60,14 @@ public class frcMatch {
         return "frcMatch Num: " + matchIndex + ", Blue: " + Arrays.toString(blueAlliance) + ", Red: " + Arrays.toString(redAlliance);
     }
 
+    public String getTeamAlliance(int teamNum){
+        if(redAlliance[0] == teamNum) return "red-1";
+        if(redAlliance[1] == teamNum) return "red-2";
+        if(redAlliance[2] == teamNum) return "red-3";
+        if(blueAlliance[0] == teamNum) return "blue-1";
+        if(blueAlliance[1] == teamNum) return "blue-2";
+        if(blueAlliance[2] == teamNum) return "blue-3";
+        return "";
+    }
+
 }

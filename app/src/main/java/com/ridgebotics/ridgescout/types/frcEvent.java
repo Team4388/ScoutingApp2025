@@ -2,6 +2,9 @@ package com.ridgebotics.ridgescout.types;
 
 import static com.ridgebotics.ridgescout.utility.DataManager.event;
 
+import android.widget.TableRow;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import com.ridgebotics.ridgescout.utility.AlertManager;
 import com.ridgebotics.ridgescout.utility.BuiltByteParser;
@@ -112,5 +115,30 @@ public class frcEvent {
             return curMatch;
         else
             return maxMatch;
+    }
+
+//    public
+
+    // Returns the soonest match that there will be all the possible upcoming data on other teams
+    public void getReportMatches(int ourTeamNum){
+        frcMatch[] teamMatches = event.getTeamMatches(ourTeamNum);
+
+        for(int i = 0; i < teamMatches.length; i++){
+            int maxMatch = -1;
+            for(int a = 0; a < 6; a++){
+                int teamNum;
+                if(a < 3)
+                    teamNum = teamMatches[i].redAlliance[a];
+                else
+                    teamNum = teamMatches[i].blueAlliance[a-3];
+
+                if(teamNum == ourTeamNum)
+                    continue;
+
+                int matchNum = event.getMostRecentTeamMatch(teamNum, teamMatches[i].matchIndex);
+                if(maxMatch < matchNum)
+                    maxMatch = matchNum;
+            }
+        }
     }
 }
