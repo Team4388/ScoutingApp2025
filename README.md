@@ -1,41 +1,26 @@
-# ScoutingApp2025
-Ridgebotics 2025 scouting app in Android
+# RidgeScout
+Ridgebotics's take on creating an FRC scouting system.
 
-## TODO:
-#### Scouting:
-- Make practice mode??
-#### Data Analysis:
-- Statbotics intigration???
-- Make the "Compare" menu, cross comparing team's stats.
-#### Functionality:
-- Add more types of data fields.
-- Test the scouting app
-- Write docs
+#### Docs are yet to be written, but here is an overview of the main features currently included in the app:
+- This project is written for Android! No need for some kind of janky laptop charging setup.
+- Similar to ScoutingPASS, there are many diffrent types of fields that can be used to collect data.
+- The app is designed to handle updates to the fields on the fly, without loosing any data!
+- Unlike other scouting solutions, scouters can disable any field they did not measure, and disabled fields will not be included in any calculations.
+- Dynamic displays based off of the diffrent fields.
+- Data transfer including 2D codes, Bluetooth, and File Bundle.
+- Exporting using CSV.
 
-## In Progress:
-#### Scouting:
-#### Data Analysis:
-- AI overview of scouting data for a team???
-- Make the "Report" menu, A tool that lets users select data to display from the the teams and compare menus.
-#### Functionality:
-- Make server software to allow for easy sync over wifi - FTP
-- Deploy to F-Droid
+#### Things that are yet to be implemented:
+- A page that lets users cross-compare scouting data between teams. (Compare)
+- A page that lets scouters more easily make reports to the drive team before a match starts (Report)
+- More types of fields
+- Data cloud sync using an FTP server
+- Deployment on F-Droid
 
-## Done:
-#### Scouting:
-- Add an "unselect" option to all of the scouting fields
-- When a field is created, make updated scouting data return null values, not the default value
-- Fix scouting offset bug
-#### Data Analysis:
-- Add "history" view type to the teams view menu.
-- Sentiment analysis of text input type
-- Add CSV exporting of match scouting data.
-#### Functionality:
-- Improve the code scanning progress indicator. It has a rounding error, I think.
-- Fix navigation crashes.
-- Make everything use Fragments instead of views that toggle visibility
-- Make the file browser UI
-- Bluetooth data sync
-- Formalize error messages & stacktraces
-- Make pit and match data field builder UIs. I don't want to have to keep editing a variable
-- Make the system for blank and unselected fields better.
+#### Things that may or may not be implemented:
+- Practice mode
+- Statbotics intgration
+- Scout error estimation using OPR-like calculation
+- - Would most likely require Statbotics
+
+### Screenshots
