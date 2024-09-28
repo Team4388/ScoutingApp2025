@@ -40,6 +40,7 @@ public class StatusFragment extends Fragment {
     }
     public static int color_found = 0x7f00ff00;
     public static int color_not_found = 0x7f7f0000;
+
     private void addTableText(TableRow tr, String textStr){
         TextView text = new TextView(getContext());
         text.setTextSize(18);

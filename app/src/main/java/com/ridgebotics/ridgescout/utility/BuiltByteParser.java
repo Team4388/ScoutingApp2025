@@ -2,6 +2,7 @@ package com.ridgebotics.ridgescout.utility;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BuiltByteParser {
     public static final Integer boolType = 0;
@@ -121,6 +122,7 @@ public class BuiltByteParser {
 
                     intArrayObject ia = new intArrayObject();
                     ia.arr = intArr;
+                    System.out.println(Arrays.toString(intArr));
                     objects.add(ia);
                     break;
                 case 4:

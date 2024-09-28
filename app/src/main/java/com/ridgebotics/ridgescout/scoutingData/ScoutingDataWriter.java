@@ -3,6 +3,7 @@ package com.ridgebotics.ridgescout.scoutingData;
 import com.ridgebotics.ridgescout.scoutingData.transfer.transferType;
 import com.ridgebotics.ridgescout.types.ScoutingArray;
 import com.ridgebotics.ridgescout.types.data.dataType;
+import com.ridgebotics.ridgescout.types.data.intArrType;
 import com.ridgebotics.ridgescout.types.data.stringType;
 import com.ridgebotics.ridgescout.types.input.inputType;
 import com.ridgebotics.ridgescout.types.data.intType;
@@ -12,6 +13,7 @@ import com.ridgebotics.ridgescout.utility.BuiltByteParser;
 import com.ridgebotics.ridgescout.utility.ByteBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ScoutingDataWriter {
 //    private static final int int_type_id = 255;
@@ -32,6 +34,9 @@ public class ScoutingDataWriter {
                         bb.addString((String) data[i].forceGetValue());
                         System.out.println("Saved STR: " + data[i].getName() + ", ("+ data[i].get() +")");
                         break;
+                    case NUMARR:
+                        bb.addIntArray((int[]) data[i].forceGetValue());
+                        System.out.println("Saved INT Array: " + data[i].getName() + ", ("+ Arrays.toString((int[]) data[i].get()) +")");
                 }
             }
             byte[] bytes = bb.build();
@@ -72,6 +77,11 @@ public class ScoutingDataWriter {
                         dataTypes[i] = stringType.newNull(values[version][i].name);
                         dataTypes[i].forceSetValue(objects.get(i+2).get());
                         System.out.println("Loaded STR: " + values[version][i].name + ", ("+ dataTypes[i].get() +")");
+                        break;
+                    case 3: // Int array
+                        dataTypes[i] = intArrType.newNull(values[version][i].name);
+                        dataTypes[i].forceSetValue(objects.get(i+2).get());
+                        System.out.println("Loaded intARR: " + values[version][i].name + ", ("+ Arrays.toString((int[])dataTypes[i].get()) +")");
                         break;
                 }
             }

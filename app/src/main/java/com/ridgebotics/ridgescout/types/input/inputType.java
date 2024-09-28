@@ -15,11 +15,18 @@ public abstract class inputType {
     public static final int dropdownType = 254;
     public static final int notesType = 253;
     public static final int tallyType = 252;
+    public static final int numberType = 251;
+    public static final int checkboxType = 250;
+    public static final int fieldposType = 249;
+
     public enum inputTypes {
         SLIDER,
         DROPDOWN,
         NOTES_INPUT,
-        TALLY
+        TALLY,
+        NUMBER,
+        CHECKBOX,
+        FIELDPOS
     }
     public String name;
     public Object default_value;

@@ -3,7 +3,8 @@ package com.ridgebotics.ridgescout.types.data;
 public abstract class dataType {
     public enum valueTypes {
         NUM,
-        STRING
+        NUMARR,
+        STRING,
     }
 
     private Object value;

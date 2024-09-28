@@ -24,8 +24,11 @@ import androidx.navigation.Navigation;
 import com.ridgebotics.ridgescout.R;
 import com.ridgebotics.ridgescout.databinding.FragmentDataFieldsBinding;
 import com.ridgebotics.ridgescout.scoutingData.fields;
+import com.ridgebotics.ridgescout.types.input.checkboxType;
 import com.ridgebotics.ridgescout.types.input.dropdownType;
+import com.ridgebotics.ridgescout.types.input.fieldposType;
 import com.ridgebotics.ridgescout.types.input.inputType;
+import com.ridgebotics.ridgescout.types.input.numberType;
 import com.ridgebotics.ridgescout.types.input.sliderType;
 import com.ridgebotics.ridgescout.types.input.tallyType;
 import com.ridgebotics.ridgescout.types.input.textType;
@@ -381,6 +384,9 @@ public class FieldsFragment extends Fragment {
         iconSpinnerItems.add(new IconSpinnerItem("Text"));
         iconSpinnerItems.add(new IconSpinnerItem("Dropdown"));
         iconSpinnerItems.add(new IconSpinnerItem("Tally"));
+        iconSpinnerItems.add(new IconSpinnerItem("Number"));
+        iconSpinnerItems.add(new IconSpinnerItem("Checkbox"));
+        iconSpinnerItems.add(new IconSpinnerItem("Field Position"));
 
         IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(dropdown);
 
@@ -444,6 +450,24 @@ public class FieldsFragment extends Fragment {
                 tally.name = title;
                 FieldEditorHelper.setTallyParams(tally, FieldEditorHelper.defaultTallyParams);
                 addField_Part_4(tally);
+                break;
+            case 4:
+                numberType num = new numberType();
+                num.name = title;
+                FieldEditorHelper.setNumberParams(num, FieldEditorHelper.defaultNumberParams);
+                addField_Part_4(num);
+                break;
+            case 5:
+                checkboxType cb = new checkboxType();
+                cb.name = title;
+                FieldEditorHelper.setCheckboxParam(cb, FieldEditorHelper.defaultCheckboxParam);
+                addField_Part_4(cb);
+                break;
+            case 6:
+                fieldposType fp = new fieldposType();
+                fp.name = title;
+                FieldEditorHelper.setFieldPosParam(fp, FieldEditorHelper.defaultFieldPosParam);
+                addField_Part_4(fp);
                 break;
 
         }

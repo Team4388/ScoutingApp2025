@@ -92,50 +92,6 @@ public class PitScoutingFragment extends Fragment {
     }
 
 
-//    public void init(frcEvent event){
-//
-//        evcode = event.eventCode;
-//        this.event = event;
-//        username = latestSettings.settings.get_username();
-//
-////        binding.eventcode.setText(evcode);
-//
-//        binding.pitBackButton.setOnClickListener(view -> {
-//            if(edited) save();
-//            binding.pitTeamName.setVisibility(View.GONE);
-//            binding.pitTeamDescription.setVisibility(View.GONE);
-//            clear_fields();
-//            load_teams();
-//        });
-//
-//        values = fields.load(fields.pitsFieldsFilename);
-//
-//        if(values == null || values.length == 0){
-//            TextView tv = new TextView(getContext());
-//            tv.setText("Failed to load fields.\nTry to either download or create pit scouting fields.");
-//            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-//            binding.pitScoutArea.addView(tv);
-//            return;
-//        }
-//
-//        latest_values = values[values.length-1];
-//        transferValues = transferType.get_transfer_values(values);
-//    }
-//
-//    public void clear_fields(){
-//        int childCount = binding.pitScoutArea.getChildCount();
-//        View[] views = new View[childCount];
-//
-//        for(int i = 0; i < childCount; i++){
-//            views[i] = binding.pitScoutArea.getChildAt(i);
-//        }
-//
-//        for(int i = 0; i < childCount; i++){
-//            if(!views[i].isShown()) continue;
-//            binding.pitScoutArea.removeView(views[i]);
-//        }
-//    }
-
     public void loadTeam(){
 //        clear_fields();
 
@@ -146,9 +102,6 @@ public class PitScoutingFragment extends Fragment {
         binding.pitTeamName.setText(team.teamName);
         binding.pitTeamDescription.setText(team.getDescription());
         binding.pitBarTeamNum.setText(String.valueOf(team.teamNumber));
-
-//        binding.teamName.setText(team.teamName);
-//        binding.teamDescription.setText(team.getDescription());
 
         filename = evcode + "-" + team.teamNumber + ".pitscoutdata";
 
@@ -195,11 +148,7 @@ public class PitScoutingFragment extends Fragment {
 
             int fi = i;
             tv.setOnClickListener(p -> {
-//                boolean blank = !latest_values[fi].getViewValue().isNull();
-
-//                System.out.println(blank);
-
-                asm.update();
+                update_asm();
 
                 if(!pit_latest_values[fi].isBlank){
                     tv.setBackgroundColor(0xffff0000);

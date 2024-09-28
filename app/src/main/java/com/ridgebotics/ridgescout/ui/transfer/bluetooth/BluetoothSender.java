@@ -70,7 +70,7 @@ public class BluetoothSender {
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    permissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+//                    permissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
                 }
             }
         }
@@ -89,11 +89,11 @@ public class BluetoothSender {
             boolean hasBasicPermissions = ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return hasBasicPermissions && ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-            } else {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                return hasBasicPermissions && ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+//            } else {
                 return hasBasicPermissions;
-            }
+//            }
         }
     }
 

@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ridgebotics.ridgescout.databinding.FragmentSettingsBinding;
+import com.ridgebotics.ridgescout.types.data.intType;
 import com.ridgebotics.ridgescout.utility.fileEditor;
 import com.ridgebotics.ridgescout.utility.settingsManager;
 
@@ -40,6 +41,17 @@ public class settingsFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);
     }
+
+    private int safeToInt(String num){
+        if(num.isEmpty())
+            return 0;
+        try {
+            return Integer.parseInt(num);
+        }catch (NumberFormatException e){
+            return 0;
+        }
+    }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -163,7 +175,7 @@ public class settingsFragment extends Fragment {
         team_num.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                settingsManager.setTeamNum(Integer.parseInt(team_num.getText().toString()));
+                settingsManager.setTeamNum(safeToInt(team_num.getText().toString()));
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}

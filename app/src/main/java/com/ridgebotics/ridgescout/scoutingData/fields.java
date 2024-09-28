@@ -1,7 +1,10 @@
 package com.ridgebotics.ridgescout.scoutingData;
 
+import com.ridgebotics.ridgescout.types.input.checkboxType;
 import com.ridgebotics.ridgescout.types.input.dropdownType;
+import com.ridgebotics.ridgescout.types.input.fieldposType;
 import com.ridgebotics.ridgescout.types.input.inputType;
+import com.ridgebotics.ridgescout.types.input.numberType;
 import com.ridgebotics.ridgescout.types.input.tallyType;
 import com.ridgebotics.ridgescout.types.input.textType;
 import com.ridgebotics.ridgescout.types.input.sliderType;
@@ -20,6 +23,7 @@ public class fields {
 
     public static final inputType[][] default_match_fields = new inputType[][] {
         {
+            new fieldposType("Auto start pos", new int[]{0,0}),
             new tallyType("Auto Notes", 0),
             new sliderType("Auto Performance", 5, 0, 10),
             new textType("Auto Comments", ""),
@@ -30,16 +34,13 @@ public class fields {
             new textType("Overall Driving Comments", ""),
             new sliderType("Score area (AMP <-> Speaker)", 5, 0, 10),
             new dropdownType("End Condition", new String[]{"Nothing", "Attempted Climb", "Successful Climbed", "Climbed with multiple robots", "Climbed with trap"}, 0),
-            new dropdownType("Robot Condition", new String[]{"Everything was working", "Something seemed to be broken", "Something was broken", "Missing robot (Joe Johnson)"}, 0),
+            new dropdownType("Robot Condition", new String[]{"Everything was working", "Something was maybe broken", "Something was broken", "Robot was disabled for part of the match", "Missing robot (Joe Johnson)"}, 0),
             new textType("Other Comments", "")
         }
     };
 
     public static final inputType[][] default_pit_fields = new inputType[][] {
         {
-            new sliderType("How good is robot", 5, 0, 10),
-            new textType("notes", ""),
-        },{
             new sliderType("How good is robot", 5, 0, 10),
             new sliderType("Test", 1, 0, 10),
             new textType("notes", ""),
@@ -112,6 +113,15 @@ public class fields {
                     break;
                 case inputType.tallyType:
                     t = new tallyType();
+                    break;
+                case inputType.numberType:
+                    t = new numberType();
+                    break;
+                case inputType.checkboxType:
+                    t = new checkboxType();
+                    break;
+                case inputType.fieldposType:
+                    t = new fieldposType();
                     break;
             }
 

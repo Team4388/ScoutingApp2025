@@ -8,8 +8,11 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.ridgebotics.ridgescout.types.input.checkboxType;
 import com.ridgebotics.ridgescout.types.input.dropdownType;
+import com.ridgebotics.ridgescout.types.input.fieldposType;
 import com.ridgebotics.ridgescout.types.input.inputType;
+import com.ridgebotics.ridgescout.types.input.numberType;
 import com.ridgebotics.ridgescout.types.input.sliderType;
 import com.ridgebotics.ridgescout.types.input.tallyType;
 import com.ridgebotics.ridgescout.types.input.textType;
@@ -19,7 +22,8 @@ public class FieldEditorHelper {
     private enum parameterTypeEnum {
         paramNumber,
         paramString,
-        paramStringArray
+        paramStringArray,
+        paramNumberArray
     }
 
     public static class parameterType {
@@ -54,6 +58,15 @@ public class FieldEditorHelper {
         }
     }
 
+//    public static class paramNumberArray extends parameterType{
+//        public int[] val;
+//        public paramNumberArray(String name, int[] val){
+//            this.name = name + " (Number array)";
+//            this.val = val;
+//            this.id = parameterTypeEnum.paramNumberArray;
+//        }
+//    }
+
     public static final parameterType[] defaultSliderParams = new parameterType[]{
             new paramNumber("Min", 0),
             new paramNumber("Max", 10),
@@ -68,6 +81,16 @@ public class FieldEditorHelper {
     };
     public static final parameterType[] defaultTallyParams = new parameterType[]{
             new paramNumber("Default Value", 0)
+    };
+    public static final parameterType[] defaultNumberParams = new parameterType[]{
+            new paramNumber("Default Value", 0)
+    };
+    public static final parameterType[] defaultCheckboxParam = new parameterType[]{
+            new paramNumber("Default Value ( 1 or 0 )", 0)
+    };
+    public static final parameterType[] defaultFieldPosParam = new parameterType[]{
+            new paramNumber("Default X", 0),
+            new paramNumber("Default Y", 0)
     };
 
 
@@ -98,6 +121,25 @@ public class FieldEditorHelper {
         };
     }
 
+    private static parameterType[] getNumberParams(numberType s){
+        return new parameterType[]{
+                new paramNumber("Default Value", (int) s.default_value)
+        };
+    }
+
+    private static parameterType[] getCheckboxParam(checkboxType s){
+        return new parameterType[]{
+                new paramNumber("Default Value ( 1 or 0 )", (int) s.default_value)
+        };
+    }
+
+    private static parameterType[] getFieldPosParam(fieldposType s){
+        return new parameterType[]{
+                new paramNumber("Default X", ((int[]) s.default_value)[0]),
+                new paramNumber("Default Y", ((int[]) s.default_value)[1])
+        };
+    }
+
 
 
     public static void setSliderParams(sliderType s, parameterType[] types){
@@ -119,6 +161,22 @@ public class FieldEditorHelper {
         s.default_value = ((paramNumber) types[0]).val;
     }
 
+    public static void setNumberParams(numberType s, parameterType[] types){
+        s.default_value = ((paramNumber) types[0]).val;
+    }
+
+    public static void setCheckboxParam(checkboxType s, parameterType[] types){
+        s.default_value = ((paramNumber) types[0]).val;
+    }
+
+    public static void setFieldPosParam(fieldposType s, parameterType[] types){
+        s.default_value = new int[]{
+                ((paramNumber) types[0]).val,
+                ((paramNumber) types[1]).val
+        };
+    }
+
+
     private static void setInputParameter(inputType t, parameterType[] types){
         switch (t.getInputType()){
             case TALLY:
@@ -132,6 +190,15 @@ public class FieldEditorHelper {
                 break;
             case NOTES_INPUT:
                 setTextParams((textType) t, types);
+                break;
+            case NUMBER:
+                setNumberParams((numberType) t, types);
+                break;
+            case CHECKBOX:
+                setCheckboxParam((checkboxType) t, types);
+                break;
+            case FIELDPOS:
+                setFieldPosParam((fieldposType) t, types);
                 break;
         }
     }
@@ -148,6 +215,12 @@ public class FieldEditorHelper {
                 return getDropdownParams((dropdownType) t);
             case NOTES_INPUT:
                 return getTextParams((textType) t);
+            case NUMBER:
+                return getNumberParams((numberType) t);
+            case CHECKBOX:
+                return getCheckboxParam((checkboxType) t);
+            case FIELDPOS:
+                return getFieldPosParam((fieldposType) t);
         }
         return new parameterType[]{};
     }
