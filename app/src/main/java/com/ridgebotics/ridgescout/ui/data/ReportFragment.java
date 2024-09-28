@@ -37,21 +37,24 @@ public class ReportFragment extends Fragment {
 
         binding.teamNumber.setText(String.valueOf(ourTeamNum));
 
-        binding.AyEyeBox.setVisibility(View.GONE);
+        binding.AyEyeBox.setVisibility(View.VISIBLE);
+        binding.AyEyeButton.setVisibility(View.GONE);
 
         DataManager.reload_event();
         DataManager.reload_pit_fields();
         DataManager.reload_match_fields();
 
-        binding.AyEyeButton.setText("Create Prompt");
-        binding.AyEyeButton.setOnClickListener(a ->{
-            getPrompt();
-            binding.AyEyeButton.setText("Generate Overview");
-            binding.AyEyeButton.setOnClickListener(b ->{
-                AIDataOverview();
-                binding.AyEyeButton.setVisibility(View.GONE);
-            });
-        });
+        binding.AyEyeBox.setText("TBD!\n This is meant to be a tool that lets scouters more easily write reports to the drive team before matches. There are some plans for LLM integration into this menu ");
+
+//        binding.AyEyeButton.setText("Create Prompt");
+//        binding.AyEyeButton.setOnClickListener(a ->{
+//            getPrompt();
+//            binding.AyEyeButton.setText("Generate Overview");
+//            binding.AyEyeButton.setOnClickListener(b ->{
+//                AIDataOverview();
+//                binding.AyEyeButton.setVisibility(View.GONE);
+//            });
+//        });
 
         return binding.getRoot();
     }
