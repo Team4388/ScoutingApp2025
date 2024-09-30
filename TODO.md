@@ -7,7 +7,6 @@
 ##### Functionality:
 - Add more types of data fields.
 - Test the scouting app
-- Write docs
 
 ### In Progress:
 ##### Scouting:
@@ -16,7 +15,6 @@
 - Make the "Report" menu, A tool that lets users select data to display from the the teams and compare menus.
 ##### Functionality:
 - Make server software to allow for easy sync over wifi - FTP
-- Deploy to F-Droid
 
 ### Done:
 ##### Scouting:
@@ -36,3 +34,5 @@
 - Formalize error messages & stacktraces
 - Make pit and match data field builder UIs. I don't want to have to keep editing a variable
 - Make the system for blank and unselected fields better.
+- Write docs
+- Deploy to F-Droid
