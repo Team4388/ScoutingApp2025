@@ -212,7 +212,7 @@ public class settingsFragment extends Fragment {
                 alert.setCancelable(true);
 
                 alert.setPositiveButton("Ok", (dialog, which) -> {
-//                    settingsManager.settings.defaultSettings();
+                    settingsManager.resetSettings();
                     username.setText(settingsManager.getUsername());
                     spinnerView.clearSelectedItem();
 //                    practice_mode.setChecked(latestSettings.settings.get_practice_mode());

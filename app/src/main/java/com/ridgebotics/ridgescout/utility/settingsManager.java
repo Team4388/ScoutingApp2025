@@ -41,6 +41,17 @@ public class settingsManager {
         return editor;
     }
 
+    public static void resetSettings(){
+        getEditor() .putString(UnameKey,    (String)  defaults.get( UnameKey    )).apply();
+        getEditor() .putString(SelEVCodeKey,(String)  defaults.get( SelEVCodeKey)).apply();
+        getEditor().putBoolean(WifiModeKey, (boolean) defaults.get( WifiModeKey )).apply();
+        getEditor()    .putInt(TeamNumKey,  (int)     defaults.get( TeamNumKey  )).apply();
+        getEditor()    .putInt(MatchNumKey, (int)     defaults.get( MatchNumKey )).apply();
+        getEditor() .putString(AllyPosKey,  (String)  defaults.get( AllyPosKey  )).apply();
+        getEditor()    .putInt(DataModeKey, (int)     defaults.get( DataModeKey )).apply();
+        getEditor() .putString(BtUUIDKey,   (String)  defaults.get( BtUUIDKey   )).apply();
+    }
+
     // IDK why I decided to format these functions like this. It looks cool though.
     public static String  getUsername(){return            prefs.getString(  UnameKey,           (String)  defaults.get(UnameKey));}
     public static void    setUsername(String str){  getEditor().putString(  UnameKey,str).apply();}

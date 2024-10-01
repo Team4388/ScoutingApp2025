@@ -20,8 +20,8 @@
 #### Things that are yet to be implemented:
 - A page that lets users cross-compare scouting data between teams. (Compare)
 - A page that lets scouters more easily make reports to the drive team before a match starts (Report)
-- More types of fields
 - Data cloud sync using an FTP server
+
 #### Things that may or may not be implemented:
 - Practice mode
 - Statbotics intgration
@@ -31,5 +31,5 @@
 ### Screenshots
 |Match scouting interface|Field editor|Teams data viewer|
 |-|-|-|
-|![Screenshot1](https://github.com/Team4388/ScoutingApp2025/blob/main/Images/Screenshot_20240925-142944_RidgeScout_1.png?raw=true)|![Screenshot2](https://github.com/Team4388/ScoutingApp2025/blob/main/Images/Screenshot_20240925-143135_RidgeScout_1.png?raw=true)|![Screenshot3](https://github.com/Team4388/ScoutingApp2025/blob/main/Images/Screenshot_20240925-143522_RidgeScout_1.png?raw=true)|
+|![Screenshot1](https://github.com/Team4388/ScoutingApp2025/blob/main/metadata/en-US/images/phoneScreenshots/1.png?raw=true)|![Screenshot2](https://github.com/Team4388/ScoutingApp2025/blob/main/metadata/en-US/images/phoneScreenshots/2.png?raw=true)|![Screenshot3](https://github.com/Team4388/ScoutingApp2025/blob/main/metadata/en-US/images/phoneScreenshots/3.png?raw=true)|
 

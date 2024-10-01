@@ -3,9 +3,7 @@
 - Make practice mode??
 ##### Data Analysis:
 - Statbotics intigration???
-- Make the "Compare" menu, cross comparing team's stats.
 ##### Functionality:
-- Add more types of data fields.
 - Test the scouting app
 
 ### In Progress:
@@ -13,6 +11,7 @@
 ##### Data Analysis:
 - AI overview of scouting data for a team???
 - Make the "Report" menu, A tool that lets users select data to display from the the teams and compare menus.
+- Make the "Compare" menu, cross comparing team's stats.
 ##### Functionality:
 - Make server software to allow for easy sync over wifi - FTP
 
@@ -36,3 +35,4 @@
 - Make the system for blank and unselected fields better.
 - Write docs
 - Deploy to F-Droid
+- Add more types of data fields.

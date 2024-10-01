@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.ridgebotics.ridgescout.utility.AlertManager;
 import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentScoutingPitBinding;
 import com.ridgebotics.ridgescout.scoutingData.ScoutingDataWriter;
@@ -74,9 +75,10 @@ public class PitScoutingFragment extends Fragment {
             types[i] = pit_latest_values[i].getViewValue();
         }
 
-        if(ScoutingDataWriter.save(pit_values.length-1, username, filename, types))
+        if(ScoutingDataWriter.save(pit_values.length-1, username, filename, types)) {
             System.out.println("Saved!");
-        else
+            AlertManager.toast("Saved " + filename);
+        }else
             System.out.println("Error saving");
     }
 
