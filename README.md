@@ -2,7 +2,7 @@
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
-     height="80">]([https://f-droid.org/packages/com.github.lamarios.clipious/](https://f-droid.org/packages/com.ridgebotics.ridgescout/))   
+     height="80">](https://f-droid.org/packages/com.ridgebotics.ridgescout/)   
 **Note**: The F-Droid version of this app is not currently up to date with the GitHub release
 
 [**Read the wiki**](https://github.com/Team4388/ScoutingApp2025/wiki)
