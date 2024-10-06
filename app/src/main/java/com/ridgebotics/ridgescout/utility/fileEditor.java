@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.nio.BufferOverflowException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -22,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -30,6 +33,7 @@ public final class fileEditor {
     public final static String baseDir = "/data/data/com.ridgebotics.ridgescout/";
     public static final byte internalDataVersion = 0x01;
     public static final int maxCompressedBlockSize = 4096;
+//    private TimeZone localTimeZone = TimeZone.getDefault();
 
 
 
@@ -190,22 +194,22 @@ public final class fileEditor {
 
 
 
-    public static Calendar getLastModified(String filepath){
-        File f = new File(baseDir + filepath);
-        if(f.exists()){
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(f.lastModified());
-            return calendar;
-        }
-        return null;
-    }
-
-    public static void setLastModified(String filepath, Calendar calendar){
-        File f = new File(baseDir + filepath);
-        if(f.exists()){
-            f.setLastModified(calendar.getTimeInMillis());
-        }
-    }
+//    public static Calendar getLastModified(String filepath){
+//        File f = new File(baseDir + filepath);
+//        if(f.exists()){
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.setTimeInMillis(f.lastModified());
+//            return calendar;
+//        }
+//        return null;
+//    }
+//
+//    public static void setLastModified(String filepath, Calendar calendar){
+//        File f = new File(baseDir + filepath);
+//        if(f.exists()){
+//            f.setLastModified(calendar.getTimeInMillis());
+//        }
+//    }
 
 
 
@@ -214,6 +218,10 @@ public final class fileEditor {
             FileOutputStream output = new FileOutputStream(baseDir + filepath);
             output.write(data);
             output.close();
+
+//            Date d = new Date();
+
+            new File(baseDir + filepath).setLastModified(new Date().getTime());
             return true;
         }
         catch (IOException e) {

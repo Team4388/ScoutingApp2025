@@ -14,10 +14,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ridgebotics.ridgescout.R;
+import com.ridgebotics.ridgescout.utility.AlertManager;
 import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentTransferBinding;
 import com.ridgebotics.ridgescout.ui.transfer.bluetooth.BluetoothSenderFragment;
 import com.ridgebotics.ridgescout.ui.transfer.codes.CodeGeneratorView;
+
+import java.util.Date;
 
 public class TransferFragment extends Fragment {
     private FragmentTransferBinding binding;
@@ -66,12 +69,31 @@ public class TransferFragment extends Fragment {
             alert.create().show();
         });
 
+
+        if(!settingsManager.getWifiMode()) {
+            binding.TBAButton.setEnabled(false);
+            binding.SyncButton.setEnabled(false);
+        }
+
+        if(!settingsManager.getFTPEnabled() ||
+            new Date().getTime()-FTPSync.lastSyncTime < FTPSync.timeTolerance) {
+            binding.SyncButton.setEnabled(false);
+        }
+
+        binding.SyncButton.setOnClickListener(v -> {
+            binding.SyncButton.setEnabled(false);
+            FTPSync.sync((error, upcount, downcount) -> getActivity().runOnUiThread(() -> {
+//                binding.SyncButton.setEnabled(true);
+                AlertManager.toast((!error ? "Synced! " : "Error Syncing. ") + upcount + " Up " + downcount + " Down");
+            }));
+        });
+
+
         if(evcode.equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);
             binding.uploadButton.setEnabled(false);
             binding.CSVButton.setEnabled(false);
             binding.downloadButton.setEnabled(true);
-            binding.SyncButton.setEnabled(false);
             return binding.getRoot();
         }
 
@@ -105,20 +127,6 @@ public class TransferFragment extends Fragment {
             });
 
             builder.show();
-        });
-
-        if(!settingsManager.getWifiMode()) {
-            binding.TBAButton.setEnabled(false);
-            binding.SyncButton.setEnabled(false);
-        }
-
-        if(!settingsManager.getFTPEnabled()) {
-            binding.SyncButton.setEnabled(false);
-        }
-
-        binding.SyncButton.setOnClickListener(v -> {
-            binding.SyncButton.setEnabled(false);
-            FTPSync.sync(error -> getActivity().runOnUiThread(() -> binding.SyncButton.setEnabled(true)));
         });
 
         return binding.getRoot();

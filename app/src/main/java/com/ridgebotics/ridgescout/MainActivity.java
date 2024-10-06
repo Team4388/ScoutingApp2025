@@ -25,6 +25,7 @@ import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         if(!fileEditor.fileExist(fields.pitsFieldsFilename)){
             fields.save(fields.pitsFieldsFilename, fields.default_pit_fields);
         }
+
+
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
         AlertManager.init(this);
         SentimentAnalysis.init(this);

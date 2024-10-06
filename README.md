@@ -1,4 +1,4 @@
-![Ridgescout](https://github.com/Team4388/ScoutingApp2025/blob/main/metadata/en-US/images/FeatureGraphic.png?raw=true)
+![Ridgescout](https://github.com/Team4388/ScoutingApp2025/blob/main/metadata/en-US/images/featureGraphic.png?raw=true)
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -6,6 +6,8 @@
 **Note**: The F-Droid version of this app is not currently up to date with the GitHub release
 
 [**Read the wiki**](https://github.com/Team4388/ScoutingApp2025/wiki)
+
+[**Test Data**](https://github.com/Team4388/ScoutingApp2025/blob/main/2024week0-1728149849985.scoutbundle)
 
 #### Here is an overview of the main features currently included in the app:
 - This project is written for Android! No need for some kind of janky laptop charging setup.
@@ -16,11 +18,11 @@
 - Data transfer including 2D codes, Bluetooth, and File Bundle.
 - Exporting using CSV.
 - Deployment on F-Droid
+- Data cloud sync using an FTP server
 
 #### Things that are yet to be implemented:
 - A page that lets users cross-compare scouting data between teams. (Compare)
 - A page that lets scouters more easily make reports to the drive team before a match starts (Report)
-- Data cloud sync using an FTP server
 
 #### Things that may or may not be implemented:
 - Practice mode

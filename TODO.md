@@ -4,7 +4,6 @@
 ##### Data Analysis:
 - Statbotics intigration???
 ##### Functionality:
-- Test the scouting app
 
 ### In Progress:
 ##### Scouting:
@@ -13,7 +12,6 @@
 - Make the "Report" menu, A tool that lets users select data to display from the the teams and compare menus.
 - Make the "Compare" menu, cross comparing team's stats.
 ##### Functionality:
-- Make server software to allow for easy sync over wifi - FTP
 
 ### Done:
 ##### Scouting:
@@ -36,3 +34,5 @@
 - Write docs
 - Deploy to F-Droid
 - Add more types of data fields.
+- Make server software to allow for easy sync over wifi - FTP
+- Test the scouting app
