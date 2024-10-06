@@ -19,6 +19,8 @@ public class settingsManager {
     public static final String AllyPosKey   = "alliance_pos";
     public static final String DataModeKey  = "data_view_mode";
     public static final String BtUUIDKey    = "bt_uuid";
+    public static final String FTPEnabled   = "ftp_enabled";
+    public static final String FTPServer    = "ftp_server";
 
     public static Map defaults = getDefaults();
     private static Map getDefaults(){
@@ -32,11 +34,13 @@ public class settingsManager {
         hm.put(AllyPosKey,   "red-1");
         hm.put(DataModeKey,  0);
         hm.put(BtUUIDKey,    UUID.randomUUID().toString());
+        hm.put(FTPEnabled,   false);
+        hm.put(FTPServer,    "0.0.0.0");
 
         return hm;
     }
 
-    private static SharedPreferences.Editor getEditor(){
+    public static SharedPreferences.Editor getEditor(){
         if(editor == null) editor = prefs.edit();
         return editor;
     }
@@ -45,11 +49,16 @@ public class settingsManager {
         getEditor() .putString(UnameKey,    (String)  defaults.get( UnameKey    )).apply();
         getEditor() .putString(SelEVCodeKey,(String)  defaults.get( SelEVCodeKey)).apply();
         getEditor().putBoolean(WifiModeKey, (boolean) defaults.get( WifiModeKey )).apply();
+
         getEditor()    .putInt(TeamNumKey,  (int)     defaults.get( TeamNumKey  )).apply();
         getEditor()    .putInt(MatchNumKey, (int)     defaults.get( MatchNumKey )).apply();
         getEditor() .putString(AllyPosKey,  (String)  defaults.get( AllyPosKey  )).apply();
         getEditor()    .putInt(DataModeKey, (int)     defaults.get( DataModeKey )).apply();
+
         getEditor() .putString(BtUUIDKey,   (String)  defaults.get( BtUUIDKey   )).apply();
+
+        getEditor().putBoolean(FTPEnabled,  (boolean) defaults.get(FTPEnabled   )).apply();
+        getEditor() .putString(FTPServer,   (String)  defaults.get( BtUUIDKey   )).apply();
     }
 
     // IDK why I decided to format these functions like this. It looks cool though.
@@ -76,5 +85,15 @@ public class settingsManager {
 
     public static String  getBtUUID(){return              prefs.getString(  BtUUIDKey,          (String)  defaults.get(BtUUIDKey));}
     public static void    setBtUUID(String str){    getEditor().putString(  BtUUIDKey,str).apply();}
+
+
+
+    public static boolean getFTPEnabled(){return            prefs.getBoolean( FTPEnabled,       (boolean) defaults.get(FTPEnabled));}
+    public static void    setFTPEnabled(boolean bool){getEditor().putBoolean( FTPEnabled,bool).apply();}
+
+    public static String  getFTPServer(){return             prefs.getString(  FTPServer,          (String)  defaults.get(FTPServer));}
+    public static void    setFTPServer(String str){   getEditor().putString(  FTPServer,str).apply();}
+
+
 
 }

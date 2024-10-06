@@ -310,8 +310,14 @@ public class MatchScoutingFragment extends Fragment {
             default_fields();
             set_indicator_color(unsaved_color);
         }else{
-            get_fields();
-            set_indicator_color(saved_color);
+            try {
+                get_fields();
+                set_indicator_color(saved_color);
+            } catch (Exception e){
+                AlertManager.error(e);
+                default_fields();
+                set_indicator_color(unsaved_color);
+            }
         }
 
         asm.start();

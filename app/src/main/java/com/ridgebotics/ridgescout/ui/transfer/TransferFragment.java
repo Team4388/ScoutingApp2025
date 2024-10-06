@@ -71,6 +71,7 @@ public class TransferFragment extends Fragment {
             binding.uploadButton.setEnabled(false);
             binding.CSVButton.setEnabled(false);
             binding.downloadButton.setEnabled(true);
+            binding.SyncButton.setEnabled(false);
             return binding.getRoot();
         }
 
@@ -106,8 +107,19 @@ public class TransferFragment extends Fragment {
             builder.show();
         });
 
-        if(!settingsManager.getWifiMode())
+        if(!settingsManager.getWifiMode()) {
             binding.TBAButton.setEnabled(false);
+            binding.SyncButton.setEnabled(false);
+        }
+
+        if(!settingsManager.getFTPEnabled()) {
+            binding.SyncButton.setEnabled(false);
+        }
+
+        binding.SyncButton.setOnClickListener(v -> {
+            binding.SyncButton.setEnabled(false);
+            FTPSync.sync(error -> getActivity().runOnUiThread(() -> binding.SyncButton.setEnabled(true)));
+        });
 
         return binding.getRoot();
     }

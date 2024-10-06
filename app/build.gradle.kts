@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.preference)
 //    implementation(libs.support.annotations)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
@@ -85,6 +86,7 @@ dependencies {
     implementation("org.tensorflow:tensorflow-lite-task-text:0.3.0")
 
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("commons-net:commons-net:3.10.0")
 
 
 

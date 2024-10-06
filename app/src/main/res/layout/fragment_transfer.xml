@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:text="Upload"
             android:textSize="34sp"
-            app:layout_constraintBottom_toTopOf="@+id/CSVButton"
+            app:layout_constraintBottom_toTopOf="@+id/SyncButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,10 +44,22 @@
             android:layout_height="wrap_content"
             android:text="Download"
             android:textSize="34sp"
-            app:layout_constraintBottom_toTopOf="@+id/CSVButton"
+            app:layout_constraintBottom_toTopOf="@+id/SyncButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/uploadButton" />
+
+        <Button
+            android:id="@+id/SyncButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SYNC"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <Button
             android:id="@+id/CSVButton"
@@ -55,10 +67,11 @@
             android:layout_height="wrap_content"
             android:text="CSV"
             android:textSize="34sp"
-            app:layout_constraintBottom_toBottomOf="@+id/TBAButton"
+            app:layout_constraintBottom_toTopOf="@+id/TBAButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/uploadButton" />
+            app:layout_constraintTop_toBottomOf="@+id/SyncButton" />
+
 
         <Button
             android:id="@+id/TBAButton"
@@ -69,7 +82,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/CSVButton" />
+            app:layout_constraintTop_toBottomOf="@+id/SyncButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

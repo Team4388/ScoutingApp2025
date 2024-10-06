@@ -7,7 +7,6 @@
     tools:context=".ui.settings.settingsFragment">
 
     <ScrollView
-        android:id="@+id/ScrollArea"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp"
@@ -18,177 +17,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <TableLayout
+            android:id="@+id/SettingsTable"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
+        </TableLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-<!--                <CheckBox-->
-<!--                    android:id="@+id/practice_mode"-->
-<!--                    android:layout_width="412dp"-->
-<!--                    android:layout_height="79dp"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:text="Practice Mode"-->
-<!--                    android:textSize="24sp"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintHorizontal_bias="0.0"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/eventDropdown" />-->
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="66dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Name"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <EditText
-                    android:id="@+id/username"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:text="Username"
-                    android:textSize="24sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="107dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="152dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="152dp"
-                    android:text="Event Code"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/username" />
-
-                <com.skydoves.powerspinner.PowerSpinnerView
-                    android:id="@+id/eventDropdown"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/black_2"
-                    android:gravity="center"
-                    android:hint="No events selected"
-                    android:padding="10dp"
-                    android:textColor="@color/main_500"
-                    android:textColorHint="@color/teal_700"
-                    android:textSize="14.5sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView1"
-                    app:spinner_arrow_gravity="end"
-                    app:spinner_arrow_padding="8dp"
-                    app:spinner_divider_color="@color/teal_200"
-                    app:spinner_divider_show="true"
-                    app:spinner_divider_size="0.4dp"
-                    app:spinner_popup_background="@color/black_2"
-                    app:spinner_popup_elevation="14dp" />
-
-                <TextView
-                    android:id="@+id/alliance_pos_text"
-                    android:layout_width="107dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="152dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="152dp"
-                    android:text="Alliance Position"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/eventDropdown" />
-
-                <com.skydoves.powerspinner.PowerSpinnerView
-                    android:id="@+id/alliance_pos_dropdown"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/black_2"
-                    android:gravity="center"
-                    android:hint="No events selected"
-                    android:padding="10dp"
-                    android:textColor="@color/main_500"
-                    android:textColorHint="@color/teal_700"
-                    android:textSize="14.5sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/alliance_pos_text"
-                    app:spinner_arrow_gravity="end"
-                    app:spinner_arrow_padding="8dp"
-                    app:spinner_divider_color="@color/teal_200"
-                    app:spinner_divider_show="true"
-                    app:spinner_divider_size="0.4dp"
-                    app:spinner_popup_background="@color/black_2"
-                    app:spinner_popup_elevation="14dp" />
-
-                <TextView
-                    android:id="@+id/team_num_settings_label"
-                    android:layout_width="107dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="152dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="152dp"
-                    android:text="Team number"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/alliance_pos_dropdown" />
-
-                <EditText
-                    android:id="@+id/team_number"
-                    android:layout_width="193dp"
-                    android:layout_height="65dp"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:padding="10dp"
-                    android:text="4388"
-                    android:textColor="@color/main_500"
-                    android:textColorHint="@color/teal_700"
-                    android:textSize="24sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/team_num_settings_label" />
-
-                <CheckBox
-                    android:id="@+id/wifi_mode"
-                    android:layout_width="412dp"
-                    android:layout_height="79dp"
-                    android:layout_marginTop="24dp"
-                    android:text="Wifi Mode"
-                    android:textSize="24sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/team_number" />
-
-                <Button
-                    android:id="@+id/reset_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Reset Settings"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

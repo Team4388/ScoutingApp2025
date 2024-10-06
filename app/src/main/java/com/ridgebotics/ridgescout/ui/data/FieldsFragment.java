@@ -55,9 +55,7 @@ public class FieldsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentDataFieldsBinding.inflate(inflater, container, false);
 
-        binding.revertVersionButton.setVisibility(View.VISIBLE);
         binding.valueEditScrollview.setOnTouchListener((v, event) -> true);
-
 
         binding.saveButton.setVisibility(View.GONE);
         binding.cancelEditButton.setVisibility(View.GONE);
@@ -124,6 +122,25 @@ public class FieldsFragment extends Fragment {
                 tr.setBackgroundColor(unfocused_background_color);
             }
         }
+
+        if(values.length > 1) {
+            binding.revertVersionButton.setVisibility(View.VISIBLE);
+            binding.revertVersionButton.setOnClickListener(v -> {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle("Warning!");
+                alert.setMessage("If there is any data set this version, it will be deleted!");
+                alert.setPositiveButton("OK", (dialog, which) -> {
+                    inputType[][] newArr = new inputType[values.length - 1][];
+                    System.arraycopy(values, 0, newArr, 0, values.length - 1);
+                    if(fields.save(filename, newArr))
+                        AlertManager.toast("Saved");
+                    load_field_menu();
+                });
+                alert.setNegativeButton("Cancel", null);
+                alert.setCancelable(true);
+                alert.create().show();
+            });
+        }
     }
 
     private void display_fields(inputType[] version_values) {
@@ -182,10 +199,7 @@ public class FieldsFragment extends Fragment {
         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
         alert.setTitle("Warning!");
         alert.setMessage("Changing or removing some values will result in lost data!\nBut this will create a new field version, and you can revert at any time.");
-        alert.setPositiveButton("OK", null);
-        alert.setNegativeButton("Cancel", null);
-        alert.setCancelable(true);
-        alert.setOnDismissListener(b -> {
+        alert.setPositiveButton("OK", (dialog, which) -> {
             inputType[][] currentValues = fields.load(filename);
             assert currentValues != null;
             inputType[][] newValues = new inputType[currentValues.length+1][];
@@ -198,11 +212,13 @@ public class FieldsFragment extends Fragment {
             }
 //            newValues[newValues.length-1] = values[values.length-1];
 
-            boolean saved = fields.save(filename, newValues);
-            AlertManager.alert("Saved", String.valueOf(saved));
+            if(fields.save(filename, newValues))
+                AlertManager.toast("Saved");
 
             Navigation.findNavController((Activity) getContext(), R.id.nav_host_fragment_activity_main).navigate(R.id.action_navigation_data_fields_to_navigation_data_fields_chooser);
         });
+        alert.setNegativeButton("Cancel", null);
+        alert.setCancelable(true);
         alert.create().show();
     }
 
@@ -503,7 +519,7 @@ public class FieldsFragment extends Fragment {
             newValues[newValues.length-1] = field;
             values[values.length-1] = newValues;
 
-            AlertManager.alert("Test", String.valueOf(binding.fieldsArea.getReorderedIndexes()));
+//            AlertManager.alert("Test", String.valueOf(binding.fieldsArea.getReorderedIndexes()));
 
             //TableRow tr = getTableRow(field);
             //binding.fieldsArea.addView(tr);
