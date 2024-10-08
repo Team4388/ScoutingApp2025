@@ -9,6 +9,7 @@ public class ByteBuilder {
     public static final int string_id = 2;
     public static final int int_arr_id = 3;
     public static final int string_arr_id = 4;
+    public static final int long_id = 5;
 
     ArrayList<byteType> bytesToBuild = new ArrayList<>();
 
@@ -150,6 +151,41 @@ public class ByteBuilder {
         stringArrayType.bytes = bb.build();
 
         bytesToBuild.add(stringArrayType);
+        return this;
+    }
+
+    private class longType extends byteType {
+        public int precision;
+        public long num;
+        public byte getType(){return long_id;}
+        public int length(){return precision;}
+        public byte[] build(){
+            return fileEditor.toBytes(num, precision);
+        }
+    }
+    private int getLeastBytePrecision(long num){
+        if(num <= 1){return 1;}
+        return (int) Math.ceil(Math.log(Math.abs(num))/Math.log(8));
+    }
+    public ByteBuilder addLong(long num) throws buildingException {
+        // Get closest number of bytes
+        int precision = getLeastBytePrecision(num);
+        return addLong(num, precision);
+    }
+    public ByteBuilder addLong(long num, int precision) throws buildingException {
+        if(precision <= 0){throw new buildingException("Invalid precision: " + precision);}
+
+        if(precision > 65536){throw new buildingException("Precision too large (greter than 65536)");}
+        if(precision < getLeastBytePrecision(num)){throw new buildingException("Precision too small");}
+
+        if(num > Long.MAX_VALUE){throw new buildingException("Long overflow");}
+        if(num < Long.MIN_VALUE){throw new buildingException("Long overflow");}
+
+        longType longType = new longType();
+        longType.num = num;
+        longType.precision = precision;
+
+        bytesToBuild.add(longType);
         return this;
     }
 

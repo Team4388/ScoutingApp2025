@@ -66,6 +66,17 @@ public final class fileEditor {
         return bytes;
     }
 
+    public static byte[] toBytes(long num, int byteCount){
+        if(num > (Math.pow(2,byteCount*8)-1)){
+            throw new BufferOverflowException();
+        }
+        byte[] bytes = new byte[byteCount];
+        for(int i=0;i<byteCount;i++){
+            bytes[i] = (byte)(num >> (i*8));
+        }
+        return bytes;
+    }
+
 
 
     public static int fromBytes(byte[] bytes, int byteCount){
@@ -74,6 +85,13 @@ public final class fileEditor {
             returnInt |= (bytes[i] & 0xFF) << (i*8);
         }
         return returnInt;
+    }
+    public static long fromBytesLong(byte[] bytes, int byteCount){
+        long returnLong = 0;
+        for(int i=0;i<byteCount;i++){
+            returnLong |= (bytes[i] & 0xFFL) << (i*8);
+        }
+        return returnLong;
     }
 
 

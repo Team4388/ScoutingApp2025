@@ -10,6 +10,7 @@ public class BuiltByteParser {
     public static final Integer stringType = 2;
     public static final Integer intArrayType = 3;
     public static final Integer stringArrayType = 4;
+    public static final Integer longType = 5;
 
     public class byteParsingExeption extends Exception {
         public byteParsingExeption() {}
@@ -57,6 +58,11 @@ public class BuiltByteParser {
         String[] arr;
         public Integer getType(){return stringArrayType;}
         public Object get(){return arr;}
+    }
+    public class longObject extends parsedObject{
+        long num;
+        public Integer getType(){return longType;}
+        public Object get(){return num;}
     }
 
 
@@ -139,6 +145,11 @@ public class BuiltByteParser {
                     stringArrayObject sa = new stringArrayObject();
                     sa.arr = StringArr;
                     objects.add(sa);
+                    break;
+                case 5:
+                    longObject lo = new longObject();
+                    lo.num = fileEditor.fromBytesLong(block, length);
+                    objects.add(lo);
                     break;
                 default:
                     rawObject ro = new rawObject(type);
