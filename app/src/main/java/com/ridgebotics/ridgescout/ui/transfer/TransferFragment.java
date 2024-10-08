@@ -75,8 +75,7 @@ public class TransferFragment extends Fragment {
             binding.SyncButton.setEnabled(false);
         }
 
-        if(!settingsManager.getFTPEnabled() ||
-            new Date().getTime()-FTPSync.lastSyncTime < FTPSync.timeTolerance) {
+        if(!settingsManager.getFTPEnabled()) {
             binding.SyncButton.setEnabled(false);
         }
 

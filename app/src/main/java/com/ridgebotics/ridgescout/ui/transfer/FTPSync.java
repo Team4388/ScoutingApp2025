@@ -31,7 +31,6 @@ import java.util.TimeZone;
 public class FTPSync extends Thread {
     public static final String remoteBasePath = "/RidgeScout/";
     public static final String timestampsFilename = "timestamps";
-    public static final long timeTolerance = 60000; // One min
     public static long lastSyncTime = 0;
 
     private static Date curSyncTime;
@@ -44,21 +43,15 @@ public class FTPSync extends Thread {
 
     public static void sync(onResult onResult){
 //        DataManager.reload_event();
-//        FTPSync ftpSync = new FTPSync();
-//        ftpSync.onResult = onResult;
-//
-//        lastSyncTime = new Date().getTime();
-//        curSyncTime = new Date();
-//
-//        ftpSync.start();
+        FTPSync ftpSync = new FTPSync();
+        ftpSync.onResult = onResult;
+
+        curSyncTime = new Date();
+
+        ftpSync.start();
     }
 
     FTPClient ftpClient;
-
-//    private class FileDate {
-//        public String filename;
-//        public Calendar lastModified;
-//    }
 
     private int upCount = 0;
     private int downCount = 0;
@@ -96,16 +89,6 @@ public class FTPSync extends Thread {
         file.setLastModified(date.getTime());
     }
 
-//    private long longAbs(long n){
-//        return n>0 ? n : -n;
-//    }
-
-//    private boolean toleranceCompareAfter(Date d1, Date d2){
-//        long diff = d1.getTime() - d2.getTime();
-//        System.out.println(diff);
-//        return diff > timeTolerance;
-//    }
-
 
     public void run() {
         try {
@@ -118,50 +101,50 @@ public class FTPSync extends Thread {
 
             File localDir = new File(baseDir);
             File[] localFiles = localDir.listFiles();
-            FTPFile[] remoteFiles = ftpClient.listFiles(remoteBasePath);
+            Map<String, Date> remoteTimestamps = getTimestamps();
 
             if (localFiles != null) {
                 for (File localFile : localFiles) {
-                    if (localFile.isFile()) {
-                        FTPFile remoteFile = findRemoteFile(remoteFiles, localFile.getName());
-//
-//                        Date t1 = getLocalFileUtcTimestamp(localFile);
-//                        Date t2 = getUtcTimestamp(remoteFile);
-////
-//                        System.out.println("- " + t1.getTime() + (t1.after(t2) ? ">" : "<") + t2.getTime());
+                    if(localFile.isDirectory()) continue;
+                    if(localFile.getName().equals(timestampsFilename)) continue;
 
-//                        if (remoteFile == null || toleranceCompareAfter(getLocalFileUtcTimestamp(localFile), (getUtcTimestamp(remoteFile)))) {
-//                            uploadFile(localFile);
-//                            System.out.println("Uploaded " + localFile.getName());
-//                            setLocalFileTimestamp(localFile, curSyncTime);
-//                            upCount++;
-//                        }else{
-//                            System.out.println("Did not upload " + localFile.getName());
-//                        }
+                    Date remoteTimestamp = remoteTimestamps.get(localFile.getName());
+
+                    if (remoteTimestamp == null || getLocalFileUtcTimestamp(localFile).after(remoteTimestamp)) {
+                        uploadFile(localFile);
+                        System.out.println("Uploaded " + localFile.getName());
+
+                        setLocalFileTimestamp(localFile, curSyncTime);
+                        remoteTimestamps.put(localFile.getName(), curSyncTime);
+                        upCount++;
+                    }else{
+                        System.out.println("Did not upload " + localFile.getName());
                     }
                 }
             }
 
-            for (FTPFile remoteFile : remoteFiles) {
-                if (!remoteFile.isDirectory()) {
-                    File localFile = new File(baseDir, remoteFile.getName());
+            for (String remoteFile : remoteTimestamps.keySet()) {
+                File localFile = new File(baseDir, remoteFile);
+                if(remoteFile.equals(timestampsFilename)) continue;
 
 //                    Date t1 = getLocalFileUtcTimestamp(localFile);
 //                    Date t2 = getUtcTimestamp(remoteFile);
 ////
 //                    System.out.println("- " + t1 + (t1.after(t2) ? ">" : "<") + t2);
 
-                    if (!localFile.exists() || getUtcTimestamp(remoteFile).after((getLocalFileUtcTimestamp(localFile)))) {
-                        downloadFile(remoteFile.getName(), localFile);
-                        System.out.println("Downloaded " + localFile.getName());
-                        Date d = getUtcTimestamp(remoteFile);
-                        setLocalFileTimestamp(localFile, d);
-                        downCount++;
-                    }else{
-                        System.out.println("Did not download " + remoteFile.getName());
-                    }
+                if (!localFile.exists() || remoteTimestamps.get(remoteFile).after(getLocalFileUtcTimestamp(localFile))) {
+                    downloadFile(remoteFile, localFile);
+                    System.out.println("Downloaded " + localFile.getName());
+//                        Date d = getUtcTimestamp(remoteFile);
+                    setLocalFileTimestamp(localFile, remoteTimestamps.get(localFile.getName()));
+//                    remoteTimestamps.put(remoteFile, curSyncTime);
+                    downCount++;
+                }else{
+                    System.out.println("Did not download " + remoteFile);
                 }
             }
+
+            setTimestamps(remoteTimestamps);
 
         } catch (Exception e) {
             AlertManager.error(e);
@@ -196,6 +179,10 @@ public class FTPSync extends Thread {
             downloadFile(timestampsFilename, new File(baseDir + timestampsFilename));
 
             byte[] data = fileEditor.readFile(timestampsFilename);
+
+            if(data == null || data.length == 0)
+                return new HashMap<>();
+
             BuiltByteParser bbp = new BuiltByteParser(data);
             List<BuiltByteParser.parsedObject> pa = bbp.parse();
 
@@ -203,8 +190,8 @@ public class FTPSync extends Thread {
             for(int i = 0; i < pa.size(); i+=2){
 //                System.out.println((long) pa.get(i).get());
                 output.put(
-                        (String) ((BuiltByteParser.stringObject) pa).get(),
-                        new Date((long) ((BuiltByteParser.longObject) pa).get())
+                        (String) pa.get(i).get(),
+                        new Date((long) pa.get(i+1).get())
                 );
             }
             return output;
