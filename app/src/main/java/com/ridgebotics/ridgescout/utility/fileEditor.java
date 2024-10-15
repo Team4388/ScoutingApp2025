@@ -383,18 +383,19 @@ public final class fileEditor {
 
         String[] filenames = outFiles.toArray(new String[0]);
 
-        Arrays.sort(filenames, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
+        try {
+            Arrays.sort(filenames, (o1, o2) -> {
                 try {
-                    if(!o1.contains("-") || !o2.contains("-"))
+                    if (!o1.contains("-") || !o2.contains("-"))
                         return 0;
                     return Integer.valueOf(o1.split("-")[1]).compareTo(Integer.valueOf(o2.split("-")[1]));
-                } catch (Exception e){
+                } catch (Exception e) {
                     return 0;
                 }
-            }
-        });
+            });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
 
         return filenames;

@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.ridgebotics.ridgescout.utility.AlertManager;
 import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentDataTeamsBinding;
 import com.ridgebotics.ridgescout.scoutingData.ScoutingDataWriter;
@@ -282,41 +283,46 @@ public class TeamsFragment extends Fragment {
 
     public void add_individual_views(LinearLayout ll, String[] files) {
         for (int i = 0; i < files.length; i++) {
-            String[] split = files[i].split("-");
-            int match_num = Integer.parseInt(split[1]);
+            try {
+                String[] split = files[i].split("-");
+                int match_num = Integer.parseInt(split[1]);
 
-            ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
+                ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
 
-            TextView tv = new TextView(getContext());
-            tv.setLayoutParams(new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            ));
-            tv.setPadding(0, 40, 0, 5);
-            tv.setGravity(Gravity.CENTER_HORIZONTAL);
-            tv.setText("M" + (match_num) + " " + split[2] + "-" + split[3] + " by " + psda.username);
-            tv.setTextSize(30);
-            ll.addView(tv);
-
-            for (int a = 0; a < psda.data.array.length; a++) {
-                tv = new TextView(getContext());
+                TextView tv = new TextView(getContext());
                 tv.setLayoutParams(new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
+                tv.setPadding(0, 40, 0, 5);
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                tv.setText(psda.data.array[a].getName());
-                tv.setTextSize(25);
-
-                if (psda.data.array[a].isNull()) {
-                    tv.setBackgroundColor(0xffff0000);
-                    tv.setTextColor(0xff000000);
-                }
-
+                tv.setText("M" + (match_num) + " " + split[2] + "-" + split[3] + " by " + psda.username);
+                tv.setTextSize(30);
                 ll.addView(tv);
 
+                for (int a = 0; a < psda.data.array.length; a++) {
+                    tv = new TextView(getContext());
+                    tv.setLayoutParams(new FrameLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    ));
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                    tv.setText(psda.data.array[a].getName());
+                    tv.setTextSize(25);
 
-                match_latest_values[a].add_individual_view(ll, psda.data.array[a]);
+                    if (psda.data.array[a].isNull()) {
+                        tv.setBackgroundColor(0xffff0000);
+                        tv.setTextColor(0xff000000);
+                    }
+
+                    ll.addView(tv);
+
+
+                    match_latest_values[a].add_individual_view(ll, psda.data.array[a]);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                AlertManager.alert("Warning!", "Failure to load file " + files[i]);
             }
         }
     }
@@ -329,10 +335,14 @@ public class TeamsFragment extends Fragment {
     public void add_compiled_views(LinearLayout ll, String[] files){
         dataType[][] data = new dataType[match_latest_values.length][files.length];
         for (int i = 0; i < files.length; i++) {
-
-            ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
-            for (int a = 0; a < data.length; a++) {
-                data[a][i] = psda.data.array[a];
+            try {
+                ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
+                for (int a = 0; a < data.length; a++) {
+                    data[a][i] = psda.data.array[a];
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+                AlertManager.alert("Warning!", "Failure to load file " + files[i]);
             }
         }
 
@@ -359,10 +369,14 @@ public class TeamsFragment extends Fragment {
     public void add_history_views(LinearLayout ll, String[] files){
         dataType[][] data = new dataType[match_latest_values.length][files.length];
         for (int i = 0; i < files.length; i++) {
-
-            ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
-            for (int a = 0; a < data.length; a++) {
-                data[a][i] = psda.data.array[a];
+            try {
+                ScoutingDataWriter.ParsedScoutingDataResult psda = ScoutingDataWriter.load(files[i], match_values, match_transferValues);
+                for (int a = 0; a < data.length; a++) {
+                    data[a][i] = psda.data.array[a];
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                AlertManager.alert("Warning!", "Failure to load file " + files[i]);
             }
         }
 

@@ -18,6 +18,9 @@ import com.ridgebotics.ridgescout.utility.fileEditor;
 public class CSVExport {
     private static String[] alliances = {"red", "blue"};
 
+    private static String safeCSV(String input){
+        return input.replace("\n", "").replace(",", ".").replace(";", ".");
+    }
 
     public static void exportMatches(Context c){
         DataManager.reload_event();
@@ -55,10 +58,15 @@ public class CSVExport {
             if(!fileEditor.fileExist(filename)){
                 data += ("null,".repeat(match_latest_values.length));
             }else{
-                ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, DataManager.match_values, DataManager.match_transferValues);
-                dataType[] types = psdr.data.array;
-                for(int i = 0; i < types.length; i++) {
-                    data += (types[i].get() + ",");
+                try {
+                    ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, DataManager.match_values, DataManager.match_transferValues);
+                    dataType[] types = psdr.data.array;
+                    for (int i = 0; i < types.length; i++) {
+                        data += (safeCSV(types[i].get().toString()) + ",");
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                    data += ("null,".repeat(pit_latest_values.length));
                 }
 
             }
@@ -77,7 +85,7 @@ public class CSVExport {
 
         String data = "";
 
-        data += ("teamnum,teamname,city,teamnum,stateOrProv,school,country,startingYear,");
+        data += ("teamnum,teamname,city,stateOrProv,school,country,startingYear,");
         for(int i = 0; i < pit_latest_values.length; i++){
             data += (pit_latest_values[i].name + ",");
         }
@@ -99,10 +107,15 @@ public class CSVExport {
             if(!fileEditor.fileExist(filename)){
                 data += ("null,".repeat(pit_latest_values.length));
             }else{
-                ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, DataManager.pit_values, DataManager.pit_transferValues);
-                dataType[] types = psdr.data.array;
-                for(int i = 0; i < types.length; i++) {
-                    data += (types[i].get() + ",");
+                try {
+                    ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, DataManager.pit_values, DataManager.pit_transferValues);
+                    dataType[] types = psdr.data.array;
+                    for (int i = 0; i < types.length; i++) {
+                        data += (safeCSV(types[i].get().toString()) + ",");
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                    data += ("null,".repeat(pit_latest_values.length));
                 }
 
             }
