@@ -97,8 +97,8 @@ public class settingsManager {
     public static String  getFTPServer(){return             prefs.getString(  FTPServer,          (String)  defaults.get(FTPServer));}
     public static void    setFTPServer(String str){   getEditor().putString(  FTPServer,str).apply();}
 
-    public static boolean  getFTPSendMetaFiles(){return prefs.getBoolean(FTPServer, (boolean) defaults.get(FTPServer));}
-    public static void    setFTPSendMetaFiles(String str){getEditor().putString(FTPServer,str).apply();}
+    public static boolean  getFTPSendMetaFiles(){return prefs.getBoolean(FTPSendMetaFiles, (boolean) defaults.get(FTPSendMetaFiles));}
+    public static void    setFTPSendMetaFiles(String str){getEditor().putString(FTPSendMetaFiles,str).apply();}
 
 
 

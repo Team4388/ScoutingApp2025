@@ -97,11 +97,11 @@ public class FTPSync extends Thread {
         boolean sendMetaFiles = settingsManager.getFTPSendMetaFiles();
 
         // Meta files
-        String[] meta_string_array = new String[]{
+        List<String> meta_string_array = Arrays.asList(
                 "matches.fields",
                 "pits.fields",
                 evcode+".eventdata"
-        };
+        );
 
         try {
             // Login to FTP
@@ -123,7 +123,7 @@ public class FTPSync extends Thread {
                     // Remove timestamts file
                     if(localFile.getName().equals(timestampsFilename)) continue;
                     // Remove meta files if the option is disabled
-                    if(!sendMetaFiles && Arrays.stream(meta_string_array).anyMatch(localFile.getName()::equals)) continue;
+                    if(!sendMetaFiles && meta_string_array.contains(localFile.getName())) continue;
 
                     Date remoteTimestamp = remoteTimestamps.get(localFile.getName());
 
