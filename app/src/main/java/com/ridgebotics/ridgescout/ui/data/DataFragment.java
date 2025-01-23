@@ -44,8 +44,6 @@ public class DataFragment extends Fragment {
 
             binding.buttons.setVisibility(View.VISIBLE);
             binding.teamsButton.setEnabled(false);
-            binding.compareButton.setEnabled(false);
-            binding.reportButton.setEnabled(false);
             binding.fieldsButton.setVisibility(View.VISIBLE);
 
 
@@ -65,15 +63,6 @@ public class DataFragment extends Fragment {
             });
             findNavController(this).navigate(R.id.action_navigation_data_to_navigation_team_selector);
         });
-
-        binding.compareButton.setOnClickListener(v -> {
-            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_compare);
-        });
-
-        binding.reportButton.setOnClickListener(v -> {
-            findNavController(this).navigate(R.id.action_navigation_data_to_navigation_data_report_selector);
-        });
-
         return root;
     }
 }

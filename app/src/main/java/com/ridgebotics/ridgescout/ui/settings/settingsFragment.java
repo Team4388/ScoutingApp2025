@@ -3,6 +3,7 @@ package com.ridgebotics.ridgescout.ui.settings;
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static com.ridgebotics.ridgescout.utility.settingsManager.AllyPosKey;
 import static com.ridgebotics.ridgescout.utility.settingsManager.FTPEnabled;
+import static com.ridgebotics.ridgescout.utility.settingsManager.FTPSendMetaFiles;
 import static com.ridgebotics.ridgescout.utility.settingsManager.FTPServer;
 import static com.ridgebotics.ridgescout.utility.settingsManager.SelEVCodeKey;
 import static com.ridgebotics.ridgescout.utility.settingsManager.TeamNumKey;
@@ -238,7 +239,11 @@ public class settingsFragment extends Fragment {
         addViews(addDropdownByString("Alliance Position", alliance_pos_list, AllyPosKey));
         addViews(addNumberEdit("Team Number", TeamNumKey));
 
-        View[] FTPDependency = addStringEdit("FTP Server", FTPServer);
+        View[] FTPDependency = concatArrays(
+                addCheckbox("Send Meta Files", FTPSendMetaFiles, new View[]{}),
+                addStringEdit("FTP Server", FTPServer)
+        );
+
         View[] WifiDependency = addCheckbox("FTP Enabled", FTPEnabled, FTPDependency);
         addViews(addCheckbox("Wifi Mode", WifiModeKey, concatArrays(FTPDependency, WifiDependency)));
         addViews(WifiDependency);

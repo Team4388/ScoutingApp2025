@@ -88,20 +88,6 @@
             app:exitAnim="@anim/exit_anim"
             app:popEnterAnim="@anim/enter_anim"
             app:popExitAnim="@anim/pop_exit_anim" />
-        <action
-            android:id="@+id/action_navigation_data_to_navigation_data_report_selector"
-            app:destination="@id/navigation_data_report_selector"
-            app:enterAnim="@anim/enter_anim"
-            app:exitAnim="@anim/exit_anim"
-            app:popEnterAnim="@anim/enter_anim"
-            app:popExitAnim="@anim/pop_exit_anim"/>
-        <action
-            android:id="@+id/action_navigation_data_to_navigation_data_compare"
-            app:destination="@id/navigation_data_compare"
-            app:enterAnim="@anim/enter_anim"
-            app:exitAnim="@anim/exit_anim"
-            app:popEnterAnim="@anim/enter_anim"
-            app:popExitAnim="@anim/pop_exit_anim"/>
     </fragment>
 
     <fragment
@@ -114,18 +100,6 @@
         android:id="@+id/navigation_data_teams"
         android:name="com.ridgebotics.ridgescout.ui.data.TeamsFragment"
         tools:layout="@layout/fragment_data_teams">
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_data_compare"
-        android:name="com.ridgebotics.ridgescout.ui.data.CompareFragment"
-        tools:layout="@layout/fragment_data_report">
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_data_report"
-        android:name="com.ridgebotics.ridgescout.ui.data.ReportFragment"
-        tools:layout="@layout/fragment_data_report">
     </fragment>
 
     <fragment
@@ -152,22 +126,6 @@
             app:exitAnim="@anim/exit_anim"
             app:popEnterAnim="@anim/enter_anim"
             app:popExitAnim="@anim/pop_exit_anim" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_data_report_selector"
-        android:name="com.ridgebotics.ridgescout.ui.data.ReportSelectorFragment"
-        tools:layout="@layout/fragment_data_report_selector">
-        <action
-            android:id="@+id/action_navigation_data_report_selector_to_navigation_data_report"
-            app:destination="@id/navigation_data_report"
-            app:enterAnim="@anim/enter_anim"
-            app:exitAnim="@anim/exit_anim"
-            app:popEnterAnim="@anim/enter_anim"
-            app:popExitAnim="@anim/pop_exit_anim"/>
-        <action
-            android:id="@+id/action_navigation_data_report_selector_to_navigation_data"
-            app:destination="@id/navigation_data" />
     </fragment>
 
 

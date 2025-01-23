@@ -21,6 +21,7 @@ public class settingsManager {
     public static final String BtUUIDKey    = "bt_uuid";
     public static final String FTPEnabled   = "ftp_enabled";
     public static final String FTPServer    = "ftp_server";
+    public static final String FTPSendMetaFiles    = "ftp_send_meta_files";
 
     public static Map defaults = getDefaults();
     private static Map getDefaults(){
@@ -36,6 +37,7 @@ public class settingsManager {
         hm.put(BtUUIDKey,    UUID.randomUUID().toString());
         hm.put(FTPEnabled,   false);
         hm.put(FTPServer,    "0.0.0.0");
+        hm.put(FTPSendMetaFiles, false);
 
         return hm;
     }
@@ -57,8 +59,9 @@ public class settingsManager {
 
         getEditor() .putString(BtUUIDKey,   (String)  defaults.get( BtUUIDKey   )).apply();
 
-        getEditor().putBoolean(FTPEnabled,  (boolean) defaults.get(FTPEnabled   )).apply();
-        getEditor() .putString(FTPServer,   (String)  defaults.get( BtUUIDKey   )).apply();
+        getEditor().putBoolean(FTPEnabled,  (boolean) defaults.get( FTPEnabled  )).apply();
+        getEditor() .putString(FTPServer,   (String)  defaults.get( FTPServer   )).apply();
+        getEditor().putBoolean(FTPSendMetaFiles,   (boolean)  defaults.get( FTPSendMetaFiles   )).apply();
     }
 
     // IDK why I decided to format these functions like this. It looks cool though.
@@ -93,6 +96,9 @@ public class settingsManager {
 
     public static String  getFTPServer(){return             prefs.getString(  FTPServer,          (String)  defaults.get(FTPServer));}
     public static void    setFTPServer(String str){   getEditor().putString(  FTPServer,str).apply();}
+
+    public static boolean  getFTPSendMetaFiles(){return prefs.getBoolean(FTPServer, (boolean) defaults.get(FTPServer));}
+    public static void    setFTPSendMetaFiles(String str){getEditor().putString(FTPServer,str).apply();}
 
 
 

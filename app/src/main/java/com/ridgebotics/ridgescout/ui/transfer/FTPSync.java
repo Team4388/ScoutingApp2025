@@ -1,8 +1,10 @@
 package com.ridgebotics.ridgescout.ui.transfer;
 
 //import static com.ridgebotics.ridgescout.utility.DataManager.evcode;
+import static com.ridgebotics.ridgescout.utility.DataManager.evcode;
 import static com.ridgebotics.ridgescout.utility.fileEditor.baseDir;
 
+import com.ridgebotics.ridgescout.ui.data.FieldEditorHelper;
 import com.ridgebotics.ridgescout.utility.AlertManager;
 import com.ridgebotics.ridgescout.utility.BuiltByteParser;
 import com.ridgebotics.ridgescout.utility.ByteBuilder;
@@ -21,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -91,7 +94,17 @@ public class FTPSync extends Thread {
 
 
     public void run() {
+        boolean sendMetaFiles = settingsManager.getFTPSendMetaFiles();
+
+        // Meta files
+        String[] meta_string_array = new String[]{
+                "matches.fields",
+                "pits.fields",
+                evcode+".eventdata"
+        };
+
         try {
+            // Login to FTP
             ftpClient = new FTPClient();
             InetAddress address = InetAddress.getByName(settingsManager.getFTPServer());
             ftpClient.connect(address);
@@ -103,10 +116,14 @@ public class FTPSync extends Thread {
             File[] localFiles = localDir.listFiles();
             Map<String, Date> remoteTimestamps = getTimestamps();
 
+            // Loop through local files and send all that are more recent
             if (localFiles != null) {
                 for (File localFile : localFiles) {
                     if(localFile.isDirectory()) continue;
+                    // Remove timestamts file
                     if(localFile.getName().equals(timestampsFilename)) continue;
+                    // Remove meta files if the option is disabled
+                    if(!sendMetaFiles && Arrays.stream(meta_string_array).anyMatch(localFile.getName()::equals)) continue;
 
                     Date remoteTimestamp = remoteTimestamps.get(localFile.getName());
 
