@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ridgebotics.ridgescout.R;
+import com.ridgebotics.ridgescout.utility.AlertManager;
 import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentScoutingBinding;
 import com.ridgebotics.ridgescout.types.frcTeam;
@@ -36,7 +37,9 @@ public class ScoutingFragment extends Fragment {
 
         String evcode = settingsManager.getEVCode();
 
-        if(evcode.equals("unset")){
+        DataManager.reload_event();
+
+        if(event == null){
             binding.noEventError.setVisibility(View.VISIBLE);
             binding.matchScoutingButton.setEnabled(false);
             binding.pitScoutingButton.setEnabled(false);
@@ -44,11 +47,6 @@ public class ScoutingFragment extends Fragment {
             is_main_page = false;
             return binding.getRoot();
         }
-
-        DataManager.reload_event();
-
-        if(event.matches.isEmpty())
-            binding.matchScoutingButton.setVisibility(View.GONE);
 
         binding.matchScoutingButton.setOnClickListener(v -> {
             findNavController(this).navigate(R.id.action_navigation_scouting_to_navigation_match_scouting);

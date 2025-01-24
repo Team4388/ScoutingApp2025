@@ -58,6 +58,10 @@ public class TBAFragment extends Fragment {
 
         final RequestTask rq = new RequestTask();
         rq.onResult(s -> {
+            if(s == null || s.isEmpty()) {
+                AlertManager.error("Could not fetch event!");
+                return null;
+            }
             eventTable(s);
             return null;
         });

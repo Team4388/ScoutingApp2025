@@ -143,6 +143,8 @@ public class FTPSync extends Thread {
             for (String remoteFile : remoteTimestamps.keySet()) {
                 File localFile = new File(baseDir, remoteFile);
                 if(remoteFile.equals(timestampsFilename)) continue;
+                // Remove meta files if the option is disabled
+                if(!sendMetaFiles && meta_string_array.contains(remoteFile)) continue;
 
 //                    Date t1 = getLocalFileUtcTimestamp(localFile);
 //                    Date t2 = getUtcTimestamp(remoteFile);

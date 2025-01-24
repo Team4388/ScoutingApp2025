@@ -72,7 +72,7 @@ public class FieldPosView extends FrameLayout {
             return false;
         });
 
-        setImageResource(R.drawable.field_2024);
+        setImageResource(R.drawable.field_2025);
 
     }
 

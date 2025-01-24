@@ -10,7 +10,16 @@ public class DataManager {
     public static frcEvent event;
     public static void reload_event(){
         evcode = getevcode();
+
+        if(evcode.equals("unset")) return;
+
         event = frcEvent.decode(fileEditor.readFile(evcode + ".eventdata"));
+
+        if(event == null) {
+            AlertManager.error("Failed to load event!");
+            settingsManager.setEVCode("unset");
+            evcode = "unset";
+        }
     }
 
     public static String getevcode() {

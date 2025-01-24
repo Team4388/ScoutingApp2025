@@ -52,7 +52,7 @@ public class MultiFieldPosView extends FrameLayout {
         imageView.setAdjustViewBounds(true);
         addView(imageView);
 
-        setImageResource(R.drawable.field_2024);
+        setImageResource(R.drawable.field_2025);
 
     }
 
