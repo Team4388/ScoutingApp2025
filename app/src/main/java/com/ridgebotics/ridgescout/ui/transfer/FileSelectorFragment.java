@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -66,6 +67,10 @@ public class FileSelectorFragment extends Fragment {
 
             tr.setBackgroundColor(background_color);
 
+            CheckBox checkBox = new CheckBox(getContext());
+            checkBox.setChecked(true);
+            tr.addView(checkBox);
+
             TextView tv = new TextView(getContext());
             tv.setText(String.valueOf(files[i]));
             tv.setTextSize(20);
@@ -77,6 +82,7 @@ public class FileSelectorFragment extends Fragment {
                 selected_arr[fi] = sel;
 
                 tr.setBackgroundColor(sel ? background_color : unselected_background_color);
+                ((CheckBox) tr.getChildAt(0)).setChecked(sel);
             });
         }
 
@@ -88,9 +94,12 @@ public class FileSelectorFragment extends Fragment {
             Arrays.fill(selected_arr, Boolean.TRUE);
 
             for(int i = 0; i < files.length; i++){
-                View child = binding.fileSelectorTable.getChildAt(i);
+                TableRow child = (TableRow) binding.fileSelectorTable.getChildAt(i);
                 child.setBackgroundColor(background_color);
-                child.setVisibility(is_in_search_param(files[i], search_param, match_num_nums) ? View.VISIBLE : View.GONE);
+                boolean sel = is_in_search_param(files[i], search_param, match_num_nums);
+                child.setVisibility(sel ? View.VISIBLE : View.GONE);
+                ((CheckBox) child.getChildAt(0)).setChecked(sel);
+
             }
 
             return false;
@@ -103,6 +112,7 @@ public class FileSelectorFragment extends Fragment {
                 View child = binding.fileSelectorTable.getChildAt(i);
                 if(child.getVisibility() == View.VISIBLE && selected_arr[i])
                     filenames.add(files[i]);
+
             }
             onSelect.onSelect(get_bytes_of_filenames(filenames));
         });
