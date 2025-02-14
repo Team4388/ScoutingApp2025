@@ -155,6 +155,8 @@ public class FieldsFragment extends Fragment {
         binding.addButton.setVisibility(View.VISIBLE);
         binding.downButton.setVisibility(View.VISIBLE);
 
+        updateUpDownAvailability();
+
         binding.valueEditContainer.setVisibility(View.GONE);
 
         for(int i = 0; i < version_values.length; i++){
@@ -167,6 +169,12 @@ public class FieldsFragment extends Fragment {
         binding.saveButton.setOnClickListener(this::buttonfunc);
     }
 
+    // Make sure the user cannot move fields when they shouldn't
+    private void updateUpDownAvailability(){
+        binding.upButton.setEnabled(selindex != -1 && selindex != 0);
+        binding.downButton.setEnabled(selindex != -1 && selindex != values[values.length-1].length-1);
+    }
+
     private void addRow(inputType field){
         TableRow tr = getTableRow(field);
 
@@ -175,6 +183,7 @@ public class FieldsFragment extends Fragment {
         tr.setOnClickListener(v -> {
             binding.editButton.setVisibility(View.VISIBLE);
             trOnClick(values[values.length-1], tr);
+            updateUpDownAvailability();
         });
 
         binding.upButton.setOnClickListener(v -> {
@@ -183,6 +192,7 @@ public class FieldsFragment extends Fragment {
                 binding.fieldsArea.updateRowOrder(selindex, selindex - 1);
                 selindex -= 1;
             }
+            updateUpDownAvailability();
         });
 
         binding.downButton.setOnClickListener(v -> {
@@ -191,6 +201,7 @@ public class FieldsFragment extends Fragment {
                 binding.fieldsArea.updateRowOrder(selindex, selindex + 1);
                 selindex += 1;
             }
+            updateUpDownAvailability();
         });
 
     }
