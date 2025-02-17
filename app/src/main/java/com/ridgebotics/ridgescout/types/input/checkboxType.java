@@ -1,5 +1,6 @@
 package com.ridgebotics.ridgescout.types.input;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
@@ -28,11 +29,6 @@ import com.ridgebotics.ridgescout.types.data.dataType;
 import com.ridgebotics.ridgescout.types.data.intType;
 import com.ridgebotics.ridgescout.utility.BuiltByteParser;
 import com.ridgebotics.ridgescout.utility.ByteBuilder;
-import com.skydoves.powerspinner.IconSpinnerAdapter;
-import com.skydoves.powerspinner.IconSpinnerItem;
-import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
-import com.skydoves.powerspinner.PowerSpinnerView;
-import com.skydoves.powerspinner.SpinnerGravity;
 
 import java.util.ArrayList;
 import java.util.List;

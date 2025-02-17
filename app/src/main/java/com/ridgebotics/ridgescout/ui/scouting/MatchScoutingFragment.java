@@ -198,14 +198,11 @@ public class MatchScoutingFragment extends Fragment {
 
             default_text_color = tv.getCurrentTextColor();
 
-            final View v = DataManager.match_latest_values[i].createView(getContext(), new Function<dataType, Integer>() {
-                @Override
-                public Integer apply(dataType dataType) {
+            final View v = DataManager.match_latest_values[i].createView(getContext(), dataType -> {
 //                    edited = true;
-                    if(asm.isRunning)
-                        update_asm();
-                    return 0;
-                }
+                if(asm.isRunning)
+                    update_asm();
+                return 0;
             });
 
             binding.MatchScoutArea.addView(tv);

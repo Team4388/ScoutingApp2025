@@ -31,11 +31,6 @@ import com.ridgebotics.ridgescout.types.frcTeam;
 import com.ridgebotics.ridgescout.utility.DataManager;
 import com.ridgebotics.ridgescout.utility.fileEditor;
 import com.google.android.material.divider.MaterialDivider;
-import com.skydoves.powerspinner.IconSpinnerAdapter;
-import com.skydoves.powerspinner.IconSpinnerItem;
-import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
-import com.skydoves.powerspinner.PowerSpinnerView;
-import com.skydoves.powerspinner.SpinnerGravity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,44 +78,44 @@ public class TeamsFragment extends Fragment {
 
 
 
-        PowerSpinnerView dropdown = new PowerSpinnerView(getContext());
-
-        List<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
-
-        iconSpinnerItems.add(new IconSpinnerItem("Individual"));
-        iconSpinnerItems.add(new IconSpinnerItem("Compiled"));
-        iconSpinnerItems.add(new IconSpinnerItem("History"));
-
-        IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(dropdown);
-        dropdown.setSpinnerAdapter(iconSpinnerAdapter);
-        dropdown.setItems(iconSpinnerItems);
-
-        dropdown.selectItemByIndex(0);
-
-        dropdown.setPadding(10,20,10,20);
-        dropdown.setBackgroundColor(0xf0000000);
-        dropdown.setTextColor(0xff00ff00);
-        dropdown.setTextSize(15);
-        dropdown.setArrowGravity(SpinnerGravity.END);
-        dropdown.setArrowPadding(8);
-//        dropdown.setSpinnerItemHeight(46);
-        dropdown.setSpinnerPopupElevation(14);
-
-
-        dropdown.selectItemByIndex(mode);
-
-
-        dropdown.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<IconSpinnerItem>() {
-            @Override
-            public void onItemSelected(int oldIndex, @Nullable IconSpinnerItem oldItem, int newIndex,
-                                       IconSpinnerItem newItem) {
-
-                settingsManager.setDataMode(newIndex);
-                loadTeam(newIndex);
-            }
-        });
-
-        ll.addView(dropdown);
+//        PowerSpinnerView dropdown = new PowerSpinnerView(getContext());
+//
+//        List<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
+//
+//        iconSpinnerItems.add(new IconSpinnerItem("Individual"));
+//        iconSpinnerItems.add(new IconSpinnerItem("Compiled"));
+//        iconSpinnerItems.add(new IconSpinnerItem("History"));
+//
+//        IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(dropdown);
+//        dropdown.setSpinnerAdapter(iconSpinnerAdapter);
+//        dropdown.setItems(iconSpinnerItems);
+//
+//        dropdown.selectItemByIndex(0);
+//
+//        dropdown.setPadding(10,20,10,20);
+//        dropdown.setBackgroundColor(0xf0000000);
+//        dropdown.setTextColor(0xff00ff00);
+//        dropdown.setTextSize(15);
+//        dropdown.setArrowGravity(SpinnerGravity.END);
+//        dropdown.setArrowPadding(8);
+////        dropdown.setSpinnerItemHeight(46);
+//        dropdown.setSpinnerPopupElevation(14);
+//
+//
+//        dropdown.selectItemByIndex(mode);
+//
+//
+//        dropdown.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<IconSpinnerItem>() {
+//            @Override
+//            public void onItemSelected(int oldIndex, @Nullable IconSpinnerItem oldItem, int newIndex,
+//                                       IconSpinnerItem newItem) {
+//
+//                settingsManager.setDataMode(newIndex);
+//                loadTeam(newIndex);
+//            }
+//        });
+//
+//        ll.addView(dropdown);
 
 
 

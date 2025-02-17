@@ -1,5 +1,6 @@
 package com.ridgebotics.ridgescout.types.input;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;

@@ -2,6 +2,7 @@ package com.ridgebotics.ridgescout.types.input;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;

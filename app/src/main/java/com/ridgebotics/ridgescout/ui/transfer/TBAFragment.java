@@ -22,6 +22,7 @@ import com.ridgebotics.ridgescout.types.frcMatch;
 import com.ridgebotics.ridgescout.types.frcTeam;
 import com.ridgebotics.ridgescout.utility.fileEditor;
 import com.ridgebotics.ridgescout.utility.JSONUtil;
+import com.ridgebotics.ridgescout.utility.settingsManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +42,7 @@ public class TBAFragment extends Fragment {
     private android.widget.TableLayout Table;
     private FragmentTransferTbaBinding binding;
 
-    private static final int year = 2024;
+    private static final int year = settingsManager.getYearNum();
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
