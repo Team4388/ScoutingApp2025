@@ -13,8 +13,8 @@ public class settingsManager {
 
     public static final String UnameKey     = "username";
     public static final String SelEVCodeKey = "selected_event_code";
+    public static final String YearNumKey   = "year_num";
     public static final String WifiModeKey  = "wifi_mode";
-    public static final String TeamNumKey   = "team_num";
     public static final String MatchNumKey  = "match_num";
     public static final String AllyPosKey   = "alliance_pos";
     public static final String DataModeKey  = "data_view_mode";
@@ -30,7 +30,7 @@ public class settingsManager {
         hm.put(UnameKey,     "Username");
         hm.put(SelEVCodeKey, "unset");
         hm.put(WifiModeKey,  false);
-        hm.put(TeamNumKey,   4388);
+        hm.put(YearNumKey,   2025);
         hm.put(MatchNumKey,  0);
         hm.put(AllyPosKey,   "red-1");
         hm.put(DataModeKey,  0);
@@ -52,7 +52,7 @@ public class settingsManager {
         getEditor() .putString(SelEVCodeKey,(String)  defaults.get( SelEVCodeKey)).apply();
         getEditor().putBoolean(WifiModeKey, (boolean) defaults.get( WifiModeKey )).apply();
 
-        getEditor()    .putInt(TeamNumKey,  (int)     defaults.get( TeamNumKey  )).apply();
+        getEditor()    .putInt(YearNumKey,  (int)     defaults.get( YearNumKey  )).apply();
         getEditor()    .putInt(MatchNumKey, (int)     defaults.get( MatchNumKey )).apply();
         getEditor() .putString(AllyPosKey,  (String)  defaults.get( AllyPosKey  )).apply();
         getEditor()    .putInt(DataModeKey, (int)     defaults.get( DataModeKey )).apply();
@@ -74,8 +74,8 @@ public class settingsManager {
     public static boolean getWifiMode(){return            prefs.getBoolean( WifiModeKey,        (boolean) defaults.get(WifiModeKey));}
     public static void    setWifiMode(boolean bool){getEditor().putBoolean( WifiModeKey,bool).apply();}
 
-    public static int     getTeamNum(){return             prefs.getInt(     TeamNumKey,         (int)     defaults.get(TeamNumKey));}
-    public static void    setTeamNum(int num){      getEditor().putInt(     TeamNumKey,num).apply();}
+    public static int     getYearNum(){return             prefs.getInt(     YearNumKey,         (int)     defaults.get(YearNumKey));}
+    public static void    setYearNum(int num){      getEditor().putInt(     YearNumKey,num).apply();}
 
     public static int     getMatchNum(){return            prefs.getInt(     MatchNumKey,        (int)     defaults.get(MatchNumKey));}
     public static void    setMatchNum(int num){     getEditor().putInt(     MatchNumKey,num).apply();}
