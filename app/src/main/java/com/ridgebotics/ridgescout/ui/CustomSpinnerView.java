@@ -39,10 +39,7 @@ public class CustomSpinnerView extends LinearLayout {
         init(context);
     }
 
-    private ViewCustomSpinnerBinding binding;
-
     private List<String> options;
-    private CustomSpinnerPopup dialog;
     private onClickListener onClickListener;
 
     private TextView title;
@@ -61,9 +58,17 @@ public class CustomSpinnerView extends LinearLayout {
         this.onClickListener = listener;
     }
 
-    public void setOptions(List<String> options){
+
+    public void setOptions(List<String> options, String defaultOption){
+        setOptions(options, options.indexOf(defaultOption));
+    }
+
+    public void setOptions(List<String> options, int defaultOption){
         this.options = options;
-//        dialog = CustomSpinnerPopup.newInstance(options);
+        this.index = defaultOption;
+
+        if(defaultOption != -1)
+            this.item.setText(options.get(defaultOption));
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -76,7 +81,7 @@ public class CustomSpinnerView extends LinearLayout {
                 onClickListener.onClick(option, options.indexOf(option));
                 index = options.indexOf(option);
             }
-        });
+        }, index);
         popup.setLayoutDirection(0);
         builder.setView(popup);
         AlertDialog dialog = builder.create();
@@ -96,10 +101,12 @@ public class CustomSpinnerView extends LinearLayout {
 
     public void setOption(String option) {
         item.setText(option);
+        index = options.indexOf(option);
     }
 
     public void setOption(int index) {
-        setOption(options.get(index));
+        item.setText(options.get(index));
+        this.index = index;
     }
 
     public int getIndex(){

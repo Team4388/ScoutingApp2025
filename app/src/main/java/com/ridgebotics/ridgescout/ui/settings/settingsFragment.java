@@ -250,7 +250,7 @@ public class settingsFragment extends Fragment {
             ArrayList<String> optionsList = new ArrayList<>(Arrays.asList(options));
 
             dropdown.setTitle(getTitle());
-            dropdown.setOptions(optionsList);
+            dropdown.setOptions(optionsList, getValue());
             dropdown.setOption(getValue());
 
             dropdown.setOnClickListener((item, index) -> {

@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.ridgebotics.ridgescout.ui.CustomSpinnerView;
 import com.ridgebotics.ridgescout.utility.AlertManager;
 import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentDataTeamsBinding;
@@ -78,48 +79,23 @@ public class TeamsFragment extends Fragment {
 
 
 
-//        PowerSpinnerView dropdown = new PowerSpinnerView(getContext());
-//
-//        List<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
-//
-//        iconSpinnerItems.add(new IconSpinnerItem("Individual"));
-//        iconSpinnerItems.add(new IconSpinnerItem("Compiled"));
-//        iconSpinnerItems.add(new IconSpinnerItem("History"));
-//
-//        IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(dropdown);
-//        dropdown.setSpinnerAdapter(iconSpinnerAdapter);
-//        dropdown.setItems(iconSpinnerItems);
-//
-//        dropdown.selectItemByIndex(0);
-//
-//        dropdown.setPadding(10,20,10,20);
-//        dropdown.setBackgroundColor(0xf0000000);
-//        dropdown.setTextColor(0xff00ff00);
-//        dropdown.setTextSize(15);
-//        dropdown.setArrowGravity(SpinnerGravity.END);
-//        dropdown.setArrowPadding(8);
-////        dropdown.setSpinnerItemHeight(46);
-//        dropdown.setSpinnerPopupElevation(14);
-//
-//
-//        dropdown.selectItemByIndex(mode);
-//
-//
-//        dropdown.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<IconSpinnerItem>() {
-//            @Override
-//            public void onItemSelected(int oldIndex, @Nullable IconSpinnerItem oldItem, int newIndex,
-//                                       IconSpinnerItem newItem) {
-//
-//                settingsManager.setDataMode(newIndex);
-//                loadTeam(newIndex);
-//            }
-//        });
-//
-//        ll.addView(dropdown);
+        CustomSpinnerView dropdown = new CustomSpinnerView(getContext());
+        dropdown.setTitle("Data Mode");
 
+        List<String> options = new ArrayList<>();
+        options.add("Individual");
+        options.add("Compiled");
+        options.add("History");
 
+        dropdown.setOptions(options, mode);
 
+        dropdown.setOnClickListener((item, index) -> {
+            System.out.println(index);
+            settingsManager.setDataMode(index);
+            loadTeam(index);
+        });
 
+        ll.addView(dropdown);
 
 
 

@@ -35,8 +35,8 @@ public class textType extends inputType {
     public dataType.valueTypes getValueType(){return dataType.valueTypes.STRING;}
     public Object get_fallback_value(){return "<no-notes>";}
     public textType(){}
-    public textType(String name, String default_text){
-        super(name);
+    public textType(String name, String description, String default_text){
+        super(name, description);
         this.default_value = default_text;
     }
     public String get_type_name(){return "Text";}
@@ -50,6 +50,7 @@ public class textType extends inputType {
     public byte[] encode() throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         bb.addString(name);
+        bb.addString(description);
         bb.addString((String) default_value);
         return bb.build();
     }
@@ -57,8 +58,9 @@ public class textType extends inputType {
         BuiltByteParser bbp = new BuiltByteParser(bytes);
         ArrayList<BuiltByteParser.parsedObject> objects = bbp.parse();
 
-        name          = (String) objects.get(0).get();
-        default_value =          objects.get(1).get();
+        name          = (String)   objects.get(0).get();
+        description   = (String)   objects.get(1).get();
+        default_value =            objects.get(2).get();
     }
 
 

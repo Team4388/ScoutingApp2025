@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ridgebotics.ridgescout.R;
-import com.ridgebotics.ridgescout.utility.AlertManager;
 import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentScoutingBinding;
 import com.ridgebotics.ridgescout.types.frcTeam;
@@ -43,7 +42,7 @@ public class ScoutingFragment extends Fragment {
             binding.noEventError.setVisibility(View.VISIBLE);
             binding.matchScoutingButton.setEnabled(false);
             binding.pitScoutingButton.setEnabled(false);
-            binding.statusButton.setEnabled(false);
+            binding.eventButton.setEnabled(false);
             is_main_page = false;
             return binding.getRoot();
         }
@@ -64,8 +63,8 @@ public class ScoutingFragment extends Fragment {
             findNavController(this).navigate(R.id.action_navigation_scouting_to_navigation_team_selector);
         });
 
-        binding.statusButton.setOnClickListener(v -> {
-            findNavController(this).navigate(R.id.action_navigation_scouting_to_navigation_scouting_status);
+        binding.eventButton.setOnClickListener(v -> {
+            findNavController(this).navigate(R.id.action_navigation_scouting_to_navigation_scouting_event);
         });
 
         return binding.getRoot();
@@ -81,23 +80,17 @@ public class ScoutingFragment extends Fragment {
 
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+        getView().setOnKeyListener((v, keyCode, event) -> {
 
-                if (event.getAction() == KeyEvent.ACTION_UP
-                        && keyCode == KeyEvent.KEYCODE_BACK
-                        && !is_main_page){
+            if (event.getAction() == KeyEvent.ACTION_UP
+                    && keyCode == KeyEvent.KEYCODE_BACK
+                    && !is_main_page){
 
-//                    binding.buttons.setVisibility(View.VISIBLE);
-//                    binding.matchScoutingView.setVisibility(View.GONE);
-//                    binding.pitScoutingView.setVisibility(View.GONE);
-                    is_main_page = true;
+                is_main_page = true;
 
-                    return true;
-                }
-                return false;
+                return true;
             }
+            return false;
         });
     }
 

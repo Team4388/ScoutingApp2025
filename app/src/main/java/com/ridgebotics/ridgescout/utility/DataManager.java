@@ -30,17 +30,25 @@ public class DataManager {
     public static inputType[] match_latest_values;
     public static transferType[][] match_transferValues;
     public static void reload_match_fields(){
-        match_values = fields.load(fields.matchFieldsFilename);
-        match_latest_values = match_values[match_values.length-1];
-        match_transferValues = transferType.get_transfer_values(match_values);
+        try {
+            match_values = fields.load(fields.matchFieldsFilename);
+            match_latest_values = match_values[match_values.length - 1];
+            match_transferValues = transferType.get_transfer_values(match_values);
+        } catch (Exception e){
+            AlertManager.error(e);
+        }
     }
 
     public static inputType[][] pit_values;
     public static inputType[] pit_latest_values;
     public static transferType[][] pit_transferValues;
     public static void reload_pit_fields(){
-        pit_values = fields.load(fields.pitsFieldsFilename);
-        pit_latest_values = pit_values[pit_values.length-1];
-        pit_transferValues = transferType.get_transfer_values(pit_values);
+        try {
+            pit_values = fields.load(fields.pitsFieldsFilename);
+            pit_latest_values = pit_values[pit_values.length-1];
+            pit_transferValues = transferType.get_transfer_values(pit_values);
+        } catch (Exception e){
+            AlertManager.error(e);
+        }
     }
 }

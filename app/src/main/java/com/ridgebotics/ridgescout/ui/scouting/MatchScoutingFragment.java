@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.divider.MaterialDivider;
+import com.ridgebotics.ridgescout.ui.ToggleTitleView;
 import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentScoutingMatchBinding;
 import com.ridgebotics.ridgescout.scoutingData.ScoutingDataWriter;
@@ -137,7 +139,7 @@ public class MatchScoutingFragment extends Fragment {
 
     boolean edited = false;
 
-    TextView[] titles;
+    ToggleTitleView[] titles;
 
     AutoSaveManager asm = new AutoSaveManager(this::save);
 
@@ -186,17 +188,22 @@ public class MatchScoutingFragment extends Fragment {
             asm.stop();
         }
 
-        titles = new TextView[DataManager.match_latest_values.length];
+        titles = new ToggleTitleView[DataManager.match_latest_values.length];
 
         for(int i = 0 ; i < DataManager.match_latest_values.length; i++) {
-            final TextView tv = new TextView(getContext());
-            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            tv.setText(DataManager.match_latest_values[i].name);
-            tv.setPadding(8,8,8,8);
-            tv.setTextSize(24);
-            titles[i] = tv;
+            binding.MatchScoutArea.addView(new MaterialDivider(getContext()));
 
-            default_text_color = tv.getCurrentTextColor();
+
+            final ToggleTitleView ttv = new ToggleTitleView(getContext());
+            ttv.setTitle(DataManager.match_latest_values[i].name);
+            ttv.setDescription(DataManager.match_latest_values[i].description);
+//            final TextView tv = new TextView(getContext());
+//            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//            tv.setText(DataManager.match_latest_values[i].name);
+//            tv.setPadding(8,8,8,8);
+//            tv.setTextSize(24);
+            titles[i] = ttv;
+
 
             final View v = DataManager.match_latest_values[i].createView(getContext(), dataType -> {
 //                    edited = true;
@@ -205,24 +212,25 @@ public class MatchScoutingFragment extends Fragment {
                 return 0;
             });
 
-            binding.MatchScoutArea.addView(tv);
+            binding.MatchScoutArea.addView(ttv);
             int fi = i;
-            tv.setOnClickListener(p -> {
-//                boolean blank = !latest_values[fi].getViewValue().isNull();
 
-//                System.out.println(blank);
+            ttv.setOnToggleListener(enabled -> {
                 if(asm.isRunning)
                     update_asm();
 
-                if(!DataManager.match_latest_values[fi].isBlank){
-                    tv.setBackgroundColor(0xffff0000);
-                    tv.setTextColor(0xff000000);
+                if(enabled){
                     DataManager.match_latest_values[fi].nullify();
                 }else{
-                    tv.setBackgroundColor(0x00000000);
-                    tv.setTextColor(default_text_color);
                     DataManager.match_latest_values[fi].setViewValue(DataManager.match_latest_values[fi].default_value);
                 }
+            });
+
+            ttv.setOnClickListener(p -> {
+//                boolean blank = !latest_values[fi].getViewValue().isNull();
+
+//                System.out.println(blank);
+
             });
 
             binding.MatchScoutArea.addView(v);
@@ -328,8 +336,7 @@ public class MatchScoutingFragment extends Fragment {
             inputType input = DataManager.match_latest_values[i];
             input.setViewValue(input.default_value);
 
-            titles[i].setBackgroundColor(0x00000000);
-            titles[i].setTextColor(default_text_color);
+            titles[i].enable();
         }
     }
 
@@ -351,11 +358,9 @@ public class MatchScoutingFragment extends Fragment {
 
 
             if(DataManager.match_latest_values[i].isBlank){
-                titles[i].setBackgroundColor(0xffff0000);
-                titles[i].setTextColor(0xff000000);
+                titles[i].disable();
             }else{
-                titles[i].setBackgroundColor(0x00000000);
-                titles[i].setTextColor(default_text_color);
+                titles[i].enable();
             }
         }
     }

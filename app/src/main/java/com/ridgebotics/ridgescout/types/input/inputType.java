@@ -30,14 +30,16 @@ public abstract class inputType {
         FIELDPOS
     }
     public String name;
+    public String description;
     public Object default_value;
     public abstract inputTypes getInputType();
     public abstract dataType.valueTypes getValueType();
     public abstract Object get_fallback_value();
     public abstract int get_byte_id();
     public inputType(){}
-    public inputType(String name){
+    public inputType(String name, String description){
         this.name = name;
+        this.description = description;
     }
 
     public abstract String get_type_name();

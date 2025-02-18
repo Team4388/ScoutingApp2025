@@ -25,7 +25,7 @@
             app:popEnterAnim="@anim/enter_anim"
             app:popExitAnim="@anim/pop_exit_anim" />
         <action
-            android:id="@+id/action_navigation_scouting_to_navigation_scouting_status"
+            android:id="@+id/action_navigation_scouting_to_navigation_scouting_event"
             app:destination="@id/navigation_scouting_status"
             app:enterAnim="@anim/enter_anim"
             app:exitAnim="@anim/exit_anim"
@@ -92,8 +92,8 @@
 
     <fragment
         android:id="@+id/navigation_scouting_status"
-        android:name="com.ridgebotics.ridgescout.ui.scouting.StatusFragment"
-        tools:layout="@layout/fragment_scouting_status">
+        android:name="com.ridgebotics.ridgescout.ui.scouting.EventFragment"
+        tools:layout="@layout/fragment_scouting_event">
     </fragment>
 
     <fragment

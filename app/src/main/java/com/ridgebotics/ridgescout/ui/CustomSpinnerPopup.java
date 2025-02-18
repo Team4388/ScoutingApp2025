@@ -25,10 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomSpinnerPopup extends TableLayout {
-    private List<String> options;
-    private OnOptionSelectedListener listener;
-    private RecyclerView recyclerView;
-    private CustomSpinnerOptionsAdapter adapter;
 
     public CustomSpinnerPopup(Context context) {
         super(context);
@@ -42,20 +38,17 @@ public class CustomSpinnerPopup extends TableLayout {
         void onOptionSelected(String option);
     }
 
-//    private int selectedIndex = -1;
-//    public void setValue()
-
-
-    public CustomSpinnerPopup init(List<String> options, OnOptionSelectedListener onOptionSelectedListener){
+    public CustomSpinnerPopup init(List<String> options, OnOptionSelectedListener onOptionSelectedListener, int defaultOption){
         CheckBox[] checkBoxes = new CheckBox[options.size()];
         setPadding(16, 16, 16, 16);
         for(int i = 0; i < options.size(); i++){
             final CheckBox cb = new CheckBox(getContext());
             cb.setText(options.get(i));
             cb.setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Headline5);
+            cb.setChecked(i == defaultOption);
 
-            addView(new MaterialDivider(getContext()));
-//            cb.margin
+            if(i > 0)
+                addView(new MaterialDivider(getContext()));
 
             addView(cb);
             checkBoxes[i] = cb;
@@ -66,8 +59,6 @@ public class CustomSpinnerPopup extends TableLayout {
                 for (CheckBox checkBox : checkBoxes)
                     checkBox.setChecked(false);
                 cb.setChecked(true);
-
-
             });
         }
 
@@ -119,9 +110,6 @@ public class CustomSpinnerPopup extends TableLayout {
 //        return view;
 //    }
 //
-    public void setOnOptionSelectedListener(OnOptionSelectedListener listener) {
-        this.listener = listener;
-    }
 
 
 

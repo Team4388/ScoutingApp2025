@@ -40,8 +40,8 @@ public class fieldposType extends inputType {
     public Object get_fallback_value(){return 0;}
     public fieldposType(){}
     public String get_type_name(){return "Field Pos";}
-    public fieldposType(String name, int[] default_value){
-        super(name);
+    public fieldposType(String name, String description, int[] default_value){
+        super(name, description);
         this.default_value = default_value;
     }
 
@@ -52,6 +52,7 @@ public class fieldposType extends inputType {
     public byte[] encode() throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         bb.addString(name);
+        bb.addString(description);
         bb.addIntArray((int[]) default_value);
         return bb.build();
     }
@@ -61,8 +62,8 @@ public class fieldposType extends inputType {
         ArrayList<BuiltByteParser.parsedObject> objects = bbp.parse();
 
         name          = (String)   objects.get(0).get();
-        default_value =            objects.get(1).get();
-        System.out.println("Defalt value!!!!!" + default_value);
+        description   = (String)   objects.get(1).get();
+        default_value =            objects.get(2).get();
     }
 
 

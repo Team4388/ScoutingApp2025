@@ -32,8 +32,8 @@ public class tallyType extends inputType {
     public Object get_fallback_value(){return 0;}
     public tallyType(){}
     public String get_type_name(){return "Tally";}
-    public tallyType(String name, int default_value){
-        super(name);
+    public tallyType(String name, String description, int default_value){
+        super(name, description);
         this.default_value = default_value;
     }
 
@@ -44,6 +44,7 @@ public class tallyType extends inputType {
     public byte[] encode() throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         bb.addString(name);
+        bb.addString(description);
         bb.addInt((int)default_value);
         return bb.build();
     }
@@ -52,7 +53,8 @@ public class tallyType extends inputType {
         ArrayList<BuiltByteParser.parsedObject> objects = bbp.parse();
 
         name          = (String)   objects.get(0).get();
-        default_value =            objects.get(1).get();
+        description   = (String)   objects.get(1).get();
+        default_value =            objects.get(2).get();
     }
 
 

@@ -1,0 +1,88 @@
+package com.ridgebotics.ridgescout.ui;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.ridgebotics.ridgescout.R;
+
+public class ToggleTitleView extends ConstraintLayout {
+    public ToggleTitleView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public ToggleTitleView(@NonNull Context context) {
+        super(context);
+        init(context);
+    }
+
+    public interface OnToggleListener {
+        void onToggle(boolean enabled);
+    }
+
+    TextView titleView;
+    CheckBox toggle_title_checkbox;
+    TextView toggle_title_description;
+    OnToggleListener onToggleListener;
+
+
+    private static final int default_text_color = 0xffffffff;
+
+    public void init(Context context){
+        LayoutInflater.from(context).inflate(R.layout.view_toggle_title, this, true);
+
+        titleView = findViewById(R.id.toggle_title);
+        toggle_title_checkbox = findViewById(R.id.toggle_title_checkbox);
+        toggle_title_description = findViewById(R.id.toggle_title_description);
+
+        toggle_title_checkbox.setOnCheckedChangeListener((compoundButton, checked) -> {
+            if(checked)
+                enable();
+            else
+                disable();
+
+            onToggleListener.onToggle(!checked);
+        });
+    }
+
+    public void setTitle(String title){
+        titleView.setText(title);
+    }
+
+    public void setDescription(String description){
+        toggle_title_description.setText(description);
+    }
+
+    public void setOnToggleListener(OnToggleListener onToggleListener){
+        this.onToggleListener = onToggleListener;
+    }
+
+    public boolean enabled = true;
+
+    public boolean isEnabled(){return enabled;}
+
+    public void disable(){
+        enabled = false;
+        toggle_title_checkbox.setChecked(false);
+        toggle_title_description.setVisibility(View.GONE);
+        setBackgroundColor(0xffff0000);
+        titleView.setTextColor(0xff000000);
+    }
+    public void enable(){
+        enabled = true;
+        toggle_title_checkbox.setChecked(true);
+        toggle_title_description.setVisibility(View.VISIBLE);
+        setBackgroundColor(0x00000000);
+        titleView.setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Headline5);
+//        titleView.setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Headline5);
+    }
+}

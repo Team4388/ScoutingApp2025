@@ -41,8 +41,8 @@ public class checkboxType extends inputType {
     public Object get_fallback_value(){return 0;}
     public checkboxType(){};
     public String get_type_name(){return "Checkbox";}
-    public checkboxType(String name, int isChecked){
-        super(name);
+    public checkboxType(String name, String description, int isChecked){
+        super(name, description);
         this.default_value = isChecked;
     }
 
@@ -50,6 +50,7 @@ public class checkboxType extends inputType {
     public byte[] encode() throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         bb.addString(name);
+        bb.addString(description);
         bb.addInt((int)default_value);
         return bb.build();
     }
@@ -58,7 +59,8 @@ public class checkboxType extends inputType {
         ArrayList<BuiltByteParser.parsedObject> objects = bbp.parse();
 
         name          = (String)   objects.get(0).get();
-        default_value =            objects.get(1).get();
+        description   = (String)   objects.get(1).get();
+        default_value =            objects.get(2).get();
     }
 
 //    public PowerSpinnerView dropdown = null;
@@ -68,7 +70,7 @@ public class checkboxType extends inputType {
     public View createView(Context context, Function<dataType, Integer> onUpdate){
         checkBox = new CheckBox(context);
         checkBox.setText(name);
-        checkBox.setTextSize(24);
+
         setViewValue(default_value);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -110,6 +112,7 @@ public class checkboxType extends inputType {
     public void add_individual_view(LinearLayout parent, dataType data){
         if(data.isNull()) return;
         CheckBox cb = new CheckBox(parent.getContext());
+        cb.setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Headline1);
         cb.setText(name);
         cb.setChecked((int) data.get() == 1);
         cb.setEnabled(false);

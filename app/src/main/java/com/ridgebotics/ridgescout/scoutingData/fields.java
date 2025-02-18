@@ -23,27 +23,32 @@ public class fields {
 
     public static final inputType[][] default_match_fields = new inputType[][] {
         {
-            new fieldposType("Auto start pos", new int[]{0,0}),
-            new tallyType("Auto Notes", 0),
-            new sliderType("Auto Performance", 5, 0, 10),
-            new textType("Auto Comments", ""),
-            new tallyType("Teleop Notes", 0),
-            new sliderType("Teleop Performance", 5, 0, 10),
-            new textType("Teleop Comments", ""),
-            new sliderType("Overall Driving Performance", 5, 0, 10),
-            new textType("Overall Driving Comments", ""),
-            new sliderType("Score area (AMP <-> Speaker)", 5, 0, 10),
-            new dropdownType("End Condition", new String[]{"Nothing", "Attempted Climb", "Successful Climbed", "Climbed with multiple robots", "Climbed with trap"}, 0),
-            new dropdownType("Robot Condition", new String[]{"Everything was working", "Something was maybe broken", "Something was broken", "Robot was disabled for part of the match", "Missing robot (Joe Johnson)"}, 0),
-            new textType("Other Comments", "")
+            new fieldposType("Auto start pos", "Where does the robot start its auto?", new int[]{0,0}),
+            new tallyType("Auto Coral", "How many coral did this robot score in auto?", 0),
+            new tallyType("Auto Algae", "How many algae did this robot score in auto?", 0),
+            new sliderType("Auto Performance", "How well did you think this robot did in auto?", 5, 0, 10),
+            new textType("Auto Comments", "Anything interesting about auto", ""),
+            new tallyType("Teleop Coral", "How many coral did this robot score in teleop?", 0),
+            new tallyType("Teleop Algae", "How many algae did this robot score in teleop?", 0),
+            new checkboxType("Coral Removal", "Did the robot remove coral?", 0),
+            new checkboxType("L4 Scoring", "Did the robot score in Layer 4?", 0),
+            new checkboxType("L3 Scoring", "Did the robot score in Layer 3?", 0),
+            new checkboxType("L2 Scoring", "Did the robot score in Layer 3?", 0),
+            new checkboxType("L1 Scoring", "Did the robot score in Layer 1?", 0),
+            new checkboxType("Processor Scoring", "Did the robot score in the processor?", 0),
+            new sliderType("Teleop Performance", "How well did the robot drive around?", 5, 0, 10),
+            new textType("Teleop Notes", "Anything intresting about Teleop", ""),
+            new dropdownType("End Condition", "What was the final condition of the robot?", new String[]{"Nothing", "Park", "Attempted Shallow", "Shallow", "Attempted Deep", "Deep"}, 0),
+            new dropdownType("Robot Condition", "Was anything broken?", new String[]{"Everything was working", "Something was maybe broken", "Something was broken", "Robot was disabled for part of the match", "Missing robot (Joe Johnson)"}, 0),
+            new textType("Other Comments", "Any other comments you have", "")
         }
     };
 
     public static final inputType[][] default_pit_fields = new inputType[][] {
         {
-            new sliderType("How good is robot", 5, 0, 10),
-            new sliderType("Test", 1, 0, 10),
-            new textType("notes", ""),
+            new sliderType("How good is robot", "How good, in fact, is this robot?", 5, 0, 10),
+            new sliderType("Test", "Testy", 1, 0, 10),
+            new textType("notes", "Write text about robot here", ""),
         }
     };
 

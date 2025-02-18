@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.ridgebotics.ridgescout.databinding.FragmentScoutingStatusBinding;
+import com.ridgebotics.ridgescout.databinding.FragmentScoutingEventBinding;
 import com.ridgebotics.ridgescout.utility.DataManager;
 import com.ridgebotics.ridgescout.utility.fileEditor;
 import com.ridgebotics.ridgescout.types.frcEvent;
@@ -22,13 +22,13 @@ import com.ridgebotics.ridgescout.types.frcMatch;
 
 import java.util.Arrays;
 
-public class StatusFragment extends Fragment {
-    FragmentScoutingStatusBinding binding;
+public class EventFragment extends Fragment {
+    FragmentScoutingEventBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        binding = FragmentScoutingStatusBinding.inflate(inflater, container, false);
+        binding = FragmentScoutingEventBinding.inflate(inflater, container, false);
 
         DataManager.reload_event();
         binding.matchTable.removeAllViews();
@@ -56,7 +56,7 @@ public class StatusFragment extends Fragment {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        tv.setText("Pit Scouting");
+        tv.setText("Teams");
         tv.setTextSize(28);
         binding.matchTable.addView(tv);
 
@@ -104,7 +104,7 @@ public class StatusFragment extends Fragment {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        tv.setText("Match Scouting");
+        tv.setText("Matches");
         tv.setTextSize(28);
         binding.matchTable.addView(tv);
 

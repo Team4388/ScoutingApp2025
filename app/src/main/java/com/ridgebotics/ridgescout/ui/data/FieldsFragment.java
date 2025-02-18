@@ -411,9 +411,8 @@ public class FieldsFragment extends Fragment {
         options.add("Checkbox");
         options.add("Field Position");
 
-        dropdown.setOptions(options);
+        dropdown.setOptions(options, 0);
         dropdown.setTitle("Type");
-        dropdown.setOption(0);
 
         builder.setView(dropdown);
 
