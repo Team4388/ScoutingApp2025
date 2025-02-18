@@ -67,6 +67,12 @@ public class MatchScoutingFragment extends Fragment {
 
 
         cur_match_num = settingsManager.getMatchNum();
+
+        if(cur_match_num >= event.matches.size()) {
+            cur_match_num = 0;
+            settingsManager.setMatchNum(0);
+        }
+
         update_match_num();
 
         binding.nextButton.setOnClickListener(v -> {
@@ -301,6 +307,13 @@ public class MatchScoutingFragment extends Fragment {
 
         frcMatch match = event.matches.get(cur_match_num);
         frcTeam team = get_team(match);
+
+        if(team == null) {
+            AlertManager.error("This team does not exist!");
+            binding.teamName.setText("ERROR!");
+            binding.teamDescription.setText("ERROR!");
+            return;
+        }
 
         binding.teamName.setText(team.teamName);
         binding.teamDescription.setText(team.getDescription());

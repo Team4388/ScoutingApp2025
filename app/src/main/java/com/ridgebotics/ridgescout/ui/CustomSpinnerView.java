@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -72,18 +73,29 @@ public class CustomSpinnerView extends LinearLayout {
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        ScrollView sv = new ScrollView(getContext());
+        sv.setLayoutDirection(ScrollView.SCROLL_AXIS_VERTICAL);
+
+        LinearLayout ll = new LinearLayout(getContext());
+        ll.setOrientation(LinearLayout.VERTICAL);
+        sv.addView(ll);
+
         builder.setPositiveButton("OK", (dialog, which) -> {});
         CustomSpinnerPopup popup = new CustomSpinnerPopup(getContext()).init(options, option -> {
 //            dialog.();
             if(!isEnabled()) return;
             item.setText(option);
+            index = options.indexOf(option);
             if(onClickListener != null) {
                 onClickListener.onClick(option, options.indexOf(option));
-                index = options.indexOf(option);
             }
         }, index);
+
+        ll.addView(popup);
+
         popup.setLayoutDirection(0);
-        builder.setView(popup);
+        builder.setView(sv);
         AlertDialog dialog = builder.create();
 
 
@@ -111,5 +123,8 @@ public class CustomSpinnerView extends LinearLayout {
 
     public int getIndex(){
         return index;
+    }
+    public String getOption(){
+        return options.get(index);
     }
 }

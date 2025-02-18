@@ -10,13 +10,13 @@
 
 ### In Progress:
 ##### Scouting:
-- Make practice mode
 - Make scouting UI look much better
 ##### Data Analysis:
 ##### Functionality:
 
 ### Done:
 ##### Scouting:
+- Make practice mode
 - Description for fields
 ##### Data Analysis:
 ##### Functionality:
