@@ -1,6 +1,7 @@
 package com.ridgebotics.ridgescout.ui.settings;
 
 import static com.ridgebotics.ridgescout.utility.settingsManager.AllyPosKey;
+import static com.ridgebotics.ridgescout.utility.settingsManager.CustomEventsKey;
 import static com.ridgebotics.ridgescout.utility.settingsManager.SelEVCodeKey;
 import static com.ridgebotics.ridgescout.utility.settingsManager.UnameKey;
 import static com.ridgebotics.ridgescout.utility.settingsManager.WifiModeKey;
@@ -55,6 +56,7 @@ public class settingsFragment extends Fragment {
         SettingsManager manager = new SettingsManager(getContext());
 
 
+        manager.addItem(new CheckboxSettingsItem(CustomEventsKey, "Custom Events"));
 
         StringSettingsItem FTPServer = new StringSettingsItem(settingsManager.FTPServer, "FTP Server");
         manager.addItem(FTPServer);

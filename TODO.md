@@ -1,6 +1,5 @@
 ### TODO:
 ##### Scouting:
-- Make practice mode??
 ##### Data Analysis:
 - Statbotics intigration???
 ##### Functionality:
@@ -11,6 +10,7 @@
 
 ### In Progress:
 ##### Scouting:
+- Make practice mode
 - Make scouting UI look much better
 ##### Data Analysis:
 ##### Functionality:

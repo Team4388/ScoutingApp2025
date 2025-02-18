@@ -104,26 +104,11 @@ public class TransferFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Chose data");
 
-            builder.setNegativeButton("Pit data", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    CSVExport.exportPits(getContext());
-                }
-            });
+            builder.setNegativeButton("Pit data", (dialog, which) -> CSVExport.exportPits(getContext()));
 
-            builder.setPositiveButton("Match data", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    CSVExport.exportMatches(getContext());
-                }
-            });
+            builder.setPositiveButton("Match data", (dialog, which) -> CSVExport.exportMatches(getContext()));
 
-            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+            builder.setNeutralButton("Cancel", (dialog, which) -> dialog.cancel());
 
             builder.show();
         });

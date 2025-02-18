@@ -22,6 +22,7 @@ public class settingsManager {
     public static final String FTPEnabled   = "ftp_enabled";
     public static final String FTPServer    = "ftp_server";
     public static final String FTPSendMetaFiles    = "ftp_send_meta_files";
+    public static final String CustomEventsKey = "enable_custom_event";
 
     public static Map defaults = getDefaults();
     private static Map getDefaults(){
@@ -38,6 +39,7 @@ public class settingsManager {
         hm.put(FTPEnabled,   false);
         hm.put(FTPServer,    "0.0.0.0");
         hm.put(FTPSendMetaFiles, false);
+        hm.put(CustomEventsKey, false);
 
         return hm;
     }
@@ -62,6 +64,8 @@ public class settingsManager {
         getEditor().putBoolean(FTPEnabled,  (boolean) defaults.get( FTPEnabled  )).apply();
         getEditor() .putString(FTPServer,   (String)  defaults.get( FTPServer   )).apply();
         getEditor().putBoolean(FTPSendMetaFiles,   (boolean)  defaults.get( FTPSendMetaFiles   )).apply();
+
+        getEditor().putBoolean(CustomEventsKey,   (boolean)  defaults.get( CustomEventsKey   )).apply();
     }
 
     // IDK why I decided to format these functions like this. It looks cool though.
@@ -98,7 +102,12 @@ public class settingsManager {
     public static void    setFTPServer(String str){   getEditor().putString(  FTPServer,str).apply();}
 
     public static boolean  getFTPSendMetaFiles(){return prefs.getBoolean(FTPSendMetaFiles, (boolean) defaults.get(FTPSendMetaFiles));}
-    public static void    setFTPSendMetaFiles(String str){getEditor().putString(FTPSendMetaFiles,str).apply();}
+    public static void    setFTPSendMetaFiles(boolean bool){getEditor().putBoolean(FTPSendMetaFiles,bool).apply();}
+
+
+    public static boolean  getCustomEvents(){return prefs.getBoolean(CustomEventsKey, (boolean) defaults.get(FTPSendMetaFiles));}
+    public static void    setCustomEvents(boolean bool){getEditor().putBoolean(CustomEventsKey,bool).apply();}
+
 
 
 
