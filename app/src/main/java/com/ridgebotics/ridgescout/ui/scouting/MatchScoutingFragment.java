@@ -65,16 +65,6 @@ public class MatchScoutingFragment extends Fragment {
 
 
 
-
-        cur_match_num = settingsManager.getMatchNum();
-
-        if(cur_match_num >= event.matches.size()) {
-            cur_match_num = 0;
-            settingsManager.setMatchNum(0);
-        }
-
-        update_match_num();
-
         binding.nextButton.setOnClickListener(v -> {
             if(edited) save();
             settingsManager.setMatchNum(cur_match_num+1);
@@ -111,6 +101,14 @@ public class MatchScoutingFragment extends Fragment {
 //            if(edited) save();
 //        });
 
+        cur_match_num = settingsManager.getMatchNum();
+
+        if(cur_match_num >= event.matches.size()) {
+            cur_match_num = 0;
+            settingsManager.setMatchNum(0);
+        }
+
+        update_match_num();
         create_fields();
         update_scouting_data();
 
@@ -142,14 +140,9 @@ public class MatchScoutingFragment extends Fragment {
     int cur_match_num;
     String username;
     String filename;
-
     boolean edited = false;
-
     ToggleTitleView[] titles;
-
     AutoSaveManager asm = new AutoSaveManager(this::save);
-
-    ArrayList<dataType> dataTypes;
 
 
 
@@ -203,16 +196,11 @@ public class MatchScoutingFragment extends Fragment {
             final ToggleTitleView ttv = new ToggleTitleView(getContext());
             ttv.setTitle(DataManager.match_latest_values[i].name);
             ttv.setDescription(DataManager.match_latest_values[i].description);
-//            final TextView tv = new TextView(getContext());
-//            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-//            tv.setText(DataManager.match_latest_values[i].name);
-//            tv.setPadding(8,8,8,8);
-//            tv.setTextSize(24);
             titles[i] = ttv;
 
 
             final View v = DataManager.match_latest_values[i].createView(getContext(), dataType -> {
-//                    edited = true;
+//                edited = true;
                 if(asm.isRunning)
                     update_asm();
                 return 0;
@@ -225,19 +213,14 @@ public class MatchScoutingFragment extends Fragment {
                 if(asm.isRunning)
                     update_asm();
 
+//                System.out.println("Checked!");
+
                 if(enabled){
                     DataManager.match_latest_values[fi].nullify();
-                }else{
+                }else
                     DataManager.match_latest_values[fi].setViewValue(DataManager.match_latest_values[fi].default_value);
-                }
             });
 
-            ttv.setOnClickListener(p -> {
-//                boolean blank = !latest_values[fi].getViewValue().isNull();
-
-//                System.out.println(blank);
-
-            });
 
             binding.MatchScoutArea.addView(v);
         }
@@ -360,6 +343,7 @@ public class MatchScoutingFragment extends Fragment {
         ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, DataManager.match_values, DataManager.match_transferValues);
         dataType[] types = psdr.data.array;
 
+
         for(int i = 0; i < DataManager.match_latest_values.length; i++){
 //            types[i] = latest_values[i].getViewValue();
             try {
@@ -369,12 +353,8 @@ public class MatchScoutingFragment extends Fragment {
                 DataManager.match_latest_values[i].setViewValue(DataManager.match_latest_values[i].default_value);
             }
 
+            titles[i].setEnabled(DataManager.match_latest_values[i].isBlank);
 
-            if(DataManager.match_latest_values[i].isBlank){
-                titles[i].disable();
-            }else{
-                titles[i].enable();
-            }
         }
     }
 

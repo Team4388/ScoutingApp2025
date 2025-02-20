@@ -69,15 +69,11 @@ public class checkboxType extends inputType {
 
     public View createView(Context context, Function<dataType, Integer> onUpdate){
         checkBox = new CheckBox(context);
+        checkBox.setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Headline6);
         checkBox.setText(name);
 
         setViewValue(default_value);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onUpdate.apply(getViewValue());
-            }
-        });
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> onUpdate.apply(getViewValue()));
 
         return checkBox;
 
@@ -112,7 +108,7 @@ public class checkboxType extends inputType {
     public void add_individual_view(LinearLayout parent, dataType data){
         if(data.isNull()) return;
         CheckBox cb = new CheckBox(parent.getContext());
-        cb.setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Headline1);
+        cb.setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Headline6);
         cb.setText(name);
         cb.setChecked((int) data.get() == 1);
         cb.setEnabled(false);

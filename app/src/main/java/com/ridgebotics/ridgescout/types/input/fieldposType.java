@@ -87,6 +87,10 @@ public class fieldposType extends inputType {
             nullify();
             return;
         }
+        if(((int[]) value)[0] == 255 && ((int[]) value)[1] == 255){
+            nullify();
+            return;
+        }
 
         isBlank = false;
         field.setVisibility(View.VISIBLE);

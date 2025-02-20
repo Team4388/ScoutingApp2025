@@ -75,7 +75,6 @@ public class tallyType extends inputType {
 
     public void setViewValue(Object value) {
         if(tally == null) return;
-        System.out.println(value);
         if(intType.isNull((int)value)){
             nullify();
             return;

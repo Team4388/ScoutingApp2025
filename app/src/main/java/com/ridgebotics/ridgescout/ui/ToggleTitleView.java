@@ -35,7 +35,6 @@ public class ToggleTitleView extends ConstraintLayout {
     OnToggleListener onToggleListener;
 
 
-    private static final int default_text_color = 0xffffffff;
 
     public void init(Context context){
         LayoutInflater.from(context).inflate(R.layout.view_toggle_title, this, true);
@@ -45,7 +44,10 @@ public class ToggleTitleView extends ConstraintLayout {
         toggle_title_description = findViewById(R.id.toggle_title_description);
 
         toggle_title_checkbox.setOnCheckedChangeListener((compoundButton, checked) -> {
-            if(checked)
+            // If checkbox has already updated
+            if(enabled == checked) return;
+
+            if (checked)
                 enable();
             else
                 disable();
@@ -83,6 +85,12 @@ public class ToggleTitleView extends ConstraintLayout {
         toggle_title_description.setVisibility(View.VISIBLE);
         setBackgroundColor(0x00000000);
         titleView.setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Headline5);
-//        titleView.setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Headline5);
+    }
+
+    public void setEnabled(boolean enabled){
+        if(enabled)
+            disable();
+        else
+            enable();
     }
 }
