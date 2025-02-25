@@ -20,6 +20,8 @@ import com.ridgebotics.ridgescout.databinding.FragmentTransferBinding;
 import com.ridgebotics.ridgescout.ui.transfer.bluetooth.BluetoothSenderFragment;
 import com.ridgebotics.ridgescout.ui.transfer.codes.CodeGeneratorView;
 
+import org.apache.commons.net.ftp.FTP;
+
 import java.util.Date;
 
 public class TransferFragment extends Fragment {
@@ -81,12 +83,22 @@ public class TransferFragment extends Fragment {
 
         binding.SyncButton.setOnClickListener(v -> {
             binding.SyncButton.setEnabled(false);
-            FTPSync.sync((error, upcount, downcount) -> getActivity().runOnUiThread(() -> {
-//                binding.SyncButton.setEnabled(true);
-                AlertManager.toast((!error ? "Synced! " : "Error Syncing. ") + upcount + " Up " + downcount + " Down");
-            }));
+            FTPSync.sync();
         });
 
+        if(FTPSync.getIsRunning())
+            binding.SyncButton.setEnabled(false);
+
+        FTPSync.setOnResult((error, upcount, downcount) -> {
+            if (getActivity() != null)
+                getActivity().runOnUiThread(() -> {
+                    binding.SyncButton.setEnabled(true);
+                    AlertManager.toast((!error ? "Synced! " : "Error Syncing. ") + upcount + " Up " + downcount + " Down");
+                });
+        });
+
+        binding.syncIndicator.setText(FTPSync.text);
+        FTPSync.setOnUpdateIndicator(text -> {if(getActivity() != null) getActivity().runOnUiThread(() -> binding.syncIndicator.setText(text));});
 
         if(evcode.equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);

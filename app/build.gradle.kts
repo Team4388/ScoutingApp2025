@@ -1,6 +1,3 @@
-import com.android.build.api.dsl.AaptOptions
-import com.android.build.api.dsl.AndroidResources
-
 plugins {
     alias(libs.plugins.androidApplication)
 //    id("com.google.gms.google-services")
@@ -28,8 +25,8 @@ android {
         applicationId = "com.ridgebotics.ridgescout"
         minSdk = 24
         targetSdk = 34
-        versionCode = 6
-        versionName = "0.6"
+        versionCode = 7    // **IMPORTANT** Increment this before releasing on github
+        versionName = "1.0"// **IMPORTANT** Change this before releasing on github (<Year num since 2024>.<Update Version>)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
