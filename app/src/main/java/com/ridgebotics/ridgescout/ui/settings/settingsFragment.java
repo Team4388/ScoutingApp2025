@@ -58,9 +58,9 @@ public class settingsFragment extends Fragment {
 
         manager.addItem(new CheckboxSettingsItem(CustomEventsKey, "Custom Events"));
 
-        StringSettingsItem FTPServer = new StringSettingsItem(settingsManager.FTPServer, "FTP Server");
+        StringSettingsItem FTPServer = new StringSettingsItem(settingsManager.FTPServer, "FTP Server (Sync)");
         manager.addItem(FTPServer);
-        CheckboxSettingsItem FTPSendMetaFiles = new CheckboxSettingsItem(settingsManager.FTPSendMetaFiles, "Send meta files");
+        CheckboxSettingsItem FTPSendMetaFiles = new CheckboxSettingsItem(settingsManager.FTPSendMetaFiles, "Sync meta files");
         manager.addItem(FTPSendMetaFiles);
         CheckboxSettingsItem FTPEnabled = new CheckboxSettingsItem(settingsManager.FTPEnabled, "FTP Enabled", FTPServer, FTPSendMetaFiles);
         manager.addItem(FTPEnabled);

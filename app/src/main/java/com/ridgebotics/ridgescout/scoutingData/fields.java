@@ -36,6 +36,7 @@ public class fields {
             new checkboxType("L2 Scoring", "Did the robot score in Layer 3?", 0),
             new checkboxType("L1 Scoring", "Did the robot score in Layer 1?", 0),
             new checkboxType("Processor Scoring", "Did the robot score in the processor?", 0),
+            new checkboxType("Net Scoring", "Did the robot score in the net?", 0),
             new sliderType("Teleop Performance", "How well did the robot drive around?", 5, 0, 10),
             new textType("Teleop Notes", "Anything intresting about Teleop", ""),
             new dropdownType("End Condition", "What was the final condition of the robot?", new String[]{"Nothing", "Park", "Attempted Shallow", "Shallow", "Attempted Deep", "Deep"}, 0),
@@ -46,9 +47,18 @@ public class fields {
 
     public static final inputType[][] default_pit_fields = new inputType[][] {
         {
-            new sliderType("How good is robot", "How good, in fact, is this robot?", 5, 0, 10),
-            new sliderType("Test", "Testy", 1, 0, 10),
-            new textType("notes", "Write text about robot here", ""),
+            new dropdownType("Drivetrain type", "What type of drivetrain does this team have?", new String[]{"Swerve Drive", "Tank Drive (Differential)", "Other, Info in comments"}, 0),
+            new checkboxType("L4 Scoring", "Will the robot score in Layer 4?", 0),
+            new checkboxType("L3 Scoring", "Will the robot score in Layer 3?", 0),
+            new checkboxType("L2 Scoring", "Will the robot score in Layer 3?", 0),
+            new checkboxType("L1/Trough Scoring", "Will the robot score in Layer 1?", 0),
+            new checkboxType("Processor Scoring", "Will the robot score in the processor?", 0),
+            new checkboxType("Net Scoring", "Will the robot score algae in the net?", 0),
+            new sliderType("Specialization", "How specified is the robot to it's scoring area?", 5, 0, 10),
+            new sliderType("Scoring Consistency", "How consistent is the robot at scoring?", 5, 0, 10),
+            new dropdownType("Auto type", "What autos does this team have?", new String[]{"No auto", "Simple Coral", "Simple Algae", "Complex Coral", "Complex Algae", "Other, Info in comments"}, 0),
+            new sliderType("Auto Consistency", "How reliable is this auto;?", 5, 0, 10),
+            new textType("Comments", "Things go here", "Day 1:\n\nDay 2:\n\nDay 3:\n")
         }
     };
 
