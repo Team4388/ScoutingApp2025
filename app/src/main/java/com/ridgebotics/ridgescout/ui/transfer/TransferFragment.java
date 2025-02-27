@@ -20,6 +20,8 @@ import com.ridgebotics.ridgescout.databinding.FragmentTransferBinding;
 import com.ridgebotics.ridgescout.ui.transfer.bluetooth.BluetoothSenderFragment;
 import com.ridgebotics.ridgescout.ui.transfer.codes.CodeGeneratorView;
 
+import org.apache.commons.net.ftp.FTP;
+
 import java.util.Date;
 
 public class TransferFragment extends Fragment {
@@ -81,12 +83,22 @@ public class TransferFragment extends Fragment {
 
         binding.SyncButton.setOnClickListener(v -> {
             binding.SyncButton.setEnabled(false);
-            FTPSync.sync((error, upcount, downcount) -> getActivity().runOnUiThread(() -> {
-//                binding.SyncButton.setEnabled(true);
-                AlertManager.toast((!error ? "Synced! " : "Error Syncing. ") + upcount + " Up " + downcount + " Down");
-            }));
+            FTPSync.sync();
         });
 
+        if(FTPSync.getIsRunning())
+            binding.SyncButton.setEnabled(false);
+
+        FTPSync.setOnResult((error, upcount, downcount) -> {
+            if (getActivity() != null)
+                getActivity().runOnUiThread(() -> {
+                    binding.SyncButton.setEnabled(true);
+                    AlertManager.toast((!error ? "Synced! " : "Error Syncing. ") + upcount + " Up " + downcount + " Down");
+                });
+        });
+
+        binding.syncIndicator.setText(FTPSync.text);
+        FTPSync.setOnUpdateIndicator(text -> {if(getActivity() != null) getActivity().runOnUiThread(() -> binding.syncIndicator.setText(text));});
 
         if(evcode.equals("unset")){
             binding.noEventError.setVisibility(View.VISIBLE);
@@ -104,26 +116,11 @@ public class TransferFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Chose data");
 
-            builder.setNegativeButton("Pit data", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    CSVExport.exportPits(getContext());
-                }
-            });
+            builder.setNegativeButton("Pit data", (dialog, which) -> CSVExport.exportPits(getContext()));
 
-            builder.setPositiveButton("Match data", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    CSVExport.exportMatches(getContext());
-                }
-            });
+            builder.setPositiveButton("Match data", (dialog, which) -> CSVExport.exportMatches(getContext()));
 
-            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+            builder.setNeutralButton("Cancel", (dialog, which) -> dialog.cancel());
 
             builder.show();
         });

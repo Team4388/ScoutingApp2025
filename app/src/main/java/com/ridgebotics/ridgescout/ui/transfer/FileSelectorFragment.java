@@ -20,6 +20,7 @@ import com.ridgebotics.ridgescout.databinding.FragmentTransferFileSelectorBindin
 import com.ridgebotics.ridgescout.types.file;
 import com.ridgebotics.ridgescout.utility.AlertManager;
 import com.ridgebotics.ridgescout.utility.ByteBuilder;
+import com.ridgebotics.ridgescout.utility.DataManager;
 import com.ridgebotics.ridgescout.utility.fileEditor;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class FileSelectorFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentTransferFileSelectorBinding.inflate(inflater, container, false);
 
+        DataManager.reload_event();
 
         meta_string_array = new String[]{
                 "matches.fields",

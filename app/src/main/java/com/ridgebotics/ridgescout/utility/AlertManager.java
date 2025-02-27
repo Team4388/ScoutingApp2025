@@ -53,19 +53,17 @@ public class AlertManager {
 
     public static void error(Exception e) {
         e.printStackTrace();
-        ((Activity) context).runOnUiThread(new Runnable() {
-            public void run() {
-                StringWriter sw = new StringWriter();
-                e.printStackTrace(new PrintWriter(sw));
+        ((Activity) context).runOnUiThread(() -> {
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                alert.setMessage(sw.toString());
-                alert.setTitle(e.getMessage());
-                alert.setPositiveButton("OK", null);
-                alert.setCancelable(true);
+            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            alert.setMessage(sw.toString());
+            alert.setTitle(e.getMessage());
+            alert.setPositiveButton("OK", null);
+            alert.setCancelable(true);
 
-                alert.create().show();
-            }
+            alert.create().show();
         });
     }
 

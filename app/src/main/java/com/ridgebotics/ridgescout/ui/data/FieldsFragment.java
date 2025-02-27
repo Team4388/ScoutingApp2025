@@ -32,11 +32,8 @@ import com.ridgebotics.ridgescout.types.input.numberType;
 import com.ridgebotics.ridgescout.types.input.sliderType;
 import com.ridgebotics.ridgescout.types.input.tallyType;
 import com.ridgebotics.ridgescout.types.input.textType;
+import com.ridgebotics.ridgescout.ui.CustomSpinnerView;
 import com.ridgebotics.ridgescout.utility.AlertManager;
-import com.skydoves.powerspinner.IconSpinnerAdapter;
-import com.skydoves.powerspinner.IconSpinnerItem;
-import com.skydoves.powerspinner.PowerSpinnerView;
-import com.skydoves.powerspinner.SpinnerGravity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -401,53 +398,26 @@ public class FieldsFragment extends Fragment {
 
     private void addField_Part_2(String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Title");
+        builder.setTitle("Select Type");
 
-        final PowerSpinnerView dropdown = new PowerSpinnerView(getContext());
+        final CustomSpinnerView dropdown = new CustomSpinnerView(getContext());
+        List<String> options = new ArrayList<>();
 
-        List<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
+        options.add("Slider");
+        options.add("Text");
+        options.add("Dropdown");
+        options.add("Tally");
+        options.add("Number");
+        options.add("Checkbox");
+        options.add("Field Position");
 
-        iconSpinnerItems.add(new IconSpinnerItem("Slider"));
-        iconSpinnerItems.add(new IconSpinnerItem("Text"));
-        iconSpinnerItems.add(new IconSpinnerItem("Dropdown"));
-        iconSpinnerItems.add(new IconSpinnerItem("Tally"));
-        iconSpinnerItems.add(new IconSpinnerItem("Number"));
-        iconSpinnerItems.add(new IconSpinnerItem("Checkbox"));
-        iconSpinnerItems.add(new IconSpinnerItem("Field Position"));
-
-        IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(dropdown);
-
-        dropdown.setGravity(Gravity.CENTER);
-
-        dropdown.setSpinnerAdapter(iconSpinnerAdapter);
-        dropdown.setItems(iconSpinnerItems);
-
-        dropdown.selectItemByIndex(0);
-
-        dropdown.setPadding(10,20,10,20);
-        dropdown.setBackgroundColor(0xf0000000);
-        dropdown.setTextColor(0xff00ff00);
-        dropdown.setTextSize(14.5f);
-        dropdown.setArrowGravity(SpinnerGravity.END);
-        dropdown.setArrowPadding(8);
-//        dropdown.setSpinnerItemHeight(46);
-        dropdown.setSpinnerPopupElevation(14);
+        dropdown.setOptions(options, 0);
+        dropdown.setTitle("Type");
 
         builder.setView(dropdown);
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                addField_Part_3(title, dropdown.getSelectedIndex());
-            }
-        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.setPositiveButton("OK", (dialog, which) -> addField_Part_3(title, dropdown.getIndex()));
 
         builder.show();
     }

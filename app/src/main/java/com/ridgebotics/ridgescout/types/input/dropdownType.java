@@ -1,5 +1,8 @@
 package com.ridgebotics.ridgescout.types.input;
 
+import static com.google.android.material.internal.ContextUtils.getActivity;
+
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
@@ -13,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.ridgebotics.ridgescout.types.data.dataType;
 import com.ridgebotics.ridgescout.types.data.intType;
+import com.ridgebotics.ridgescout.ui.CustomSpinnerView;
 import com.ridgebotics.ridgescout.utility.BuiltByteParser;
 import com.ridgebotics.ridgescout.utility.ByteBuilder;
 import com.github.mikephil.charting.charts.LineChart;
@@ -24,13 +28,9 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.skydoves.powerspinner.IconSpinnerAdapter;
-import com.skydoves.powerspinner.IconSpinnerItem;
-import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
-import com.skydoves.powerspinner.PowerSpinnerView;
-import com.skydoves.powerspinner.SpinnerGravity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -42,8 +42,8 @@ public class dropdownType extends inputType {
     public Object get_fallback_value(){return 0;}
     public dropdownType(){};
     public String get_type_name(){return "Dropdown";}
-    public dropdownType(String name, String[] text_options, int defaultSelIndex){
-        super(name);
+    public dropdownType(String name, String description, String[] text_options, int defaultSelIndex){
+        super(name, description);
         this.text_options = text_options;
         this.default_value = defaultSelIndex;
     }
@@ -52,6 +52,7 @@ public class dropdownType extends inputType {
     public byte[] encode() throws ByteBuilder.buildingException {
         ByteBuilder bb = new ByteBuilder();
         bb.addString(name);
+        bb.addString(description);
         bb.addInt((int)default_value);
         bb.addStringArray(text_options);
         return bb.build();
@@ -61,55 +62,24 @@ public class dropdownType extends inputType {
         ArrayList<BuiltByteParser.parsedObject> objects = bbp.parse();
 
         name          = (String)   objects.get(0).get();
-        default_value =            objects.get(1).get();
-        text_options  = (String[]) objects.get(2).get();
+        description   = (String)   objects.get(1).get();
+        default_value =            objects.get(2).get();
+        text_options  = (String[]) objects.get(3).get();
     }
 
-    public PowerSpinnerView dropdown = null;
+    public CustomSpinnerView dropdown = null;
 
     public View createView(Context context, Function<dataType, Integer> onUpdate){
-        dropdown = new PowerSpinnerView(context);
+        dropdown = new CustomSpinnerView(context);
 
-        List<IconSpinnerItem> iconSpinnerItems = new ArrayList<>();
-        for(int i = 0; i < text_options.length; i++){
-            iconSpinnerItems.add(new IconSpinnerItem(text_options[i]));
-        }
-        IconSpinnerAdapter iconSpinnerAdapter = new IconSpinnerAdapter(dropdown);
+        ArrayList<String> iconSpinnerItems = new ArrayList<>(Arrays.asList(text_options));
 
-        dropdown.setGravity(Gravity.CENTER);
+        dropdown.setTitle(name);
+        dropdown.setOptions(iconSpinnerItems, (int) default_value);
+        onUpdate.apply(getViewValue());
 
-        dropdown.setSpinnerAdapter(iconSpinnerAdapter);
-        dropdown.setItems(iconSpinnerItems);
+        dropdown.setOnClickListener((item, index) -> onUpdate.apply(getViewValue()));
 
-        dropdown.selectItemByIndex((int) default_value);
-
-        dropdown.setPadding(10,20,10,20);
-        dropdown.setBackgroundColor(0xf0000000);
-        dropdown.setTextColor(0xff00ff00);
-        dropdown.setTextSize(14.5f);
-        dropdown.setArrowGravity(SpinnerGravity.END);
-        dropdown.setArrowPadding(8);
-//        dropdown.setSpinnerItemHeight(46);
-        dropdown.setSpinnerPopupElevation(14);
-
-
-
-
-        dropdown.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<IconSpinnerItem>() {
-            @Override
-            public void onItemSelected(int oldIndex, @Nullable IconSpinnerItem oldItem, int newIndex,
-                                       IconSpinnerItem newItem) {
-                onUpdate.apply(getViewValue());
-            }
-        });
-
-//            dropdown.setLifecycleOwner(context.life);
-//            slider.addOnChangeListener(new Slider.OnChangeListener() {
-//                @Override
-//                public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-//                    onUpdate.apply(getViewValue());
-//                }
-//            });
         return dropdown;
 
     }
@@ -123,7 +93,7 @@ public class dropdownType extends inputType {
         isBlank = false;
 
         dropdown.setVisibility(View.VISIBLE);
-        dropdown.selectItemByIndex((int) value);
+        dropdown.setOption((int) value);
     }
     public void nullify(){
         isBlank = true;
@@ -132,7 +102,7 @@ public class dropdownType extends inputType {
     public dataType getViewValue(){
         if(dropdown == null) return null;
         if(dropdown.getVisibility() == View.GONE) return new intType(name, intType.nullval);
-        return new intType(name, dropdown.getSelectedIndex());
+        return new intType(name, dropdown.getIndex());
     }
 
 

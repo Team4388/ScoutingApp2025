@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.divider.MaterialDivider;
+import com.ridgebotics.ridgescout.ui.ToggleTitleView;
 import com.ridgebotics.ridgescout.utility.settingsManager;
 import com.ridgebotics.ridgescout.databinding.FragmentScoutingMatchBinding;
 import com.ridgebotics.ridgescout.scoutingData.ScoutingDataWriter;
@@ -63,10 +65,6 @@ public class MatchScoutingFragment extends Fragment {
 
 
 
-
-        cur_match_num = settingsManager.getMatchNum();
-        update_match_num();
-
         binding.nextButton.setOnClickListener(v -> {
             if(edited) save();
             settingsManager.setMatchNum(cur_match_num+1);
@@ -103,6 +101,14 @@ public class MatchScoutingFragment extends Fragment {
 //            if(edited) save();
 //        });
 
+        cur_match_num = settingsManager.getMatchNum();
+
+        if(cur_match_num >= event.matches.size()) {
+            cur_match_num = 0;
+            settingsManager.setMatchNum(0);
+        }
+
+        update_match_num();
         create_fields();
         update_scouting_data();
 
@@ -134,14 +140,9 @@ public class MatchScoutingFragment extends Fragment {
     int cur_match_num;
     String username;
     String filename;
-
     boolean edited = false;
-
-    TextView[] titles;
-
+    ToggleTitleView[] titles;
     AutoSaveManager asm = new AutoSaveManager(this::save);
-
-    ArrayList<dataType> dataTypes;
 
 
 
@@ -186,47 +187,40 @@ public class MatchScoutingFragment extends Fragment {
             asm.stop();
         }
 
-        titles = new TextView[DataManager.match_latest_values.length];
+        titles = new ToggleTitleView[DataManager.match_latest_values.length];
 
         for(int i = 0 ; i < DataManager.match_latest_values.length; i++) {
-            final TextView tv = new TextView(getContext());
-            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            tv.setText(DataManager.match_latest_values[i].name);
-            tv.setPadding(8,8,8,8);
-            tv.setTextSize(24);
-            titles[i] = tv;
+            binding.MatchScoutArea.addView(new MaterialDivider(getContext()));
 
-            default_text_color = tv.getCurrentTextColor();
 
-            final View v = DataManager.match_latest_values[i].createView(getContext(), new Function<dataType, Integer>() {
-                @Override
-                public Integer apply(dataType dataType) {
-//                    edited = true;
-                    if(asm.isRunning)
-                        update_asm();
-                    return 0;
-                }
+            final ToggleTitleView ttv = new ToggleTitleView(getContext());
+            ttv.setTitle(DataManager.match_latest_values[i].name);
+            ttv.setDescription(DataManager.match_latest_values[i].description);
+            titles[i] = ttv;
+
+
+            final View v = DataManager.match_latest_values[i].createView(getContext(), dataType -> {
+//                edited = true;
+                if(asm.isRunning)
+                    update_asm();
+                return 0;
             });
 
-            binding.MatchScoutArea.addView(tv);
+            binding.MatchScoutArea.addView(ttv);
             int fi = i;
-            tv.setOnClickListener(p -> {
-//                boolean blank = !latest_values[fi].getViewValue().isNull();
 
-//                System.out.println(blank);
+            ttv.setOnToggleListener(enabled -> {
                 if(asm.isRunning)
                     update_asm();
 
-                if(!DataManager.match_latest_values[fi].isBlank){
-                    tv.setBackgroundColor(0xffff0000);
-                    tv.setTextColor(0xff000000);
+//                System.out.println("Checked!");
+
+                if(enabled){
                     DataManager.match_latest_values[fi].nullify();
-                }else{
-                    tv.setBackgroundColor(0x00000000);
-                    tv.setTextColor(default_text_color);
+                }else
                     DataManager.match_latest_values[fi].setViewValue(DataManager.match_latest_values[fi].default_value);
-                }
             });
+
 
             binding.MatchScoutArea.addView(v);
         }
@@ -297,6 +291,13 @@ public class MatchScoutingFragment extends Fragment {
         frcMatch match = event.matches.get(cur_match_num);
         frcTeam team = get_team(match);
 
+        if(team == null) {
+            AlertManager.error("This team does not exist!");
+            binding.teamName.setText("ERROR!");
+            binding.teamDescription.setText("ERROR!");
+            return;
+        }
+
         binding.teamName.setText(team.teamName);
         binding.teamDescription.setText(team.getDescription());
 
@@ -331,8 +332,7 @@ public class MatchScoutingFragment extends Fragment {
             inputType input = DataManager.match_latest_values[i];
             input.setViewValue(input.default_value);
 
-            titles[i].setBackgroundColor(0x00000000);
-            titles[i].setTextColor(default_text_color);
+            titles[i].enable();
         }
     }
 
@@ -343,6 +343,7 @@ public class MatchScoutingFragment extends Fragment {
         ScoutingDataWriter.ParsedScoutingDataResult psdr = ScoutingDataWriter.load(filename, DataManager.match_values, DataManager.match_transferValues);
         dataType[] types = psdr.data.array;
 
+
         for(int i = 0; i < DataManager.match_latest_values.length; i++){
 //            types[i] = latest_values[i].getViewValue();
             try {
@@ -352,14 +353,8 @@ public class MatchScoutingFragment extends Fragment {
                 DataManager.match_latest_values[i].setViewValue(DataManager.match_latest_values[i].default_value);
             }
 
+            titles[i].setEnabled(DataManager.match_latest_values[i].isBlank);
 
-            if(DataManager.match_latest_values[i].isBlank){
-                titles[i].setBackgroundColor(0xffff0000);
-                titles[i].setTextColor(0xff000000);
-            }else{
-                titles[i].setBackgroundColor(0x00000000);
-                titles[i].setTextColor(default_text_color);
-            }
         }
     }
 

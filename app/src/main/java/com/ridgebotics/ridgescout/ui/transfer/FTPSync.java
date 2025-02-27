@@ -27,27 +27,54 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 public class FTPSync extends Thread {
     public static final String remoteBasePath = "/RidgeScout/";
     public static final String timestampsFilename = "timestamps";
-    public static long lastSyncTime = 0;
 
+
+
+    public static long lastSyncTime = 0;
     private static Date curSyncTime;
+    private static final long millisTolerance = 1000;
+
+    private boolean after(Date a, Date b){
+        return a.getTime() - b.getTime() > millisTolerance;
+    }
+
 
     public interface onResult {
         void onResult(boolean error, int upCount, int downCount);
     }
+    public interface UpdateIndicator {
+        void onText(String text);
+    }
+    private static UpdateIndicator updateIndicator = text -> {};
+    public static String text = "";
+    private static void setUpdateIndicator(String m_text){
+        text = m_text;
+        updateIndicator.onText(m_text);
+    }
+    public static void setOnUpdateIndicator(UpdateIndicator m_updateIndicator){
+        updateIndicator = m_updateIndicator;
+    }
 
-    public onResult onResult;
+    private static onResult onResult = (error, upCount, downCount) -> {};
+    public static void setOnResult(onResult result){
+        onResult = result;
+    }
 
-    public static void sync(onResult onResult){
+    private static boolean isRunning = false;
+    public static boolean getIsRunning(){return isRunning;}
+
+    public static void sync(){
 //        DataManager.reload_event();
         FTPSync ftpSync = new FTPSync();
-        ftpSync.onResult = onResult;
 
         curSyncTime = new Date();
 
@@ -94,6 +121,7 @@ public class FTPSync extends Thread {
 
 
     public void run() {
+        isRunning = true;
         boolean sendMetaFiles = settingsManager.getFTPSendMetaFiles();
 
         // Meta files
@@ -118,7 +146,10 @@ public class FTPSync extends Thread {
 
             // Loop through local files and send all that are more recent
             if (localFiles != null) {
-                for (File localFile : localFiles) {
+                for (int i = 0; i < localFiles.length; i++) {
+                    File localFile = localFiles[i];
+                    setUpdateIndicator("Uploading " + (i+1) + "/" + localFiles.length);
+
                     if(localFile.isDirectory()) continue;
                     // Remove timestamts file
                     if(localFile.getName().equals(timestampsFilename)) continue;
@@ -127,20 +158,27 @@ public class FTPSync extends Thread {
 
                     Date remoteTimestamp = remoteTimestamps.get(localFile.getName());
 
-                    if (remoteTimestamp == null || getLocalFileUtcTimestamp(localFile).after(remoteTimestamp)) {
+                    Date localTimeStamp = getLocalFileUtcTimestamp(localFile);
+
+                    if (remoteTimestamp == null || after(localTimeStamp, remoteTimestamp)) {
                         uploadFile(localFile);
-                        System.out.println("Uploaded " + localFile.getName());
+                        System.out.println("Uploaded" + localFile.getName());
 
                         setLocalFileTimestamp(localFile, curSyncTime);
                         remoteTimestamps.put(localFile.getName(), curSyncTime);
                         upCount++;
                     }else{
-                        System.out.println("Did not upload " + localFile.getName());
+                        System.out.println("Did not upload");
                     }
                 }
             }
 
-            for (String remoteFile : remoteTimestamps.keySet()) {
+            Set<String> keySet = remoteTimestamps.keySet();
+            Iterator<String> keyIt = keySet.iterator();
+            for (int i = 0; i < keySet.size(); i++) {
+                String remoteFile = keyIt.next();
+                setUpdateIndicator("Downloading " + (i+1) + "/" + keySet.size());
+
                 File localFile = new File(baseDir, remoteFile);
                 if(remoteFile.equals(timestampsFilename)) continue;
                 // Remove meta files if the option is disabled
@@ -151,15 +189,25 @@ public class FTPSync extends Thread {
 ////
 //                    System.out.println("- " + t1 + (t1.after(t2) ? ">" : "<") + t2);
 
-                if (!localFile.exists() || remoteTimestamps.get(remoteFile).after(getLocalFileUtcTimestamp(localFile))) {
+                Date localTimeStamp = getLocalFileUtcTimestamp(localFile);
+                Date remoteTimestamp = remoteTimestamps.get(remoteFile);
+
+
+
+                if (!localFile.exists() || (after(remoteTimestamp, localTimeStamp) && !localTimeStamp.equals(remoteTimestamp))) {
                     downloadFile(remoteFile, localFile);
+
                     System.out.println("Downloaded " + localFile.getName());
+
+                    if(!localFile.exists()) System.out.println("Not exist");
+                    else if(after(remoteTimestamp, localTimeStamp)) System.out.println("Before: " + (localTimeStamp.getTime()-remoteTimestamp.getTime()));
+
 //                        Date d = getUtcTimestamp(remoteFile);
                     setLocalFileTimestamp(localFile, remoteTimestamps.get(localFile.getName()));
 //                    remoteTimestamps.put(remoteFile, curSyncTime);
                     downCount++;
                 }else{
-                    System.out.println("Did not download " + remoteFile);
+                    System.out.println("Did not download");
                 }
             }
 
@@ -168,9 +216,13 @@ public class FTPSync extends Thread {
         } catch (Exception e) {
             AlertManager.error(e);
             onResult.onResult(true, upCount, downCount);
+            setUpdateIndicator("ERROR!");
         } finally {
             onResult.onResult(false, upCount, downCount);
+            setUpdateIndicator("Finished");
         }
+
+        isRunning = false;
     }
 
     private boolean setTimestamps(Map<String, Date> timestamps){

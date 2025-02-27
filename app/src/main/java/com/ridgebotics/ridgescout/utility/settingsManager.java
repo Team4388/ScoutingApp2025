@@ -13,8 +13,8 @@ public class settingsManager {
 
     public static final String UnameKey     = "username";
     public static final String SelEVCodeKey = "selected_event_code";
+    public static final String YearNumKey   = "year_num";
     public static final String WifiModeKey  = "wifi_mode";
-    public static final String TeamNumKey   = "team_num";
     public static final String MatchNumKey  = "match_num";
     public static final String AllyPosKey   = "alliance_pos";
     public static final String DataModeKey  = "data_view_mode";
@@ -22,6 +22,7 @@ public class settingsManager {
     public static final String FTPEnabled   = "ftp_enabled";
     public static final String FTPServer    = "ftp_server";
     public static final String FTPSendMetaFiles    = "ftp_send_meta_files";
+    public static final String CustomEventsKey = "enable_custom_event";
 
     public static Map defaults = getDefaults();
     private static Map getDefaults(){
@@ -30,7 +31,7 @@ public class settingsManager {
         hm.put(UnameKey,     "Username");
         hm.put(SelEVCodeKey, "unset");
         hm.put(WifiModeKey,  false);
-        hm.put(TeamNumKey,   4388);
+        hm.put(YearNumKey,   2025);
         hm.put(MatchNumKey,  0);
         hm.put(AllyPosKey,   "red-1");
         hm.put(DataModeKey,  0);
@@ -38,6 +39,7 @@ public class settingsManager {
         hm.put(FTPEnabled,   false);
         hm.put(FTPServer,    "0.0.0.0");
         hm.put(FTPSendMetaFiles, false);
+        hm.put(CustomEventsKey, false);
 
         return hm;
     }
@@ -52,7 +54,7 @@ public class settingsManager {
         getEditor() .putString(SelEVCodeKey,(String)  defaults.get( SelEVCodeKey)).apply();
         getEditor().putBoolean(WifiModeKey, (boolean) defaults.get( WifiModeKey )).apply();
 
-        getEditor()    .putInt(TeamNumKey,  (int)     defaults.get( TeamNumKey  )).apply();
+        getEditor()    .putInt(YearNumKey,  (int)     defaults.get( YearNumKey  )).apply();
         getEditor()    .putInt(MatchNumKey, (int)     defaults.get( MatchNumKey )).apply();
         getEditor() .putString(AllyPosKey,  (String)  defaults.get( AllyPosKey  )).apply();
         getEditor()    .putInt(DataModeKey, (int)     defaults.get( DataModeKey )).apply();
@@ -62,6 +64,8 @@ public class settingsManager {
         getEditor().putBoolean(FTPEnabled,  (boolean) defaults.get( FTPEnabled  )).apply();
         getEditor() .putString(FTPServer,   (String)  defaults.get( FTPServer   )).apply();
         getEditor().putBoolean(FTPSendMetaFiles,   (boolean)  defaults.get( FTPSendMetaFiles   )).apply();
+
+        getEditor().putBoolean(CustomEventsKey,   (boolean)  defaults.get( CustomEventsKey   )).apply();
     }
 
     // IDK why I decided to format these functions like this. It looks cool though.
@@ -74,8 +78,8 @@ public class settingsManager {
     public static boolean getWifiMode(){return            prefs.getBoolean( WifiModeKey,        (boolean) defaults.get(WifiModeKey));}
     public static void    setWifiMode(boolean bool){getEditor().putBoolean( WifiModeKey,bool).apply();}
 
-    public static int     getTeamNum(){return             prefs.getInt(     TeamNumKey,         (int)     defaults.get(TeamNumKey));}
-    public static void    setTeamNum(int num){      getEditor().putInt(     TeamNumKey,num).apply();}
+    public static int     getYearNum(){return             prefs.getInt(     YearNumKey,         (int)     defaults.get(YearNumKey));}
+    public static void    setYearNum(int num){      getEditor().putInt(     YearNumKey,num).apply();}
 
     public static int     getMatchNum(){return            prefs.getInt(     MatchNumKey,        (int)     defaults.get(MatchNumKey));}
     public static void    setMatchNum(int num){     getEditor().putInt(     MatchNumKey,num).apply();}
@@ -98,7 +102,12 @@ public class settingsManager {
     public static void    setFTPServer(String str){   getEditor().putString(  FTPServer,str).apply();}
 
     public static boolean  getFTPSendMetaFiles(){return prefs.getBoolean(FTPSendMetaFiles, (boolean) defaults.get(FTPSendMetaFiles));}
-    public static void    setFTPSendMetaFiles(String str){getEditor().putString(FTPSendMetaFiles,str).apply();}
+    public static void    setFTPSendMetaFiles(boolean bool){getEditor().putBoolean(FTPSendMetaFiles,bool).apply();}
+
+
+    public static boolean  getCustomEvents(){return prefs.getBoolean(CustomEventsKey, (boolean) defaults.get(FTPSendMetaFiles));}
+    public static void    setCustomEvents(boolean bool){getEditor().putBoolean(CustomEventsKey,bool).apply();}
+
 
 
 

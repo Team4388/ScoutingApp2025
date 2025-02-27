@@ -22,6 +22,7 @@ import com.ridgebotics.ridgescout.types.frcMatch;
 import com.ridgebotics.ridgescout.types.frcTeam;
 import com.ridgebotics.ridgescout.utility.fileEditor;
 import com.ridgebotics.ridgescout.utility.JSONUtil;
+import com.ridgebotics.ridgescout.utility.settingsManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,13 +36,13 @@ import java.util.Comparator;
 import java.util.Date;
 
 public class TBAFragment extends Fragment {
-    private final String TBAAddress = "https://www.thebluealliance.com/api/v3/";
-    private final String TBAHeader = "X-TBA-Auth-Key: tjEKSZojAU2pgbs2mBt06SKyOakVhLutj3NwuxLTxPKQPLih11aCIwRIVFXKzY4e";
+    private static final String TBAAddress = "https://www.thebluealliance.com/api/v3/";
+    private static final String TBAHeader = "X-TBA-Auth-Key: tjEKSZojAU2pgbs2mBt06SKyOakVhLutj3NwuxLTxPKQPLih11aCIwRIVFXKzY4e";
 
     private android.widget.TableLayout Table;
     private FragmentTransferTbaBinding binding;
 
-    private static final int year = 2024;
+    private final int year = settingsManager.getYearNum();
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

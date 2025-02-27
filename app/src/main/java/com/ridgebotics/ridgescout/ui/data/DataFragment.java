@@ -54,12 +54,9 @@ public class DataFragment extends Fragment {
 
         binding.teamsButton.setOnClickListener(v -> {
             TeamSelectorFragment.setPits_mode(false);
-            TeamSelectorFragment.setOnSelect(new TeamSelectorFragment.onTeamSelected() {
-                @Override
-                public void onSelect(TeamSelectorFragment self, frcTeam team) {
-                    TeamsFragment.setTeam(team);
-                    findNavController(self).navigate(R.id.action_navigation_team_selector_to_navigation_data_teams);
-                }
+            TeamSelectorFragment.setOnSelect((self, team) -> {
+                TeamsFragment.setTeam(team);
+                findNavController(self).navigate(R.id.action_navigation_team_selector_to_navigation_data_teams);
             });
             findNavController(this).navigate(R.id.action_navigation_data_to_navigation_team_selector);
         });

@@ -68,27 +68,34 @@ public class FieldEditorHelper {
 //    }
 
     public static final parameterType[] defaultSliderParams = new parameterType[]{
+            new paramString("Description", ""),
             new paramNumber("Min", 0),
             new paramNumber("Max", 10),
             new paramNumber("Default Value", 5)
     };
     public static final parameterType[] defaultDropdownParams = new parameterType[]{
+            new paramString("Description", ""),
             new paramStringArray("Default Value", new String[]{"Zero","One","Two","Three"}),
             new paramNumber("Default Option", 0),
     };
     public static final parameterType[] defaultTextParams = new parameterType[]{
+            new paramString("Description", ""),
             new paramString("Default Value", "")
     };
     public static final parameterType[] defaultTallyParams = new parameterType[]{
+            new paramString("Description", ""),
             new paramNumber("Default Value", 0)
     };
     public static final parameterType[] defaultNumberParams = new parameterType[]{
+            new paramString("Description", ""),
             new paramNumber("Default Value", 0)
     };
     public static final parameterType[] defaultCheckboxParam = new parameterType[]{
+            new paramString("Description", ""),
             new paramNumber("Default Value ( 1 or 0 )", 0)
     };
     public static final parameterType[] defaultFieldPosParam = new parameterType[]{
+            new paramString("Description", ""),
             new paramNumber("Default X", 0),
             new paramNumber("Default Y", 0)
     };
@@ -96,6 +103,7 @@ public class FieldEditorHelper {
 
     private static parameterType[] getSliderParams(sliderType s){
         return new parameterType[]{
+            new paramString("Description", s.description),
             new paramNumber("Min", s.min),
             new paramNumber("Max", s.max),
             new paramNumber("Default Value", (int) s.default_value)
@@ -104,6 +112,7 @@ public class FieldEditorHelper {
 
     private static parameterType[] getDropdownParams(dropdownType s){
         return new parameterType[]{
+                new paramString("Description", s.description),
                 new paramStringArray("Default Value",s.text_options),
                 new paramNumber("Default Option", (int) s.default_value),
         };
@@ -111,30 +120,35 @@ public class FieldEditorHelper {
 
     private static parameterType[] getTextParams(textType s){
         return new parameterType[]{
+                new paramString("Description", s.description),
                 new paramString("Default Value", (String) s.default_value)
         };
     }
 
     private static parameterType[] getTallyParams(tallyType s){
         return new parameterType[]{
+                new paramString("Description", s.description),
                 new paramNumber("Default Value", (int) s.default_value)
         };
     }
 
     private static parameterType[] getNumberParams(numberType s){
         return new parameterType[]{
+                new paramString("Description", s.description),
                 new paramNumber("Default Value", (int) s.default_value)
         };
     }
 
     private static parameterType[] getCheckboxParam(checkboxType s){
         return new parameterType[]{
+                new paramString("Description", s.description),
                 new paramNumber("Default Value ( 1 or 0 )", (int) s.default_value)
         };
     }
 
     private static parameterType[] getFieldPosParam(fieldposType s){
         return new parameterType[]{
+                new paramString("Description", s.description),
                 new paramNumber("Default X", ((int[]) s.default_value)[0]),
                 new paramNumber("Default Y", ((int[]) s.default_value)[1])
         };
@@ -143,36 +157,43 @@ public class FieldEditorHelper {
 
 
     public static void setSliderParams(sliderType s, parameterType[] types){
-        s.min = ((paramNumber) types[0]).val;
-        s.max = ((paramNumber) types[1]).val;
-        s.default_value = ((paramNumber) types[2]).val;
+        s.description = ((paramString) types[0]).val;
+        s.min = ((paramNumber) types[1]).val;
+        s.max = ((paramNumber) types[2]).val;
+        s.default_value = ((paramNumber) types[3]).val;
     }
 
     public static void setDropdownParams(dropdownType s, parameterType[] types){
-        s.text_options = ((paramStringArray) types[0]).val;
-        s.default_value = ((paramNumber) types[1]).val;
+        s.description = ((paramString) types[0]).val;
+        s.text_options = ((paramStringArray) types[1]).val;
+        s.default_value = ((paramNumber) types[2]).val;
     }
 
     public static void setTextParams(textType s, parameterType[] types){
-        s.default_value = ((paramString) types[0]).val;
+        s.description = ((paramString) types[0]).val;
+        s.default_value = ((paramString) types[1]).val;
     }
 
     public static void setTallyParams(tallyType s, parameterType[] types){
-        s.default_value = ((paramNumber) types[0]).val;
+        s.description = ((paramString) types[0]).val;
+        s.default_value = ((paramNumber) types[1]).val;
     }
 
     public static void setNumberParams(numberType s, parameterType[] types){
-        s.default_value = ((paramNumber) types[0]).val;
+        s.description = ((paramString) types[0]).val;
+        s.default_value = ((paramNumber) types[1]).val;
     }
 
     public static void setCheckboxParam(checkboxType s, parameterType[] types){
-        s.default_value = ((paramNumber) types[0]).val;
+        s.description = ((paramString) types[0]).val;
+        s.default_value = ((paramNumber) types[1]).val;
     }
 
     public static void setFieldPosParam(fieldposType s, parameterType[] types){
+        s.description = ((paramString) types[0]).val;
         s.default_value = new int[]{
-                ((paramNumber) types[0]).val,
-                ((paramNumber) types[1]).val
+                ((paramNumber) types[1]).val,
+                ((paramNumber) types[2]).val
         };
     }
 
